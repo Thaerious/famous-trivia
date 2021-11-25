@@ -224,27 +224,6 @@
           "fontSize": "16px"
         }
       ]
-    },
-    {
-      "type": "multiple_choice",
-      "question": "MCQ",
-      "answers": [
-        "MCA1",
-        "MCA2",
-        "MCA3",
-        "MCA4",
-        "MCA5",
-        "MCA6"
-      ],
-      "values": [
-        false,
-        true,
-        true,
-        false,
-        false,
-        false
-      ],
-      "bonus": 500
     }
   ]
 }

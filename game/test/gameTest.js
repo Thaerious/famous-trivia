@@ -5,7 +5,6 @@ import assert from 'assert';
 import fs from 'fs';
 import GameModel from '../src/model/GameModel.js';
 import {Game, Timer} from '../src/Game.js';
-import {GAME_MODEL_STYLE, GAME_MODEL_STATES} from "../src/constants.js";
 
 const file = fs.readFileSync('test/data/test-data-00.json');
 const data = JSON.parse(file);

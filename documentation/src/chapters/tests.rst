@@ -1,3 +1,11 @@
+Game
+----
+
+Tests the mechanics of the game outside of the context of a client-server.  Run the command to execute all
+tests with code coverage.  The result index.html can be found in ``/game/coverage/index.html``.
+
+``npx c8 -r html mocha``
+
 Client Side
 -----------
 

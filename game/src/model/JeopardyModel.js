@@ -81,6 +81,23 @@ class JeopardyModel {
     }
 
     /**
+     * If the player removed is the current player and the player is not spent,
+     * The next player becomes the current player.
+     * If the player is spent, the current player becomes blank.
+     * (Players become spent by selecting a question or buzzing in)
+     * (If the current player is unspent, it means they have not selected a qustion)
+     */
+    removePlayer(name){
+        if (name == this.currentPlayer){            
+            if (!this.isPlayerSpent(name)){
+                this.currentPlayer = this.parent.players[0].name;
+            } else {
+                this.currentPlayer = "";
+            }
+        }
+    }
+
+    /**
      * return the number of unspent players.
      * @returns {*}
      */
@@ -163,7 +180,7 @@ class JeopardyModel {
             type: this.getType(col, row),
             question: this.model.column[col].cell[row].q,
             answer: this.getAnswer(),
-            spent: this.spent
+            spent: this.spent            
         };
 
         return this.stateData;
@@ -227,11 +244,11 @@ class JeopardyModel {
             round : {
                 current_player : this.currentPlayer,
                 categories : this.categories,
-                values : this.values
+                values : this.values,
+                spent_players : [...this.spentPlayers]
             },
-            players : players
+            players : players,            
         }
-
         Object.assign(r.round, this.stateData);
         return r;
     }

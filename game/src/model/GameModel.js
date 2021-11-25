@@ -12,18 +12,9 @@ class GameModel {
         if (gameDescription) this.setupRounds();
     }
 
-    addListener(event, cb){
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(cb);
-    }
-
-    dispatchEvent(event, ...argList){
-        if (!this.listeners[event]) return;
-        for (const list of this.listeners[event]){
-            list(...argList);
-        }
-    }
-
+    /**
+     * Perform initialization of each round in the model.
+     */
     setupRounds(){
         this.rounds = [];
         this.roundIndex = -1;
@@ -35,25 +26,6 @@ class GameModel {
         }
 
         this.rounds.push(new EndOfGame(this));
-    }
-
-    toJSON(){
-        let sanitized = Object.assign({}, this);
-        delete sanitized.listeners;
-        delete sanitized.rounds;
-        return sanitized;
-    }
-
-    static fromJSON(json) {
-        if (typeof json === "string") {
-            json = JSON.parse(json);
-        }
-
-        let gameModel = new GameModel()
-        Object.assign(gameModel, json);
-        gameModel.setupRounds();
-
-        return gameModel;
     }
 
     /**
@@ -115,7 +87,6 @@ class GameModel {
         };
 
         this._players.push(player);
-        this.dispatchEvent("player-added", this._players.length - 1, player);
         return player;
     }
 
@@ -182,11 +153,20 @@ class GameModel {
         return true;
     }
 
+    /**
+     * Remove a player specified by 'name' from the game.  If a player with 
+     * the same name rejoins, they will be treated as a new player.
+     * Returns the player tuple (name, score, enabled) when successfull.
+     * Returns null when the player is not found.
+     */
     removePlayer(name) {
         let player = this.getPlayer(name);
         let index = this._players.indexOf(player);
         if (index === -1) return null;
         let splice = this._players.splice(index, 1);
+
+        if (this.getRound()?.removePlayer) this.getRound().removePlayer(name);
+
         return splice[0];
     }
 
