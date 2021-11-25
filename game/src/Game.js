@@ -295,50 +295,6 @@ class Game {
         }
     }
 
-    [1](input) {
-        switch (input.action) {
-            case "continue":
-                this.gameModel.getRound().setAnswerState();
-                this.transientValues.clear();
-                this.updateState(2);
-                this.timer.start(this.times.MULTIPLE_CHOICE);
-                break;
-        }
-    }
-
-    [2](input) {
-        switch (input.action) {
-            case "continue":
-            case "expire":
-                this.gameModel.getRound().setRevealState();
-                this.updateMCScores();
-                this.updateState(3);
-                break;
-            case "update_index": {
-                let name = input.player;
-                let index = parseInt(input.data.index);
-                this.transientValues.set(name, "mc_index", index);
-            }
-                break;
-            case "update_bet": {
-                let name = input.player;
-                let bet = parseInt(input.data.bet);
-                this.transientValues.set(name, "mc_bet", bet);
-            }
-                break;
-
-        }
-    }
-
-    [3](input) {
-        switch (input.action) {
-            case "continue":
-                this.gameModel.nextRound();
-                this.startRound();
-                break;
-        }
-    }
-
     [4](input) { // waiting for player to pick question
         switch (input.action) {
             case "select":

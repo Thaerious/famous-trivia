@@ -16,7 +16,6 @@ const GAME_MODEL_STATES = {
 
 const GAME_MODEL_STYLE = {
     NOT_STARTED: "ns",
-    MULTIPLE_CHOICE: "mc",
     JEOPARDY: "j",
     END_OF_GAME: "end"
 }
