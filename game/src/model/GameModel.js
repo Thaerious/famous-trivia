@@ -140,20 +140,6 @@ class GameModel {
     }
 
     /**
-     * Set the current player choosing the question.
-     * Setting active player out of range will set it to -1
-     * Returns, JSON object to broadcast
-     */
-    setActivePlayer(name) {
-        let player = this.getPlayer(name);
-        let index = this._players.indexOf(player);
-        if (index === -1) return false;
-        let splice = this._players.splice(index, 1);
-        this._players.unshift(splice[0]);
-        return true;
-    }
-
-    /**
      * Remove a player specified by 'name' from the game.  If a player with 
      * the same name rejoins, they will be treated as a new player.
      * Returns the player tuple (name, score, enabled) when successfull.
