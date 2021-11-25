@@ -1,0 +1,8 @@
+# **/.*/
+# **/jit/
+# **/generated/
+# **/logs/
+# coverage/
+# db/
+**/node_modules/
+documentation/build/

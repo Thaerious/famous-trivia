@@ -1,0 +1,245 @@
+=================
+Overview
+=================
+
+The program entry point is `src/index/index.js`_.
+This is where the Express webserver is setup and started.
+It starts the following modules and services:
+
+* Session manager.
+* Game manager service.
+* CORS settings.
+* Embedded JavaScript (ejs) template engine.
+* Just-In-Time (JIT) javascript browserify/babel.
+* The Websocket to listen for new connections.
+
+**Settings**
+
+* Values that are not expected to change are found in: `src/constants.js`_.
+* Settings that may change are found in: `src/config.js`_.
+
+.. _src/index/index.js: https://github.com/Thaerious/trivia-index/blob/master/src/index/index.js
+.. _src/constants.js: https://github.com/Thaerious/trivia-index/blob/master/src/constants.js
+.. _src/config.js: https://github.com/Thaerious/trivia-index/blob/master/src/config.js
+
+===============
+Root HTML Pages
+===============
+There are 6 single page applications which serve as entry points.
+These are found in the '/views/pages' directory.
+They are .ejs pages which compile into .html pages.
+This permits the automatic injection of Nidget dependencies.
+
+* contestant_join.ejs : the contestant enters their name to join a game.
+* editor.ejs : the host edit's a game.
+* host.ejs : the host's main menu where they can manage and launch games.
+* launch_console.ejs : host's submenu to manage a launched game.
+* contestant_portal.ejs : the contestant's game view (where they actually play).
+* host_portal.ejs : the host's game view (where they actually play).
+
+=====================
+Game Manager Endpoint
+=====================
+The GameManagerEndpoint is the main api starting point for any client interacting with the index.
+The endpoint url is "HOSTNAME/game-manager-service".  The format, exampled below, consists of
+a required 'action' field.  Other required fields depend on the contents of the action field.  The
+client has a corresponding  GameManagerService class which calls the endpoint actions.
+
+All actions return a json object with the result field set to 'success', 'rejected', or 'error'.
+If the result if 'error' or 'rejected' there will also be a 'reason' field.
+The following actions are supported:
+
+launch
+------
+Launch a new game with the user as host.
+The model is result from GameDescriptionModel#get().
+This method will verify the user's google credentials.
+The 'game-hash' returned is used to connect to the game with
+future API calls.
+A user can only host one game at a time.::
+
+  {
+    'action' : 'launch',
+    'model'  : game-description-model,
+    'token'  : google-auth-token
+  }
+
+returns::
+
+    res.json({
+        result : "success",
+        hash   : game-hash
+    }
+
+terminate
+---------
+Stop a currently running game.
+This method will verify the user's google credentials.::
+
+    {
+        action : "terminate",
+        token  : google-auth-token
+    }
+
+returns::
+
+    res.json({
+        result : "success"
+    }
+
+join-game
+---------
+Create a contestant with the given name.
+The contestant will be associated with the current session.
+Each session can only have one contestant.
+The host can not also be a contestant.::
+
+    {
+        'action'    : "join-game",
+        'game-hash' : game-hash,
+        'name'      : string
+    }
+
+returns::
+
+    {
+        result : 'success'
+    }
+
+has-game
+--------
+Determine if a user is currently hosting a game.::
+
+  {
+    'action' : 'has-game',
+    'token'  : google-auth-token
+  }
+
+returns::
+
+    {
+        result : 'success',
+        hash   : game-hash,
+    }
+
+get-game-hash
+-------------
+Determine if the current session has been associated with a game (see join-game).::
+
+    {
+        'action'    : "get-game-hash"
+        'game-hash' : game-hash
+    }
+
+returns::
+
+    {
+        result : 'success',
+        hash   : game-hash,
+    }
+
+==================
+Websocket Commands
+==================
+
+Connection.parseMessage is the first method to intercept a command.
+Second is Game.onInput.
+Lastly, each state in Game may handle the input object.
+
+All commands are in JSON format, with an 'action', 'players', and 'data' field.
+The player field is set by the Connection class object and will overwrite any
+provided by the client.  This will have the registered player name.  In the case
+of the host it will be '@HOST'.  Data sub-fields are determined by the action listed below.::
+
+    {
+        action : "string",
+        player : "string",
+        data   : {}
+    }
+
+Accepted actions:
+
+* request_model
+* next_round
+* prev_round
+* start
+* continue
+* back
+* accept
+* reject
+* expire
+* buzz
+* update_index {index}
+* update_bet {bet}
+* select {col, row}
+* set_score {name, score}
+
+======================
+Game Description Model
+======================
+The game description model (src/client/GameDescriptionModel.js) stores the questions for
+a trivia game.  GameDescriptionModel#get() returns the json version of the model.  The
+GameDescriptionModel class is just a helper class to manipulate the json.  The root object
+(shown below) contains the game name and an array of rounds.  There are currently two flavours
+of rounds, with the option to easily add more.
+
+json root::
+
+    {
+        name : string,
+        rounds : [{}, ..., {}]
+    }
+
+Jeopardy style round::
+
+    {
+        type : "categorical",
+        column : [
+            {
+                category : string,
+                font-size : string,
+                cell : [
+                    {
+                        value : number,
+                        type : "text",
+                        q : string,
+                        a : string
+                    }
+                ] x 5
+            },
+        ] x 6
+    }
+
+Multiple choice round::
+
+    {
+        type : "multiple_choice",
+        bonus : number,
+        question : string,
+        answers : [
+            string_1, ..., string_6
+        ],
+        values : [
+            boolean_1, ..., boolean_6
+        ]
+    }
+
+=================
+Game Update Model
+=================
+
+Basic object must have a players and a round field.  The round field my have a type field.::
+
+    {
+        players : [{
+            name : string,
+            score : number,
+            active : boolean,
+            light_state : constants.LIGHT_STATE
+        },
+        round {
+            type :
+        }
+    }
+
+.. include:: nidgets.rst

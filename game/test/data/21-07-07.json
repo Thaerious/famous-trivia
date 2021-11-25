@@ -1,0 +1,675 @@
+{
+  "name": "21-07-07 2",
+  "rounds": [
+    {
+      "type": "categorical",
+      "column": [
+        {
+          "category": "WHAT AM I?",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "THE MORE OF ME YOU\nTAKE AWAY\nTHE BIGGER I GET",
+              "a": "A HOLE"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "I HAVE BRANCHES\nBUT NO TRUNK OR LEAVES",
+              "a": "A BANK"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "I AM FULL OF HOLES\nBUT I STILL HOLD WATER.",
+              "a": "A SPONGE"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "I GO UP\nBUT I NEVER GO DOWN",
+              "a": "YOUR AGE"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "I AM AN ODD NUMBER\nWHEN YOU TAKE AWAY ONE LETTER, I BECOME EVEN",
+              "a": "SEVEN"
+            }
+          ],
+          "fontSize": "calc(25 * var(--fit-text-unit))"
+        },
+        {
+          "category": "SW\nONTARIO\nHIGHWAYS",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "GUELPH\nACTON\nGEORGETOWN",
+              "a": "HWY 7"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "NEW HAMBURG\nSTRATFORD\nGODERICH",
+              "a": "HWY 8"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "WELLENSTEIN\nDORKING\nLISTOWEL",
+              "a": "HWY 86"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "HARRISTON\nSHELBURN\n\nCOOKSTOWN",
+              "a": "HWY 89"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "SOUTHAMPTON\nGRAND BEND\nFOREST",
+              "a": "HWY 21"
+            }
+          ],
+          "fontSize": "calc(26 * var(--fit-text-unit))"
+        },
+        {
+          "category": "WHO AM I?",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "I HAVE ONE HORN\nAND\nONE BIG EYE",
+              "a": "PURPLE PEOPLE EATHER"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "JESUS LOVES ME MORE\nTHAN YOU WILL KNOW",
+              "a": "MRS. ROBINSON"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "I DID THE BOOGIE WOOGIE\nIN COMPANY 'B'",
+              "a": "BUGLE BOY"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "I PUT YOU ON THE BACK\nOF MY BIKE\nAND WE WENT RIDING \nDOWN BY\nOLD MAN JOHNSON'S FARM",
+              "a": "GIRL IN A\nRASPBERRY BERET"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "SHE JUST GOT BACK FROM A BUSINESS TRIP, AND SHE'S TRYING TO GIVE ME THE SLIP",
+              "a": "STACIE'S MOM"
+            }
+          ],
+          "fontSize": "calc(27 * var(--fit-text-unit))"
+        },
+        {
+          "category": "NOBEL PRIZE\nWINNERS",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "1903\n\n\nspontaneous radiation",
+              "a": "MARIE CURIE"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "1921\n\n\ndiscovery of the law of the photoelectric effect",
+              "a": "ALBERT EINSTEIN"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "2016\n\n\nCREATED NEW POETIC EXPRESSIONS WITHIN THE GREAT AMERICAN SONG TRADITION",
+              "a": "BOB DYLAN"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "2009\n\n\nextraordinary efforts to strengthen international diplomacy and cooperation between peoples",
+              "a": "BARAK OBAMA"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "1973\n\n\nHAVING NEGOTIATED A CEASE FIRE IN VIETNAM IN 1973\n\n\nWITH LE DUC THO",
+              "a": "HENRY KISSINGER"
+            }
+          ],
+          "fontSize": "calc(23 * var(--fit-text-unit))"
+        },
+        {
+          "category": "FAMOUS\nBEARS",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "RESIDES IN THE\nHUNDRED ACRE WOOD",
+              "a": "Winnie-the-Pooh"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "NAMED AFTER THE LONDON\nTRAIN STATION\nHE WAS FOUND IN",
+              "a": "PADDINGTON BEAR"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "LIVES IN JELLYSTONE\nAND\nLIKE TO PICNIC",
+              "a": "YOGI"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "THIS SLEEPY \nBROWN SLOTH BEAR\nRESIDES IN A FOREST IN\nINDIA",
+              "a": "BALOO"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "THIS INUIT PLOAR BEAR\nDECIDES IF HUNTERS WILL\nBE SUCCESSFUL\nON THEIR HUNTS",
+              "a": "NANOOK"
+            }
+          ],
+          "fontSize": "calc(36 * var(--fit-text-unit))"
+        },
+        {
+          "category": "CAPITAL\nCITIES",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "AFGANISTAN",
+              "a": "KABUL"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "Colombia",
+              "a": "BOGATA"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "Norway",
+              "a": "OSLO"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "Vietnam",
+              "a": "HANOI"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "Australia",
+              "a": "CANBERRA"
+            }
+          ],
+          "fontSize": "calc(36 * var(--fit-text-unit))"
+        }
+      ]
+    },
+    {
+      "type": "categorical",
+      "column": [
+        {
+          "category": "BEER",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "WHAT FOUR INGREDIENTS\nMAKE UP THE GERMAN\nPURITY LAWS?",
+              "a": "HOPS\nBARLEY\nWATER\nYEAST"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "WHAT IS THE COMMON NAME\nFOR\nSACCHAROMYCES CEREVISIAE",
+              "a": "BREWER'S YEAST"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "A BEER IS CALLED THIS\nWHEN THE HOPS ARE ADDED\nDURING THE FERMENTATION PROCESS",
+              "a": "DRY HOPPED"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "THIS STYLE OF BEER WAS\nFIRST BREWED IN BOHEMIA\nIN 1842",
+              "a": "PILSNER"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "WHAT INGREDIENT DOES BUDWEISER USE\n THAT IS NOT INCLUDED \nIN THE\nGERMAN PURITY LAWS",
+              "a": "RICE"
+            }
+          ],
+          "fontSize": "calc(57 * var(--fit-text-unit))"
+        },
+        {
+          "category": "MARSUPIALS",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "WHAT IS THE LARGEST\nEXTANT MARSUPIAL",
+              "a": "RED KANGAROO"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "THE TERM MARSUPIUM\nREFERS TO THIS",
+              "a": "POUCH"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "AMONG MARSUPIALS \nTHE YAPOK,\nA TYPE OF OPPOSUM,\n IS UNIQUE FOR\nLIVING IN THIS HABITAT",
+              "a": "AQUATIC"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "PRESENT IN THE BRAIN\nOF A PLACENTAL MAMMALS\nMARSUPIALS ARE MISSING\nTHIS.",
+              "a": "CORPUS CALLOSUM"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "THE RECENTLY EXINCT\nTHYLACINE IS COMMONLY \nKNOWN AS THIS",
+              "a": "TASMANIAN TIGER\nTASMANIAN WOLF"
+            }
+          ],
+          "fontSize": "calc(22 * var(--fit-text-unit))"
+        },
+        {
+          "category": "CANDY",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "nvented in 1948, the first dispenser for this candy resembled a lighter, to encourage people to quit smoking",
+              "a": "PEZ"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "These \"tiny, tangy crunchy\" candies from Wonka have a geeky name",
+              "a": "NERDS"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "The streetlights in the town of Hershey are shaped like these candies that were introduced in 1907",
+              "a": "KISSES"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "It calls itself the \"crispety, crunchety\" candy bar",
+              "a": "BUTTERFINGER"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "This British chocolatier makes a dairy milk bar as well as a milk tray",
+              "a": "CADBURY"
+            }
+          ],
+          "fontSize": "calc(43 * var(--fit-text-unit))"
+        },
+        {
+          "category": "FOUR LETTER \nF WORDS",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "YOU PUT THESE UP\nWHEN YOU REST",
+              "a": "FEET"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "KNOWLEDGE \nOR INFORMATION \nBASED ON REAL \nOCCURRENCES",
+              "a": "FACT"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "EXOTHERMIC OXIDATION OF A\nCOMBUSTIBLE SUBSTANCE",
+              "a": "FIRE"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "A shallow place in a body of water where one can cross",
+              "a": "FORD"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "YOU DO THIS IN \nYOUR POCKETS OR IN\nA POND",
+              "a": "FISH"
+            }
+          ],
+          "fontSize": "calc(20 * var(--fit-text-unit))"
+        },
+        {
+          "category": "CANADIAN\nC\nCITIES",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "FORMED FROM THE \nALMALGAMATION OF\nGALT, PRESTON, AND HESPELER",
+              "a": "CAMBRIDGE"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "THE CONFERENCE THAT\nSPURRED CANADA'S BIRTH\nWAS HOSTED IN THIS\nCITY IN 1864",
+              "a": "CHARLOTTETOWN"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "EASTERN ONTARIO CITY\nCONNECTED TO THE US\nCITY ROSEVELTOWN",
+              "a": "CORNWALL"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "JUST EAST OF ABBOTSFORD\nON THE TRANS-CANADA\nIT'S NAME MEANS\n\"VALLEY OF MANY STREAMS\"",
+              "a": "CHILLIWACK"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "AN OFF ISLAND SUBBURB\nOF MONTREAL LOCATED ON\nA RIVER OF THE SAME NAME",
+              "a": "Châteauguay"
+            }
+          ],
+          "fontSize": "calc(26 * var(--fit-text-unit))"
+        },
+        {
+          "category": "STUPID\nFUCKING\nPUNS",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "What do you call a veterinarian with laryngitis?",
+              "a": "A HOARSE DOCTOR"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "What kind of tree do fingers grow on?",
+              "a": "A PALM TREE"
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "WHY IS LINCOLN\nNOT GUILTY",
+              "a": "BECAUSE HE IS\nIN-A-CENT"
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "What do you call two people in an ambulance?",
+              "a": "PAIR OF MEDICS"
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "WHY CAN'T TENNIS PLAYERS\nFIND HAPPINESS?",
+              "a": "LOVE MEANS NOTHING TO THEM"
+            }
+          ],
+          "fontSize": "calc(26 * var(--fit-text-unit))"
+        }
+      ]
+    },
+    {
+      "type": "categorical",
+      "column": [
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        },
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        },
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1600,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 2000,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        },
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1600,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 2000,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        },
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 600,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 800,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 1000,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        },
+        {
+          "category": "",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "",
+              "a": ""
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "",
+              "a": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "bonus": 100,
+      "correct-answer": 0,
+      "question" : "which is what",
+      "options" : [
+        "what",
+        "where",
+        "who",
+        "when",
+        "why"
+      ]
+    }
+  ]
+}

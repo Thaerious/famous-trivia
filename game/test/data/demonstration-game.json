@@ -1,0 +1,247 @@
+{
+  "name": "Demonstration Game",
+  "rounds": [
+    {
+      "type": "categorical",
+      "column": [
+        {
+          "category": "A TO Z",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "R\n\n(1)\nTHE GAPE OF A BIRD'S MOUTH\n\n(2)\nA GAPING GRIN OR GRIMACE",
+              "a": "RICTUS"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "P\n\nTO LOOK OVER OR THROUGH\n IN A CASUAL\nOR\n CURSORY MANNER",
+              "a": "PERUSE"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "M\n\nA GREAT WORK; ESPECIALLY : THE GREATEST ACHIEVEMENT OF AN ARTIST OR WRITER",
+              "a": "MAGNUM OPUS"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "H\n\nHATEFULLY OR SHOCKINGLY EVIL : ABOMINABLE",
+              "a": "HEINOUS"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "B\n\nWITH LIGHTHEARTEDNESS OR UNCONCERN : GAY, MERRY",
+              "a": "BLITHESOME"
+            }
+          ],
+          "fontSize": "calc(45 * var(--fit-text-unit))"
+        },
+        {
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "2 × 3 + 1",
+              "a": "7"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "1/2 × 1/2",
+              "a": "1/4"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "111 × 11",
+              "a": "1221"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "1/2 ÷ 1/6",
+              "a": "3"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "(12 + 11 × 6) / 3",
+              "a": "26"
+            }
+          ],
+          "fontSize": "calc(42 * var(--fit-text-unit))",
+          "category": "MATHS"
+        },
+        {
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "KMX:\nThey'll help you find that 2010 Dodge Grand Caravan you want",
+              "a": "CARMAX"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "EL\nis for this company that makes makeup, fragrances & skincare products",
+              "a": "ESTEE LAUDER"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "MS:\nThey'll help you with your financial goals & investing",
+              "a": "MORGAN STANLEY"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "X marks the spot for this Pittsburgh company, founded in 1901 & formerly part of USX",
+              "a": "U.S. STEEL"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "DLTR:\nThe buck stops at this retailer",
+              "a": "DOLLAR TREE"
+            }
+          ],
+          "fontSize": "calc(31 * var(--fit-text-unit))",
+          "category": "STOCK \nSYMBOLS"
+        },
+        {
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "TO COMMUNICATE DIRECTLY REGARDING A SITUATION, OR 1201 S. MAIN STREET",
+              "a": "ADDRESS"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "A CHINESE SHIP, OR WORTHLESS RUBBISH",
+              "a": "JUNK"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "PREY, OR AN OPEN CAVITY FOR DIGGING OUT LIMESTONE",
+              "a": "QUARRY"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "A LIQUEUR, OR POLITE & GENIAL",
+              "a": "CORDIAL"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "A CABDRIVER, A TYPE OF COUGH OR A BAD WRITER",
+              "a": "A HACK"
+            }
+          ],
+          "fontSize": "calc(26 * var(--fit-text-unit))",
+          "category": "HOMONYMS"
+        },
+        {
+          "category": "IN THE\nNATIONAL\nWOMEN'S \nHALL OF FAME",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "Honored in 2001, this actress, whom we all love",
+              "a": "LUCILLE BALL"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "Shannon Lucid, who made history in 1996 by spending 188 consecutive days in space, mostly on this Russian space station",
+              "a": "MIR"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "This anthropologist who spent time living among the people of Samoa & New Guinea",
+              "a": "MEAD"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "This first lady who turned 93 in 2020",
+              "a": "ROSALYNN CARTER"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "This Swiss-born American psychiatrist who identified the 5 stages of grief",
+              "a": "KUBLER-ROSS"
+            }
+          ],
+          "fontSize": "calc(20 * var(--fit-text-unit))"
+        },
+        {
+          "category": "A PLACE IN \nTHE BIBLE",
+          "cell": [
+            {
+              "value": 100,
+              "type": "text",
+              "q": "\"And the Lord came down upon\" this place, \"on the top of\" it... \"and Moses went up\"",
+              "a": "MOUNT SINAI"
+            },
+            {
+              "value": 200,
+              "type": "text",
+              "q": "\"Hath not the scripture said, that Christ cometh of the seed of David, and out of the town of\" this, \"where David was?\"",
+              "a": "BETHLAHAM"
+            },
+            {
+              "value": 300,
+              "type": "text",
+              "q": "\"Therefore is the name of it called\" this; \"because the Lord did there confound the language of all the earth\"",
+              "a": "BABEL"
+            },
+            {
+              "value": 400,
+              "type": "text",
+              "q": "\"Now when Jesus had heard that John was cast into prison, he departed into\" this region, now in northern Israel",
+              "a": "GALILEE"
+            },
+            {
+              "value": 500,
+              "type": "text",
+              "q": "\"... And sold Joseph to the Ishmeelites for twenty pieces of silver: and they brought Joseph into\" this country",
+              "a": "EGYPT"
+            }
+          ],
+          "fontSize": "calc(26 * var(--fit-text-unit))"
+        }
+      ]
+    },
+    {
+      "type": "multiple_choice",
+      "question": "SOLVE FOR X\nX^2 + 5X + 6",
+      "answers": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "values": [
+        false,
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "bonus": "500"
+    }
+  ]
+}
