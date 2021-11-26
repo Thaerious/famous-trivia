@@ -8,3 +8,4 @@
 documentation/build/
 **/coverage/
 .vscode
+**/generated/

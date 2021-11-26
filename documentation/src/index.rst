@@ -29,6 +29,13 @@ Welcome to Famous-Trivia's documentation!
 .. toctree::
     :maxdepth: 2
     :numbered:
+    :caption: Server
+
+    chapters/server.rst
+
+.. toctree::
+    :maxdepth: 2
+    :numbered:
     :caption: Internals
 
     chapters/3.internals

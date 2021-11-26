@@ -213,46 +213,12 @@ class Game {
     }
 
     startRound() {
-        if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.MULTIPLE_CHOICE) {
-            this.updateState(1);
-            this.gameModel.getRound().setQuestionState();
-        } else if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.JEOPARDY) {
+        if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.JEOPARDY) {
             this.gameModel.getRound().setBoardState();
             this.updateState(4);
         } else if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.END_OF_GAME) {
             this.updateState(10);
         }
-    }
-
-    /**
-     * Calculate the player scores based upon the MC answers
-     * Blank values are considered to be false.
-     * >= 0 are considered to be true.
-     */
-    updateMCScores() {
-        let answer = this.gameModel.getRound().getAnswer();
-
-        for (let player of this.gameModel.players) {
-            const name = player.name;
-            const index = parseInt(this.transientValues.get(name, "mc_index", 0));
-            let bet = parseInt(this.transientValues.get(name, "mc_bet", 0));
-
-            if (bet > player.score) bet = player.score;
-            if (index === answer) player.score = parseInt(player.score) + bet;
-            else player.score = parseInt(player.score) - bet;
-        }
-    }
-
-    /**
-     * Return the sum of all multiple choice bets for the given name.
-     * @param name
-     */
-    sumMCBet(name) {
-        let r = 0;
-        for (let index = 0; index < this.mcBetsData[name].answers.length; index++) {
-            r = r + parseInt(this.mcBetsData[name].answers[index].amount);
-        }
-        return r;
     }
 
     [0](input) {
