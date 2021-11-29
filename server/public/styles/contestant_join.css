@@ -1,0 +1,57 @@
+*{
+    font-family: "Arial Black";
+}
+
+.form.hidden{
+    display: none;
+}
+
+.form{
+    position: absolute;
+    display: block;
+    border: 1px solid black;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    left: 50%;
+    top: 50%;
+    background-color: aqua;
+
+    width: 50vh;
+    height: 35vh;
+}
+
+.form *, .form *{
+    position: absolute;
+    display: block;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4vh;
+    text-align: center;
+    font-family: "Arial Black", serif;
+}
+
+.form .label{
+    width: 90%;
+    top: 7%;
+}
+
+.form .name{
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+}
+
+.form .button{
+    cursor: pointer;
+    background-color: chartreuse;
+    bottom: 7%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.form .button:hover{
+    cursor: pointer;
+    background-color: greenyellow;
+}

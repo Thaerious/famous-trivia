@@ -1,0 +1,55 @@
+{
+  "name": "trivia-server",
+  "version": "0.1.0",
+  "description": "Creator and Luancher for Online Trivia",
+  "main": "src/server/index.js",
+  "scripts": {
+    "build-css": "sass src/styles:public/styles/generated/",
+    "watch-css": "sass --watch src/styles:public/styles/generated/",
+    "build": "npm run build-js && npm run build-css",
+    "test": "mocha test/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thaerious/trivia-server.git"
+  },
+  "author": "Ed Armstrong",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Thaerious/trivia-server/issues"
+  },
+  "homepage": "https://github.com/Thaerious/trivia-server#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.13.10",
+    "@thaerious/parseargs": "0.x.x",
+    "async-mutex": "^0.3.1",
+    "body-parser": "^1.19.0",
+    "browserify": "^17.0.0",
+    "cookie-parser": "^1.4.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-useragent": "^1.0.15",
+    "google-auth-library": "^7.0.3",
+    "helmet": "^4.4.1",
+    "http": "^0.0.1-security",
+    "jsdom": "^18.1.1",
+    "jsonschema": "^1.4.0",
+    "path": "^0.12.7",
+    "sqlite3": "^5.0.2",
+    "ws": "^8.3.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "babel-plugin-istanbul": "^6.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^10.0.0",
+    "c8": "^7.7.2",
+    "mocha": "*",
+    "nyc": "^15.1.0",
+    "puppeteer": "^11.*.*",
+    "query-selector-shadow-dom": "^1.0.0",
+    "sass": "^1.34.0"
+  }
+}

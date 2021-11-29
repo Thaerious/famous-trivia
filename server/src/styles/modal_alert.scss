@@ -1,0 +1,55 @@
+@import 'components/button';
+
+*{
+  display: block;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+:host(modal-alert.hidden){
+  display: none;
+}
+
+:host(modal-alert){
+  z-index: 100;
+}
+
+.outer {
+  position: absolute;
+  border: 3px solid #3d7837;
+  border-radius: 15px;
+  height: 100%;
+  width:  100%;
+  background-color: #e9e9e9;
+
+  .row {
+    position: absolute;
+    border: 3px solid #3d7837;
+    border-radius: 15px;
+    height: 75%;
+    width:  90%;
+    top: 5%;
+    left: 5%;
+    background-color: #e9e9e9;
+
+    .content{
+      position: absolute;
+      text-align: center;
+      font-size: 35px;
+      font-family: "Arial Black", serif;
+      width: 100%;
+      height: auto;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  #ok{
+    position: absolute;
+    bottom: 2%;
+    width: 50%;
+    left: 50%;
+    height: 15%;
+    transform: translateX(-50%);
+  }
+}

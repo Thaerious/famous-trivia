@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--suppress HtmlRequiredTitleElement -->
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body>
+<%- include('../partials/nidget-templates'); %>
+
+<div class="bg"></div>
+
+<div id="page-container" class="aspect-fit">
+    <div class="top-bar" id="top-bar">
+        <menu-container image-src="assets/images/menu.png">
+            <menu-item event-name="logout">Logout</menu-item>
+        </menu-container>
+        <nidget-text class="round-number-text">Round 1</nidget-text>
+    </div>
+
+    <div id="main-container">
+        <player-container id="player-container"></player-container>
+        <player-panel id="self-panel"></player-panel>
+
+        <question-pane id="question-pane" class="hidden" template-id="question-pane-template"></question-pane>
+        <game-board id="game-board" class="hidden"></game-board>
+        <multiple-choice-present id="multiple-choice-present" class="hidden"></multiple-choice-present>
+
+        <div class="button-container">
+            <trivia-timer class="hidden"></trivia-timer>
+            <nidget-button id="buzz" class="round raised center button">BUZZ</nidget-button>
+            <nidget-button id="show-question" class="round raised center button">Question</nidget-button>
+        </div>
+    </div>
+
+    <popup-panel id="question-popup" class="hidden">
+        <link rel="stylesheet" href="styles/generated/contestant_portal.css"/>
+        <nidget-text class="text-contents" id="text-contents"></nidget-text>
+    </popup-panel>
+</div>
+
+</body>
+</html>

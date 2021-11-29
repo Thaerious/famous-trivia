@@ -1,0 +1,40 @@
+*{
+    background-color: #a3f3ff;
+}
+
+.home-options{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: ;
+    transform: translate(-50%, -50%);
+    border: 3px solid;
+    border-color: #44b3ff;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    width: 80%;
+    height: 30vh;
+}
+
+.home-option{
+    position: relative;
+    border: 3px solid;
+    border-color: #4bf;
+    border-radius: 50px;
+    height: 30%;
+    margin: 0.5vh;
+    text-align: center;
+    font-size: 3.5vh;
+    font-weight: bold;
+    font-family: "Arial Black";
+    line-height: 8vh;
+    cursor: pointer;
+    background-color: rgba(0, 192, 0, 0.3);
+}
+
+.home-option:hover{
+    position: relative;
+    border-color: #4ff;
+    background-color: rgba(64, 255, 64, 0.6);
+}

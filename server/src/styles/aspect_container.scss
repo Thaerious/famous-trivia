@@ -1,0 +1,30 @@
+
+:host(aspect-container) {
+  position: absolute;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: calc(var(--height-value));
+  width: calc(var(--width-value));
+  font-size: calc(var(--base-font-size));
+}
+
+:host(aspect-container.fill-vertical) {
+  --aspect-ratio: var(--aspect-width, 16) / var(--aspect-height, 9);
+  --height-value: 100vh;
+  --width-value: var(--aspect-ratio) * 100vh;
+  --base-font-size: 5vh;
+  --cell-font-size: 6.5vh;
+  --fit-text-unit: 0.1vh;
+}
+
+// taller
+:host(aspect-container.fill-horizontal) {
+  --aspect-ratio: calc(var(--aspect-height, 9) / var(--aspect-width, 16));
+  --height-value: calc(var(--aspect-ratio) * 100vw);
+  --width-value: 100vw;
+  --base-font-size: calc(var(--aspect-ratio) * 5vw);
+  --cell-font-size: calc(var(--aspect-ratio) * 6.5vw);
+  --fit-text-unit: calc(var(--aspect-ratio) * 0.1vw);
+}
