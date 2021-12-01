@@ -9,3 +9,4 @@ documentation/build/
 **/coverage/
 .vscode
 **/generated/
+client/output

@@ -93,15 +93,15 @@ Perform the following steps.
 Generate the html and js pages.::
 
     const nidgetPreprocessor = new NidgetPreprocessor(config.index.ejs_nidgets, config.index.nidget_scripts).setup();
-    await JITRender.render(nidgetPreprocessor);
+    await EJSRender.render(nidgetPreprocessor);
 
 Setup the middleware to index Browserified .js files.::
 
-    app.get(config.index.jit_path, Express.static(config.index.public_scripts));
+    app.get(config.index.JIT_URL, Express.static(config.index.public_scripts));
 
 Setup the middleware to serve rendered .ejs files.::
 
-    app.get("*.ejs", Express.static(config.index.PRECOMPILED_EJS_DIR,
+    app.get("*.ejs", Express.static(config.index.GENERATED_EJS_DIR,
         {
             setHeaders : (res, path, stat) => res.setHeader('Content-Type', 'text/html')
         }
