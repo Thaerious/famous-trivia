@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head'); %>
+    <%- include('./partials/google'); %>
+</head>
+<body>
+<%- include('./partials/nidget-templates'); %>
+
+<div class="bg"></div>
+
+<div id="page-container" class="aspect-fit">
+    <div class="top-bar" id="top-bar">
+        <menu-container id="menu-container" image-src="assets/images/menu.png">
+            <menu-item  id="menu-terminate" event-name="terminate">Terminate Hosting</menu-item>
+            <menu-item  id="menu-next" event-name="next">Next Round</menu-item>
+            <menu-item  id="menu-prev" event-name="prev">Previous Round</menu-item>
+            <menu-item event-name="add-players">Add Players</menu-item>
+        </menu-container>
+        <nidget-text class="round-number-text">Round 1</nidget-text>
+    </div>
+
+    <div id="main-container">
+        <player-container id="player-container"></player-container>
+        <question-pane id="question-pane" class="hidden" template-id="question-pane-template"></question-pane>
+        <game-board id="game-board" class="hidden"></game-board>
+        <multiple-choice-present id="multiple-choice-present" class="hidden"></multiple-choice-present>
+        <nidget-text id="answer"></nidget-text>
+
+        <div class="button-container">
+            <trivia-timer class="hidden"></trivia-timer>
+
+            <nidget-button id="accept" class="round left button">ACCEPT</nidget-button>
+            <nidget-button id="reject" class="round right button">REJECT</nidget-button>
+            <nidget-button id="back" class="round left button">BACK</nidget-button>
+            <nidget-button id="continue" class="round right button">CONTINUE</nidget-button>
+            <nidget-button id="next" class="round center button">NEXT ROUND</nidget-button>
+            <nidget-button id="start" class="round center button">START</nidget-button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

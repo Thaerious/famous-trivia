@@ -1,0 +1,26 @@
+{
+    "name": "famous-trivia-client",
+    "version": "0.1.0",
+    "main": "src/index.js",
+    "author": "Ed Armstrong",
+    "license": "MIT",
+    "type": "module",
+    "dependencies": {
+        "ejs": "^3.1.6",
+        "famous-trivia-game": "file:../game",
+        "jsdom": "^18.1.1"
+    },
+    "devDependencies": {
+        "@babel/plugin-transform-runtime": "^7.16.4",
+        "@babel/preset-env": "^7.16.4",
+        "babelify": "^10.0.0",
+        "browserify": "^17.0.0",
+        "sass": "^1.44.0"
+    },
+    "scripts": {
+        "build-css": "sass styles:output",
+        "watch-css": "sass --watch styles:output",
+        "build": "npm run clean && node . && npm run build-css",
+        "clean": "rm -rf output"
+    }
+}

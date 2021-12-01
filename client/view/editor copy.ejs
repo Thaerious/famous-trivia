@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head'); %>
+    <%- include('./partials/google'); %>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+</head>
+<body>
+<%- include('./partials/nidget-templates'); %>
+
+<div class="bg busy"></div>
+<div class="busy-box">
+    <img src="assets\images\busy.gif"/>
+</div>
+
+<a id="download-anchor" class="hidden-anchor" download="download.json" type="text/json"></a>
+
+<div id="page-container">
+
+    <div class="top-bar" id="top-bar">
+        <div class="game-name" id="game-name" contenteditable="true">Game Name</div>
+        <menu-container id="menu" image-src="assets/images/menu.png">
+            <menu-item event-name="menu-home-screen">Home Screen</menu-item>
+            <menu-item event-name="menu-add-jeopardy">Add Jeopardy Round</menu-item>
+            <menu-item event-name="menu-add-mc">Add Multiple-Choice Round</menu-item>
+            <menu-item event-name="menu-remove-round">Remove Round</menu-item>
+            <menu-item event-name="menu-move-left">Move Round Left</menu-item>
+            <menu-item event-name="menu-move-right">Move Round Right</menu-item>
+            <menu-item event-name="menu-download">Download</menu-item>
+            <menu-item id="menu-increase-value" event-name="menu-increase-value">Increase Value</menu-item>
+            <menu-item id="menu-decrease-value" event-name="menu-decrease-value">Decrease Value</menu-item>
+        </menu-container>
+    </div>
+
+    <div class="round-number" id="round-number">
+        <img class="triangle-indicator" id="triangle-right" src="assets/images/right_triangle.png"/>
+        <nidget-text class="text">Round 1</nidget-text>
+        <img class="triangle-indicator" id="triangle-left" src="assets/images/left_triangle.png"/>
+    </div>
+
+    <nidget-element id="jp">
+        <question-pane id="jp-question-pane" class="question-pane hidden"></question-pane>
+        <question-pane id="jp-answer-pane"   class="answer-pane hidden"></question-pane>
+        <game-board id="game-board" class="game-board hidden"></game-board>
+
+        <nidget-element class="button-container">
+            <nidget-button id="show-question" class="show-question round">Show Question</nidget-button>
+            <nidget-button id="show-answer" class="show-answer round">Show Answer</nidget-button>
+            <nidget-button id="show-board" class="show-board round">Show Board</nidget-button>
+        </nidget-element>
+    </nidget-element>
+
+    <nidget-element id="mc">
+        <multiple-choice-compose id="multiple-choice-compose" class="answer-pane hidden"></multiple-choice-compose>
+        <question-pane id="mc-question-pane" class="question-pane hidden"></question-pane>
+
+        <nidget-element class="hidden button-container">
+            <nidget-button id="show-question" class="show-question round">Show Question</nidget-button>
+            <nidget-button id="show-answer" class="show-answer round">Show Answer</nidget-button>
+        </nidget-element>
+    </nidget-element>
+</div>
+
+</body>
+</html>
