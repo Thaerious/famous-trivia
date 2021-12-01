@@ -1,7 +1,7 @@
 import GameModel from "./model/GameModel.js";
-import constants from "./config.js";
+import config from "./config.js";
 import crypto from "crypto";
-import {GAME_MODEL_STYLE, GAME_MODEL_STATES} from "./constants.js";
+import schema_constants from "./constants.js";
 import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 logger.channel("debug").enabled = false;
@@ -90,7 +90,7 @@ class Timer {
 }
 
 /**
- * Gets the initial timer values from constants.times
+ * Gets the initial timer values from config.times
  */
 class Game {
     /**
@@ -110,7 +110,7 @@ class Game {
         }
 
         this.times = {};
-        Object.assign(this.times, constants.TIMES);
+        Object.assign(this.times, config.TIMES);
     }
 
     set state(value) {
@@ -130,17 +130,17 @@ class Game {
 
         switch (input.action) {
             case "set_score":
-                if (input.player !== constants.names.HOST) return;
+                if (input.player !== config.names.HOST) return;
                 const player = this.getPlayerByName(input.data.name);
                 player.score = input.data.score;
                 break;
             case "next_round":
-                if (input.player !== constants.names.HOST) return;
+                if (input.player !== config.names.HOST) return;
                 this.gameModel.nextRound();
                 this.startRound();
                 break;
             case "prev_round":
-                if (input.player !== constants.names.HOST) return;
+                if (input.player !== config.names.HOST) return;
                 this.gameModel.prevRound();
                 this.startRound();
                 break;
@@ -213,10 +213,10 @@ class Game {
     }
 
     startRound() {
-        if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.JEOPARDY) {
+        if (this.gameModel.getRound().stateData.style === schema_constants.GAME_MODEL_STYLE.JEOPARDY) {
             this.gameModel.getRound().setBoardState();
             this.updateState(4);
-        } else if (this.gameModel.getRound().stateData.style === GAME_MODEL_STYLE.END_OF_GAME) {
+        } else if (this.gameModel.getRound().stateData.style === schema_constants.GAME_MODEL_STYLE.END_OF_GAME) {
             this.updateState(10);
         }
     }
@@ -237,7 +237,7 @@ class Game {
             case "select":
                 let allow = false;
                 if (Game.settings.ALLOW_PLAYER_PICK && (this.gameModel.activePlayer.name === input.player)) allow = true;
-                if (input.player === constants.names.HOST) allow = true;
+                if (input.player === config.names.HOST) allow = true;
                 if (!allow) return;
 
                 if (!this.gameModel.getRound().isSpent(input.data.col, input.data.row)) {
@@ -260,7 +260,7 @@ class Game {
     [5](input) { // waiting for host to read question and click continue
         switch (input.action) {
             case "continue":
-                if (input.player !== constants.names.HOST) return;
+                if (input.player !== config.names.HOST) return;
                 this.updateState(6);
                 this.timer.start(this.times.ANSWER);
                 break;
@@ -376,5 +376,5 @@ Game.settings = {
 }
 
 export {
-    Game, Timer
+    Game, GameModel, Timer, schema_constants
 };

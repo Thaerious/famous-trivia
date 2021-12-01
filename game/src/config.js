@@ -26,10 +26,10 @@ const config = {
         public_scripts : "public/scripts/",
 
         // Public script dir (target of JIT pre-compiler).
-        jit_scripts : "./public/scripts/jit/",
+        GENERATED_SCRIPT_DIR : "./public/scripts/jit/",
 
         // Target of .ejs precompile
-        PRECOMPILED_EJS_DIR : "./public/html/jit/",
+        GENERATED_EJS_DIR : "./public/html/jit/",
 
         // .ejs source directory
         ejs_src : "./views/",
@@ -41,7 +41,7 @@ const config = {
         ejs_root : "./views/pages/",
 
         // Path that serves JIT pages.
-        jit_path : "/jit/*.js",
+        JIT_URL : "/jit/*.js",
 
         // Client source files, all files in this dir get browserified unless --jit is flagged.
         client_path : "./src/client/",

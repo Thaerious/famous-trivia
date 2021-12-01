@@ -1,5 +1,4 @@
-import {GAME_MODEL_STYLE, GAME_MODEL_STATES} from "../constants.js";
-import {LIGHT_STATE} from "../constants.js";
+import constants from "../constants.js";
 
 class JeopardyModel {
     /**
@@ -53,7 +52,7 @@ class JeopardyModel {
      */
     setPlayerSpent() {
         const name = this.getCurrentPlayer();
-        if (this.stateData.state !== GAME_MODEL_STATES.QUESTION) return false;
+        if (this.stateData.state !== constants.GAME_MODEL_STATES.QUESTION) return false;
         if (!name) return false;
         if (this.isPlayerSpent(name)) return true;
         this.spentPlayers.push(name);
@@ -123,8 +122,8 @@ class JeopardyModel {
         this.spentPlayers = [];
 
         this.stateData = {
-            style: GAME_MODEL_STYLE.JEOPARDY,
-            state: GAME_MODEL_STATES.BOARD,
+            style: constants.GAME_MODEL_STYLE.JEOPARDY,
+            state: constants.GAME_MODEL_STATES.BOARD,
             spent: this.spent
         };
 
@@ -144,8 +143,8 @@ class JeopardyModel {
         this.spentPlayers = [];
 
         this.stateData = {
-            style: GAME_MODEL_STYLE.JEOPARDY,
-            state: GAME_MODEL_STATES.QUESTION,
+            style: constants.GAME_MODEL_STYLE.JEOPARDY,
+            state: constants.GAME_MODEL_STATES.QUESTION,
             col: col,
             row: row,
             type: this.getType(col, row),
@@ -173,8 +172,8 @@ class JeopardyModel {
         this.spentPlayers = [];
 
         this.stateData = {
-            style: GAME_MODEL_STYLE.JEOPARDY,
-            state: GAME_MODEL_STATES.REVEAL,
+            style: constants.GAME_MODEL_STYLE.JEOPARDY,
+            state: constants.GAME_MODEL_STATES.REVEAL,
             col: col,
             row: row,
             type: this.getType(col, row),
@@ -230,13 +229,13 @@ class JeopardyModel {
 
         for (let player of players) {
             if (player.name === this.currentPlayer) {
-                player.light_state = LIGHT_STATE.HIGHLIGHT;
+                player.light_state = constants.LIGHT_STATE.HIGHLIGHT;
             }
             else if (this.spentPlayers.indexOf(player.name) !== -1) {
-                player.light_state = LIGHT_STATE.DIM;
+                player.light_state = constants.LIGHT_STATE.DIM;
             }
             else {
-                player.light_state = LIGHT_STATE.NORMAL;
+                player.light_state = constants.LIGHT_STATE.NORMAL;
             }
         }
 

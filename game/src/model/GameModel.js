@@ -1,4 +1,4 @@
-import SCHEMA_CONSTANTS from "../schema_constants.js";
+import constants from "../constants.js";
 import JeopardyModel from "./JeopardyModel.js";
 import EndOfGame from "./EndOfGame.js";
 import GameNotStarted from "./GameNotStarted.js";
@@ -20,7 +20,7 @@ class GameModel {
         this.roundIndex = -1;
 
         for(let roundModel of this.gameDescription.rounds){
-            if (roundModel.type ===  SCHEMA_CONSTANTS.CATEGORY) {
+            if (roundModel.type ===  constants.SCHEMA_CONSTANTS.CATEGORY) {
                 this.rounds.push(new JeopardyModel(this, roundModel));
             }
         }
