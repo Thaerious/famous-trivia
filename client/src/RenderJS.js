@@ -1,5 +1,6 @@
 import browserify from "browserify";
 import FS from "fs";
+import Path from "path";
 
 class RenderJS{
 
@@ -12,13 +13,13 @@ class RenderJS{
     }
 
     addPath(...jsSrcPath){
-        this.sourcePaths = [...this.sourcePaths, jsSrcPath];
+        this.sourcePaths = [...this.sourcePaths, ...jsSrcPath];
     }
 
     render(){
         const b = browserify({ debug: true });
     
-        for (path of this.sourcePaths) {
+        for (let path of this.sourcePaths) {
             if (FS.existsSync(path)) b.add(path);
         }
 
@@ -39,7 +40,7 @@ class RenderJS{
 
             rs.on('error', err => {
                 reject(err);
-                if (stream?.emit) stream.emit('end'); // end this stream
+                if (stream?.emit) stream.emit('end'); 
             });
             
             rs.pipe(stream);

@@ -3,7 +3,7 @@
 import crypto from "crypto";
 import constants from "../../config.js";
 import HasDB from './HasDB.js';
-import Logger from "../Logger.js";
+import Logger from "@thaerious/logger";
 
 const logger = Logger.getLogger();
 

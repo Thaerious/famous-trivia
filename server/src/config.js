@@ -19,8 +19,9 @@ const config = {
         // The port to start Express on.
         port : 8000,
 
-        // The directory to server files out of
-        public_html : "public",
+        // The directories to server files out of
+        PUBLIC_STATIC : "public",
+        PUBLIC_GENERATED : "../client/output",
 
         // Public script dir (target)
         public_scripts : "public/scripts/",

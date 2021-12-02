@@ -1,21 +1,18 @@
 // noinspection JSCheckFunctionSignatures
-
 import config from "../config.js";
-import EJSRender from "./mechanics/EJSRender.js";
 import ReportCoverage from "./mechanics/ReportCoverage.js";
 import Connection from "./game/Connection.js";
 import cors from "./mechanics/cors.js";
 
-import Path from "path";
 import Express from "express";
 import http from "http";
 import BodyParser from "body-parser";
 import helmet from "helmet";
 import UserAgent from "express-useragent";
-import WebSocket from "ws";
+// import WebSocket from "ws";
+import WebSocket, { WebSocketServer } from 'ws';
 
-
-import Logger from './Logger.js';
+import Logger from '@thaerious/logger';
 const logger = Logger.getLogger();
 
 class Server {
@@ -28,30 +25,29 @@ class Server {
      * @param cors
      * @param jitFlag
      */
-    constructor(sessionManager, gameManager, gameManagerEndpoint, nidgetPreprocessor, cors, jitFlag = false) {
+    constructor(sessionManager, gameManager, gameManagerEndpoint, cors) {
         this.app = Express();
-        this.index = http.createServer(this.app);
+        this.httpServer = http.createServer(this.app);
 
         this.setupExternals();
         this.setupSessionManagerEndpoint(sessionManager);
         this.setupGameManagerEndpoint(sessionManager, gameManagerEndpoint);
         this.setupReportCoverageEndpoint();
         this.setupPageRenderingEndpoints(cors);
-        this.setupJIT(nidgetPreprocessor, jitFlag);
         this.setupWebsocket(sessionManager, gameManager, gameManagerEndpoint);
         this.setup404();
     }
 
-    start(port) {
+    start(port, ip = "0.0.0.0") {
         /** Start the index **/
-        this.index.listen(port, () => {
+        this.httpServer.listen(port, ip, () => {
             console.log(`HTTP listener started on port ${port}`);
         });
     }
 
     stop(cb = () => {}) {
         console.log("Stopping server");
-        this.index.close(cb);
+        this.httpServer.close(cb);
     }
 
     setupExternals() {
@@ -59,8 +55,9 @@ class Server {
         this.app.use(UserAgent.express()); // used to determine what the connection is using (phone,browser etc)
     }
 
+    // adds session inforation to requests
     setupSessionManagerEndpoint(sessionManager) {
-        this.app.use('/*.ejs', sessionManager.middleware);
+        this.app.use('/*.html', sessionManager.middleware);
         this.app.use('/game-manager-service', sessionManager.middleware);
     }
 
@@ -76,45 +73,25 @@ class Server {
 
     setupPageRenderingEndpoints() {
         this.app.use("*", (req, res, next)=>{
+            // logger when -v/--verbose flag is active
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
             logger.channel("verbose").log(ip + " " + req.originalUrl);
             next();
         });
         
-        this.app.get("", cors);
+        this.app.get("*", cors);
         this.app.get('/', (req, res) => {
+            //serve the index file by default
             res.sendFile('index.html', {root: "./public/html/static/"});
         });
-        this.app.use("/*.ejs", cors);
+
         this.app.get("/*.html", cors);
-        this.app.use(Express.static(config.server.public_html));
-    }
-
-    setupJIT(nidgetPreprocessor, jitFlag) {
-        if (jitFlag) { // render the files every time they are accessed
-            this.app.get(config.server.JIT_URL, new EJSRender(nidgetPreprocessor).middleware);
-            this.app.set('view engine', 'ejs');
-
-            this.app.get('*.ejs', (req, res) => {
-                nidgetPreprocessor.setup();
-                let nidgetDependencies = nidgetPreprocessor.getTemplateDependencies(config.server.EJS_ROOT_DIR + req.path);
-                res.render(`pages/${req.path}`, {
-                    filename: Path.basename(req.path.slice(0, -4)),
-                    nidgets: nidgetDependencies
-                });
-            });
-        } else { // serve files already rendered
-            this.app.get(config.server.JIT_URL, Express.static(config.server.public_scripts));
-            this.app.get("*.ejs", Express.static(config.server.GENERATED_EJS_DIR,
-                {
-                    setHeaders: (res, path, stat) => res.setHeader('Content-Type', 'text/html')
-                }
-            ));
-        }
+        this.app.use(Express.static(config.server.PUBLIC_STATIC));
+        this.app.use(Express.static(config.server.PUBLIC_GENERATED));
     }
 
     setupWebsocket(sessionManager, gameManager, gameManagerEndpoint) {
-        const wss = new WebSocket.Server({server: this.index, path: "/game-service.ws"});
+        const wss = new WebSocketServer({server: this.httpServer, path: "/game-service.ws"});
         wss.on('connection', async (ws, req) => {
             await sessionManager.applyTo(req);
 

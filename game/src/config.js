@@ -20,7 +20,7 @@ const config = {
         port : 8000,
 
         // The directory to server files out of
-        public_html : "public",
+        PUBLIC_STATIC : "public",
 
         // Public script dir (target)
         public_scripts : "public/scripts/",

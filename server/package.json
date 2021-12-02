@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Thaerious/trivia-server#readme",
   "dependencies": {
     "@babel/runtime": "^7.13.10",
+    "@thaerious/logger": "^0.1.1",
     "@thaerious/parseargs": "0.x.x",
     "async-mutex": "^0.3.1",
     "body-parser": "^1.19.0",
@@ -30,6 +31,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-useragent": "^1.0.15",
+    "famous-trivia-game": "file:../game",
     "google-auth-library": "^7.0.3",
     "helmet": "^4.4.1",
     "http": "^0.0.1-security",

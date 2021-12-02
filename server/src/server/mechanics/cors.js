@@ -1,4 +1,4 @@
-import Logger from "../Logger.js";
+import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 
 /**

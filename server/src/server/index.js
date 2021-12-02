@@ -1,21 +1,17 @@
 // noinspection JSCheckFunctionSignatures
 import cors from './mechanics/cors.js';
 import GameManager from "./game/GameManager.js";
-import CLI from './CLI.js';
 import SessionManager from "./mechanics/SessionManager.js";
 import Path from 'path';
-import NidgetPreprocessor from "./mechanics/NidgetPreprocessor.js";
-import EJSRender from "./mechanics/EJSRender.js";
 import config from "../config.js";
 import ParseArgs from "@thaerious/parseargs";
-import clean from "./clean.js";
 import setupDB from "./game/setupDB.js";
 import Server from "./Server.js";
 import GameManagerEndpoint from "./game/GameManagerEndpoint.js";
 import NameValidator from "./game/NameValidator.js";
 import verify from "./mechanics/verify.js";
 import parseArgsOptions from './parseArgsOptions.js';
-import Logger from './Logger.js';
+import Logger from '@thaerious/logger';
 
 const flags = new ParseArgs().loadOptions(parseArgsOptions).run().flags;
 const logger = Logger.getLogger();
@@ -38,30 +34,9 @@ if (flags['help']){
     process.exit();
 }
 
-let nidgetPreprocessor = null;
-if (flags['render'] || flags['start']){
-    logger.channel('verbose').log("initializing nidget pre processor");
-    nidgetPreprocessor = new NidgetPreprocessor(config.server.NIDGET_EJS_SRC, config.server.NIDGET_JS_DIR).setup();
-}
-
 if (process.env.NODE_ENV === 'test'){
     logger.channel('log').log("initializing pre processor");
 } 
-
-if (flags['clean']){
-    logger.channel('verbose').log("operation clean");
-    clean();
-}
-
-if (flags['render']){
-    logger.channel('verbose').log("operation render");
-    await EJSRender.render(nidgetPreprocessor);
-}
-
-if (flags['i']) {
-    logger.channel('verbose').log("interactive mode");
-    new CLI(gameManager, sessionManager);
-}
 
 if (flags['start']){
     logger.channel('verbose').log("setting up database");
@@ -83,6 +58,6 @@ if (flags['start']){
     const gameManagerEndpoint = new GameManagerEndpoint(gameManager, new NameValidator(), verify);    
 
     logger.channel('verbose').log("starting server");
-    const server = new Server(sessionManager, gameManager, gameManagerEndpoint, nidgetPreprocessor, cors, flags['jit']);
-    server.start(config.server.port);
+    const server = new Server(sessionManager, gameManager, gameManagerEndpoint, cors);
+    server.start(flags['port']);
 }

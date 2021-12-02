@@ -6,26 +6,6 @@ export default {
             type : "boolean",
         },
         {
-            long: "render",
-            short: "r",
-            type : "boolean",
-        },
-        {
-            long: "jit",
-            short: "j",
-            type : "boolean",
-        },
-        {
-            long: "browserify",
-            short: "b",
-            type : "boolean",
-        },
-        {
-            long: "interactive",
-            short: "i",
-            type : "boolean",
-        },
-        {
             long: "verbose",
             short: "v",
             default: false,
@@ -37,5 +17,10 @@ export default {
             default: false,
             type : "boolean",
         },              
+        {
+            long: "port",
+            short: "p",
+            default: 8000,
+        }
     ],
 };

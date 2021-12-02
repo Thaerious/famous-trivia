@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
-<link rel="stylesheet" href="styles/generated/<%= filename %>.css"/>
-<script type="text/javascript" src="jit/<%= filename %>.js" defer></script>
+<link rel="stylesheet" href="<%= filename %>.css"/>
+<script type="text/javascript" src="<%= filename %>.js" defer></script>
 <% if (process.env.NODE_ENV === 'test'){%>
     <script type="text/javascript" src="scripts/static/coverage_report.js" defer></script>
 <% } %>
