@@ -1,6 +1,7 @@
 import browserify from "browserify";
 import FS from "fs";
-import Path from "path";
+import Logger from "@thaerious/logger";
+const logger = Logger.getLogger();
 
 class RenderJS{
 
@@ -20,15 +21,18 @@ class RenderJS{
         const b = browserify({ debug: true });
     
         for (let path of this.sourcePaths) {
+            logger.channel("verbose").log(`JS Source: ${path}`);
             if (FS.existsSync(path)) b.add(path);
         }
 
         for (let dep of this.dependencies) {
+            logger.channel("verbose").log(`JS Dependency: ${dep.script}`);
             b.add(dep.script);
         }
 
         b.transform("babelify");
         const rs = b.bundle();
+        logger.channel("verbose").log(``);
         return rs;        
     }
 

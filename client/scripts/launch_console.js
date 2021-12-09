@@ -1,5 +1,6 @@
 import Authenticate from './modules/Authenticate.js';
 import GameManagerService from "./modules/GameManagerService.js"
+import constants from './constants.js';
 
 const gameManagerService = new GameManagerService();
 
@@ -10,7 +11,7 @@ window.addEventListener("load", async ()=>{
     const response = await gameManagerService.getHostedHash(token);
 
     if (response['result'] !== "success"){
-        window.location = "host.ejs";
+        window.location = constants.locations.HOST;
     }
 
     const len = location.href.lastIndexOf("/");

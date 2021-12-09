@@ -3,6 +3,7 @@ import FileOps from "./modules/FileOps.js";
 import GameManagerService from "./modules/GameManagerService.js";
 import emptyRoot from "./json_schema/empty_root.js";
 import emptyCategory from "./json_schema/empty_categorical.js";
+import constants from "./constants.js";
 
 let fileOps = new FileOps();
 const gameManagerService = new GameManagerService();
@@ -20,7 +21,7 @@ window.main = async function () {
 
 function onLoad(event) {
     let id = event.detail.id;
-    window.location = `editor.ejs?action=load&fileId=${id}`;
+    window.location = `${constants.locations.EDITOR}?action=load&fileId=${id}`;
 }
 
 async function getHostedHash() {
@@ -89,7 +90,7 @@ function addMenuListeners() {
                 let name = JSON.parse(e.target.result).name;
                 let fp = await fileOps.create(name + ".json");
                 await fileOps.setBody(fp, e.target.result);
-                window.location ="editor.ejs?action=load&fileId=" + fp;
+                window.location =`${constants.locations.EDITOR}?action=load&fileId=` + fp;
             }
             reader.readAsText(data);
         }, {once: true});

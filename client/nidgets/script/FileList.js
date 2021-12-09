@@ -1,3 +1,4 @@
+import NidgetElement from "./NidgetElement.js";
 
 class DeleteFileEvent extends  CustomEvent{
     constructor(id) {
@@ -11,13 +12,13 @@ class SelectFileEvent extends  CustomEvent{
     }
 }
 
-class FileList extends HTMLElement{
-    constructor(props) {
-        super(props);
-        window.addEventListener("load", (event)=>this.load());
+class FileList extends NidgetElement{
+    constructor() {
+        super("file-list");        
     }
 
-    load(){
+    // override from NidgetElement
+    ready(){
         this.querySelector(".close").addEventListener("click", ()=>{
             this.hide();
         });
@@ -62,7 +63,7 @@ class FileList extends HTMLElement{
     set busy(value){
         if (value) this.querySelector("#file-list-busy").classList.remove("hidden");
         else this.querySelector("#file-list-busy").classList.add("hidden");
-    }
+    }    
 }
 
 window.customElements.define('file-list', FileList);

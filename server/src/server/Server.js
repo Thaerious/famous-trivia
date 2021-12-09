@@ -82,7 +82,7 @@ class Server {
         this.app.get("*", cors);
         this.app.get('/', (req, res) => {
             //serve the index file by default
-            res.sendFile('index.html', {root: "./public/html/static/"});
+            res.sendFile('html/index.html', {root: config.server.PUBLIC_STATIC});
         });
 
         this.app.get("/*.html", cors);

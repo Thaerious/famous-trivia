@@ -16,7 +16,8 @@ const constants = {
         scope: "https://www.googleapis.com/auth/drive.file"
     },
     locations : {
-        HOST : "host.ejs"
+        HOST : "host.html",
+        EDITOR : "editor.html",
     },
     names: {
         HOST : "@HOST"

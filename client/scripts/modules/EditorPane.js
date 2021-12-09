@@ -1,6 +1,7 @@
 import emptyCategory from "../json_schema/empty_categorical.js";
 import emptyMC from "../json_schema/empty_mulitple_choice.js";
 import SCHEMA_CONSTANTS from "../json_schema/schema_constants.js";
+import constants from "../constants.js";
 
 const DOM = {/* see EditorPane.constructor */};
 
@@ -9,7 +10,6 @@ const DOM = {/* see EditorPane.constructor */};
  */
 class MCAnswerCtrl {
     /**
-     *
      * @param {NidgetElement} element
      * @param {function} saveCB
      */
@@ -348,7 +348,7 @@ class EditorPane {
         });
 
         this.DOM.menu.addEventListener("menu-home-screen", () => {
-            location.href = "host.ejs";
+            location.href = constants.locations.HOST;
         });
 
         this.DOM.menu.addEventListener("menu-increase-value", () => {
