@@ -12,11 +12,15 @@ files are located in ``client/output``.
 Build Instructions
 ------------------
 
-::
+Vanilla::
 
     cd client
     npm run build-css
     node . -v # the -v flag provides details
+
+Specify single file to build::
+
+    node . -f editor.ejs # the -f flag for filename
 
 .. note::
 
