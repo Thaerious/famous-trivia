@@ -8,48 +8,42 @@ Welcome to Famous-Trivia's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :numbered:
+   :caption: introduction:
 
-   chapters/1.introduction
-
-.. toctree::
-    :maxdepth: 2
-    :numbered:
-    :caption: Getting Started
-
-    chapters/2.getting_started
+   chapters/chapter.1/introduction
 
 .. toctree::
     :maxdepth: 2
     :numbered:
-    :caption: Tests & Coverage
+    :caption: Deployment
 
-    chapters/tests.rst
+    chapters/chapter.2/index
 
 .. toctree::
     :maxdepth: 2
     :numbered:
-    :caption: Server
+    :caption: Deployment
 
-    chapters/server.rst
+    chapters/chapter.3/index
 
 .. toctree::
     :maxdepth: 2
     :numbered:
     :caption: Internals
 
-    chapters/3.internals
+    chapters/chapter.4/index    
 
 .. toctree::
     :maxdepth: 2
     :numbered:
-    :caption: Log
+    :caption: Nidgets
 
-    chapters/4.log
+    chapters/chapter.5/index    
 
-Indices and tables
-==================
+.. toctree::
+    :maxdepth: 2
+    :numbered:
+    :caption: TESTS 
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    chapters/chapter.6/tests          

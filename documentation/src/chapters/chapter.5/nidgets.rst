@@ -1,6 +1,6 @@
-=================
+=======
 Nidgets
-=================
+=======
 The term "Nidget" stands for "Not-a-Widget", which is a little tongue in cheek as it is a widget.
 A Widget (and a Nidget) being a reusable GUI element.  I chose Nidget as the term Widget is used quite often
 already.
@@ -108,5 +108,3 @@ Setup the middleware to serve rendered .ejs files.::
     ));
 
 Information details on individual nidgets.
-
-.. include:: nidget-list.rst

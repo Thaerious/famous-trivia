@@ -35,7 +35,3 @@ NGINX Commands
     systemctl restart nginx
     systemctl enable nginx
     systemctl disable nginx
-
-.. include:: deployment.rst
-
-.. include:: 2.3.documentation.rst

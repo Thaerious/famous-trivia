@@ -4,16 +4,16 @@ Documentation
 building the documentation
 --------------------------
 
-The documentation made with |sphinx_documentation|.
+The documentation made with SPHINX.
 The following commands are used to build the documentation.
 
 Install SPHINX with ``sudo apt-get install python3-sphinx``.
 
+``pip install git+https://github.com/sphinx-doc/sphinx``.
+
 Install the Read-The-Docs theme with ``sudo apt-get install python3-sphinx``.
 
 Build the documentation with ``sphinx-build -b html src build``.
-
-
 
 uploading to github
 -------------------
@@ -27,6 +27,4 @@ uploading to github
     git commit -m"..."
     git push
 
-View documentation at ``https://thaerious.github.io/famous-trivia/``.
-
-
+Github hosted documentation at ``https://thaerious.github.io/famous-trivia/``.
