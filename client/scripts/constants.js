@@ -18,6 +18,10 @@ const constants = {
     locations : {
         HOST : "host.html",
         EDITOR : "editor.html",
+        LAUNCH_CONSOLE : "launch_console.html",
+        HOST_PORTAL : "host_portal.html",
+        CONTESTANT_JOIN : "contestant_join.html",
+        CONTESTANT_PORTAL : "contestant_portal.html"
     },
     names: {
         HOST : "@HOST"

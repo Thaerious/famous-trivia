@@ -1,4 +1,3 @@
-import constants from "../../config.js";
 import ErrorResponse from "./responses/ErrorResponse.js";
 
 /**

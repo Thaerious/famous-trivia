@@ -21,8 +21,8 @@ class JeopardyModel {
         }
 
         this.stateData = {
-            style: GAME_MODEL_STYLE.JEOPARDY,
-            state: GAME_MODEL_STATES.BOARD,
+            style: constants.GAME_MODEL_STYLE.JEOPARDY,
+            state: constants.GAME_MODEL_STATES.BOARD,
             spent: this.spent
         };
 

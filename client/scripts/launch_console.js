@@ -15,11 +15,11 @@ window.addEventListener("load", async ()=>{
     }
 
     const len = location.href.lastIndexOf("/");
-    const url = `${location.href.substr(0, len)}/contestant_join.ejs?hash=${response['game-hash']}`;
+    const url = `${location.href.substr(0, len)}/${constants.locations.CONTESTANT_JOIN}?hash=${response['game-hash']}`;
     document.querySelector("#contestant_link").innerText = url;
 
     document.querySelector("#host").addEventListener("click", ()=>{
-        window.open(`host_portal.ejs`, '_blank').focus();
+        window.open(constants.locations.HOST_PORTAL, '_blank').focus();
     });
 
     document.querySelector("#contestant").addEventListener("click", ()=>{

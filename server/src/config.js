@@ -77,6 +77,10 @@ const config = {
         "./public/html/jit/",
         "./public/scripts/jit/",
         "./public/styles/generated"
-    ]
+    ],
+    TIMES : {
+        BUZZ : 10,
+        ANSWER : 10
+    }
 };
 export default config;

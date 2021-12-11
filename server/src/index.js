@@ -3,7 +3,7 @@ import cors from './mechanics/cors.js';
 import GameManager from "./game/GameManager.js";
 import SessionManager from "./mechanics/SessionManager.js";
 import Path from 'path';
-import config from "../config.js";
+import config from "./config.js";
 import ParseArgs from "@thaerious/parseargs";
 import setupDB from "./game/setupDB.js";
 import Server from "./Server.js";

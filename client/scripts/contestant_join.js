@@ -1,3 +1,4 @@
+import constants from "./constants.js";
 import GameManagerService from "./modules/GameManagerService.js";
 
 let gameManagerService = new GameManagerService();
@@ -6,7 +7,7 @@ window.addEventListener("load", async(event)=>{
     /* attempt to join game, if already joined, forward to the game page */
     const gameHashResp = await gameManagerService.getGameHash();
     if (gameHashResp.result === "success"){
-        window.location = `contestant_portal.ejs`;
+        window.location = constants.locations.CONTESTANT_PORTAL;
     }
 
     document.querySelector("#name").addEventListener("text-enter", e=>submit());
@@ -22,6 +23,6 @@ async function submit(){
         document.querySelector("#alert").show(response.reason);
     }
     else if (response.result === "success"){
-        window.location = `contestant_portal.ejs`;
+        window.location = constants.locations.CONTESTANT_PORTAL;
     }
 }

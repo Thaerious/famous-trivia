@@ -29,7 +29,7 @@ async function getHostedHash() {
     let response = await gameManagerService.getHostedHash(token);
     console.log(response);
     if (response.result === "success") {
-        window.location = `launch_console.ejs`;
+        window.location = constants.locations.LAUNCH_CONSOLE;
     }
 }
 
@@ -42,7 +42,7 @@ async function onLaunch(event) {
 
     let response = await gameManagerService.launch(token, model);
     if (response.result === "success") {
-        window.location = `launch_console.ejs`;
+        window.location = constants.locations.LAUNCH_CONSOLE;
     } else {
         window.alert("Error launching game");
         console.log(response);
@@ -75,7 +75,7 @@ function addMenuListeners() {
         gameDescriptionHelper.name = "New Game";
         let fp = await fileOps.create();
         await fileOps.setBody(fp, JSON.stringify(gameDescriptionHelper.get(), null, 2));
-        window.location = "editor.ejs?action=load&fileId=" + fp;
+        window.location = `${constants.locations.EDITOR}?action=load&fileId=${fp}`;
     });
 
     document.querySelector("#upload").addEventListener("click", async (e) => {

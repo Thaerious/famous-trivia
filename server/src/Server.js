@@ -1,9 +1,8 @@
 // noinspection JSCheckFunctionSignatures
-import config from "../config.js";
+import config from "./config.js";
 import ReportCoverage from "./mechanics/ReportCoverage.js";
 import Connection from "./game/Connection.js";
 import cors from "./mechanics/cors.js";
-
 import Express from "express";
 import http from "http";
 import BodyParser from "body-parser";

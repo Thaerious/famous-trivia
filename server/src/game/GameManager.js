@@ -1,10 +1,7 @@
 // noinspection SqlNoDataSourceInspection,SqlDialectInspection
 
 import crypto from 'crypto';
-import {Game} from 'famous-trivia-game';
-import HasDB from '../mechanics/HasDB.js';
-import ParseArgs from "@thaerious/parseargs";
-import config from "../../config.js";
+import config from "../config.js";
 
 /**
  * The game manager keeps a record of all launched games.
@@ -50,7 +47,6 @@ class GameManager{
 
         liveGame.times.ANSWER          = this.ta ?? config.TIMES.ANSWER;
         liveGame.times.BUZZ            = this.tb ?? config.TIMES.BUZZ;
-        liveGame.times.MULTIPLE_CHOICE = this.tm ?? config.TIMES.MULTIPLE_CHOICE;
 
         this.hosts.set(hostInfo.userId, {hash:gameHash, name:hostInfo.userName});
         return gameHash;

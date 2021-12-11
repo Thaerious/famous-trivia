@@ -2,7 +2,7 @@
   "name": "trivia-server",
   "version": "0.1.0",
   "description": "Creator and Luancher for Online Trivia",
-  "main": "src/server/index.js",
+  "main": "src/index.js",
   "scripts": {
     "build-css": "sass src/styles:public/styles/generated/",
     "watch-css": "sass --watch src/styles:public/styles/generated/",
