@@ -31,7 +31,7 @@ async function getHostedHash() {
     if (response.result === "success") {
         window.location = constants.locations.LAUNCH_CONSOLE;
     }
-}
+}  
 
 async function onLaunch(event) {
     let id = event.detail.id; // google file identifier

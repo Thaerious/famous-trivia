@@ -5,7 +5,7 @@ import NidgetElement from "./NidgetElement.js";
  * Set the font-size as a multiple of the css variable --fit-text-unit.
  * Style example: calc(45 * var(--fit-text-unit))
  */
-class FitText {
+class FitText { 
     constructor(nidget){
         this.nidget = nidget;
         this.parseArguments();
@@ -16,7 +16,7 @@ class FitText {
             hDiff: this.nidget.parentElement.offsetHeight - this.nidget.scrollHeight,
             wDiff: this.nidget.parentElement.offsetWidth - this.nidget.scrollWidth
         };
-    }
+    }    
 
     extractUnits(){
         const fontSize = this.nidget.style.fontSize;

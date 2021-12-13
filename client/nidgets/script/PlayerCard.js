@@ -2,7 +2,7 @@
 
 import NidgetElement from "./NidgetElement.js";
 import "./PlayerCard.js";
-import constants from "famous-trivia-game";
+import {constants} from "famous-trivia-game";
 
 class PlayerCard extends NidgetElement {
     constructor(templateId = "player-card-template") {

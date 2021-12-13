@@ -56,6 +56,37 @@ class PlayerContainer extends NidgetElement {
     get cards() {
         return this.querySelectorAll("player-card.visible");
     }
+
+    topPlayer(){
+        let currentInner = this.querySelector(".row.first");
+        return currentInner.querySelector("player-panel");
+    }
+
+    getPlayer(name){
+        for (let panel of this.querySelectorAll("player-panel")){
+            if (panel.name === name) return panel;
+        }
+        return null;
+    }
+
+    moveToTop(name){
+        const components = [];
+        if (!this.getPlayer(name)) return;
+
+        components.push(this.getPlayer(name));
+        this.getPlayer(name).detach();
+
+        for (const element of this.querySelectorAll("player-panel")){
+            components.push(element);
+            element.detach();
+        }
+
+        for (let component of components){
+            this.addPlayerPanel(component);
+        }
+
+        return components[0];
+    }    
 }
 
 window.customElements.define('player-container', PlayerContainer);

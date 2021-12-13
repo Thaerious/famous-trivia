@@ -4,7 +4,7 @@ class DeleteFileEvent extends  CustomEvent{
     constructor(id) {
         super('delete-file', {detail : {id : id}});
     }
-}
+} 
 
 class SelectFileEvent extends  CustomEvent{
     constructor(id) {

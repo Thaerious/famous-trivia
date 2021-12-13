@@ -117,6 +117,10 @@ class EJSRender {
         for (let filename of files) {
             console.log("Render: " + filename);
             let nidgetDependencies = nidgetPreprocessor.getTemplateDependencies(config.EJS_ROOT_DIR + filename);
+
+            [...nidgetPreprocessor.getDependencies]
+                .stream()
+                .filter(
             await EJSRender.renderEJS(filename, nidgetDependencies);
             await EJSRender.renderJS(jit, filename, nidgetDependencies);
         }

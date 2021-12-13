@@ -1,5 +1,6 @@
 import constants from "./constants.js";
 import GameManagerService from "./modules/GameManagerService.js";
+import parseURLParameters from './modules/parseURLParameters.js';
 
 let gameManagerService = new GameManagerService();
 

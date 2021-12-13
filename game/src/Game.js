@@ -1,7 +1,7 @@
 import GameModel from "./model/GameModel.js";
 import config from "./config.js";
 import crypto from "crypto";
-import schema_constants from "./constants.js";
+import constants from "./constants.js";
 import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 logger.channel("debug").enabled = false;
@@ -213,10 +213,10 @@ class Game {
     }
 
     startRound() {
-        if (this.gameModel.getRound().stateData.style === schema_constants.GAME_MODEL_STYLE.JEOPARDY) {
+        if (this.gameModel.getRound().stateData.style === constants.GAME_MODEL_STYLE.JEOPARDY) {
             this.gameModel.getRound().setBoardState();
             this.updateState(4);
-        } else if (this.gameModel.getRound().stateData.style === schema_constants.GAME_MODEL_STYLE.END_OF_GAME) {
+        } else if (this.gameModel.getRound().stateData.style === constants.GAME_MODEL_STYLE.END_OF_GAME) {
             this.updateState(10);
         }
     }
@@ -376,5 +376,5 @@ Game.settings = {
 }
 
 export {
-    Game, GameModel, Timer, schema_constants
+    Game, GameModel, Timer, constants
 };

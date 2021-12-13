@@ -1,13 +1,20 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import Path from "path";
+import getFiles from "./getFiles.js";
 
+/**
+ * A record object for a single Nidget.
+ * It may or may not have an associated script file or view file (must have at least one of them).
+ * All nidgets that this nidget refrences are considered dependencies.
+ */
 class NidgetRecord {
     constructor(nidgetName) {
         this._name = nidgetName;
         this._script = undefined;
         this._view = undefined;
         this._dependencies = new Set();
+        this._root = false;
     }
 
     addDependency(record) {
@@ -21,7 +28,7 @@ class NidgetRecord {
         
         while(stack.length > 0){
             if (!set.has(stack[0])){
-                set.add(stack[0]);
+                if (stack[0] !== this) set.add(stack[0]);
                 for (const dep of stack[0]._dependencies){
                     stack.push(dep);
                 }
@@ -40,19 +47,35 @@ class NidgetRecord {
     get view() {
         return this._view;
     }
-
     set script(value) {
         this._script = value;
     }
     set view(value) {
         this._view = value;
     }
+    set root(value) {
+        this._root = value;
+    }
+    get root() {
+        return this._root;
+    }    
+
+    toString(){        
+        return `NidgetRecord {\n` + 
+               `\tname : ${this.name}\n` + 
+               `\tscript : ${this.script}\n` + 
+               `\tview : ${this.view}\n` + 
+               `\troot : ${this.root}\n` + 
+               `\tdependencies : Set(${this.dependencies.size}){\n` + 
+               [...this.dependencies].reduce((p, c)=> `${p}\t\t${c.name}\n`, "") +
+               `\t}\n`;
+    }
 
     /**
-     * Get all dependencies from a nidget ejs file.
+     * Get all dependencies for a single nidget ejs file.
+     * 
      * Adds any dependencies in the data-include attribute of the template (comma or space delimited).
-     * Then searches for any tag-names that match any .ejs files in views/nidgets.
-     * @param filename
+     * Then searches for any tag-names that match any .ejs files in the nidgets subdirectory.
      */
     seekDependencies(nidgetRecords) {
         if (this.view === "") return;
@@ -66,19 +89,24 @@ class NidgetRecord {
             const record = nidgetRecords[nidgetName];
             if (this._dependencies.has(record)) continue;
 
-            const template = dom.window.document.querySelector(`template`);
+            let template = dom.window.document.querySelector(`template`);
+            if (template){
+                let includes = template.getAttribute("data-include") ?? "";
+                let split = includes.split(/[ ,]+/g);
 
-            let includes = template.getAttribute("data-include") ?? "";
-            let split = includes.split(/[ ,]+/g);
-
-            for (let s of split) {
-                if (s.trim() != "") {
-                    this._dependencies.add(nidgetRecords[s.trim()]);
+                for (let s of split) {
+                    if (s.trim() != "") {
+                        this._dependencies.add(nidgetRecords[s.trim()]);
+                    }
                 }
-            }
-            
-            if (template.content.querySelector(nidgetName)) {
-                this._dependencies.add(record);
+                
+                if (template.content.querySelector(nidgetName)) {
+                    this._dependencies.add(record);
+                }
+            } else {
+                if (dom.window.document.querySelector(nidgetName)) {
+                    this._dependencies.add(record);
+                }
             }
         }
     }
@@ -88,10 +116,6 @@ class NidgetRecord {
  * Creates lists of .js dependencies from nidget .ejs files.
  */
 class NidgetPreprocessor {
-    /**
-     * @param (String) templateFilePath location of the template (.ejs) files.
-     * @param (String) scriptFilePath location of the script (.js) files.
-     */
     constructor() {
         this.nidgetRecords = {};
     }
@@ -102,29 +126,86 @@ class NidgetPreprocessor {
      * 'knownNidgets' field.
      * @returns {NidgetPreprocessor}
      */
-    setup(templateFilePath, scriptFilePath) {
-        this.templateFilePath = templateFilePath;
-        this.scriptFilePath = scriptFilePath;
+    addNidgetPath(...filepaths) {
+        return this.addPath(filename=>this.addNidget(filename), ...filepaths);
+    }
 
-        /** look through .ejs files to identify nidgets  */
-        for (let file of fs.readdirSync(this.templateFilePath)) {
-            let nidgetName = file.substr(0, file.length - 4); // .ejs
-            const record = this.addNidget(nidgetName);
-            record.view = Path.join(this.templateFilePath, file);
+    addRootPath(...filepaths) {
+        return this.addPath(filename=>this.addRoot(filename), ...filepaths);
+    }
+
+    addPath(addRecordCB, ...filepaths){
+        for (let filepath of filepaths){
+            let recursive = false;
+            if (filepath.endsWith("/**")){
+                recursive = true;
+                filepath = filepath.substring(0, filepath.length - 3);
+            }
+
+            /** look through .ejs files to identify nidgets */
+            for (let fileRecord of getFiles(filepath, recursive)) {
+                const filename = fileRecord.name;
+                if (!filename.endsWith(".ejs") && !filename.endsWith(".js")) continue;
+
+                const record = addRecordCB(filename.substring(0, filename.lastIndexOf(".")));
+
+                if (filename.endsWith(".ejs"))     record.view = Path.join(filepath, fileRecord.relative);
+                else if (filename.endsWith(".js")) record.script = Path.join(filepath, fileRecord.relative);       
+            }
+
+            for (const nidget in this.nidgetRecords) {
+                this.nidgetRecords[nidget].seekDependencies(this.nidgetRecords);
+            }
         }
 
-        /** look through .js files to identify nidgets  */
-        for (const file of fs.readdirSync(this.scriptFilePath)) {
-            const nidgetName = file.substr(0, file.length - 3); // .js
-            const record = this.addNidget(nidgetName);
-            record.script = Path.join(this.scriptFilePath, file);
+        return this;        
+    }
+
+    getRecord(name){
+        if (this.nidgetRecords[name]) return this.nidgetRecords[name];
+        return this.nidgetRecords[this.convertToDash(name)];
+    }
+
+    /**
+     * Retrieve a non-reflective array of known Nidget names.
+     */
+    get directory(){
+        const array = [];
+        for (const name in this.nidgetRecords) {
+            array.push(name);
+        }
+        return array;
+    }
+
+    /**
+     * Retrieve a non-reflective set nidgets that depend on a nidget
+     */
+    reverseLookup(nidgetName){
+        if (!this.getRecord(nidgetName)) throw new Error(`Unknown Nidget: ${nidgetName}`);
+        const return_set = new Set();
+
+        if (this.getRecord(nidgetName).root === false){
+            nidgetName = this.convertToDash(nidgetName);
         }
 
-        for (const nidget in this.nidgetRecords) {
-            this.nidgetRecords[nidget].seekDependencies(this.nidgetRecords);
+        return_set.add(this.getRecord(nidgetName));
+
+        for (const parentName in this.nidgetRecords) {
+            const parent = this.nidgetRecords[parentName];
+            for (const child of parent.dependencies) {
+                if (child.name === nidgetName) return_set.add(parent);
+            }
         }
 
-        return this;
+        return return_set;
+    }
+
+    addRoot(name) {
+        if (!this.nidgetRecords[name]){
+             this.nidgetRecords[name] = new NidgetRecord(name);
+             this.nidgetRecords[name].root = true;
+        }
+        return this.nidgetRecords[name];
     }
 
     addNidget(name) {
@@ -137,6 +218,7 @@ class NidgetPreprocessor {
      * Ensure that the nidget name is in the correct format.
      * The correct format consists of two or more dash (-) separated words.
      * Converts camelcase names to dash delimited names.
+     * Converts underscore delimited to dash delimited.
      * @param nidgetName
      */
     validateNidgetName(nidgetName) {
@@ -148,37 +230,21 @@ class NidgetPreprocessor {
     }
 
     /**
-     * Converts camelCase to dash delimited.
+     * Converts string to dash delimited.
      * @param string
      */
     convertToDash(string) {
-        const llcString = string.charAt(0).toLocaleLowerCase() + string.substr(1); // leading lower case
-        return llcString.replace(/([A-Z])/g, "-$1").toLowerCase();
+        string = string.charAt(0).toLocaleLowerCase() + string.substr(1); // leading lower case
+        string = string.replace(/_+/g, "-"); // replace underscore with dash
+        string = string.replace(/ +/g, "-"); // replace space with dash
+        return string.replace(/([A-Z]+)/g, "-$1").toLowerCase(); // change all upper to lower and add a dash
     }
 
     /**
-     * Retrieve only the dependencies that have a template file.
-     * This is used by the ejs renderer to determine which template files to include.
-     * Browserify uses 'getDependencies' as it returns all dependencies.
-     * @param filePath
-     */
-    getTemplateDependencies(filePath) {
-        let includes = new Set();
-        for (const dep of this.getDependencies(filePath)) {
-            if (this.ejsNidgets.has(dep)) {
-                includes.add(dep);
-            }
-        }
-        return includes;
-    }
-
-    /**
-     * Retrieve the dependencies for a specific template (.ejs) file.
+     * Given a template (.ejs) file retrieve all nidgets it depends on.
      * Searches the template for for any instance of a nidget element.
-     * Nidgets elements are those that declared in in the nidget template
-     * path (/view/nidgets) or in the nidget script path (/src/client/nidgets).
      * @param filePath
-     * @returns {Set<any>}
+     * @returns {Set<NidgetRecord>}
      */
     getDependencies(filePath) {
         const fileString = fs.readFileSync(filePath);

@@ -10,7 +10,7 @@ class TextInput extends NidgetElement {
         await super.connectedCallback();
     }
 
-    async ready() {
+    async ready() { 
         await super.ready();
 
         this.filter = this.getAttribute(TextInput.FILTER) ?? ".*";

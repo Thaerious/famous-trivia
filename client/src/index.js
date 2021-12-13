@@ -17,7 +17,7 @@ else
     logger.channel("verbose").enabled = false;
 
 const nidgetPreprocessor = new NidgetPreprocessor();
-nidgetPreprocessor.setup(constants.NIDGET_VIEW_PATH, constants.NIDGET_SCRIPT_PATH);
+nidgetPreprocessor.addNidgetPath(constants.NIDGET_VIEW_PATH, constants.NIDGET_SCRIPT_PATH);
 
 if (args.flags['filename']){
     const fullpath = Path.resolve(constants.EJS_VIEW_DIR, args.flags['filename']);
