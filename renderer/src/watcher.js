@@ -10,13 +10,15 @@ import Crypto from "crypto";
 const logger = Logger.getLogger();
 
 class Watcher {
-    constructor(output_directory, ...source_directory) {
-        this.output_directory = output_directory;
-        this.source_directory = source_directory;
+    constructor() {
         this.blacklist = new Set();
         this.md5 = new Map();
+
+        if (!FS.existsSync(constants.GENERATED_DIR)){
+            FS.mkdirSync(constants.GENERATED_DIR, {recursive : true});
+        }
         
-        for (let dir of source_directory){
+        for (let dir of [...constants.NIDGET_PATH, ...constants.ROOT_PATH]){
             let recursive = false;
             if (dir.endsWith("/**")){
                 recursive = true;
@@ -27,6 +29,8 @@ class Watcher {
             FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));        
         }
     }
+
+    async startup(directory){}
 
     async listener(directory, event, filename) {
         const fullpath = Path.join(directory, filename);
@@ -47,15 +51,15 @@ class Watcher {
 
     async browserify(filename) {
         const nidget_preprocessor = new NidgetPreprocessor();        
-        nidget_preprocessor.addNidgetPath(constants.NIDGET_PATH);            
-        nidget_preprocessor.addRootPath(constants.EJS_VIEW_DIR, constants.SCRIPT_SOURCE_DIR);       
+        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);            
+        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);       
         const parsed = Path.parse(filename);
         const dependents = nidget_preprocessor.reverseLookup(parsed.name); 
         
         for (const rec of dependents){
             if (rec.root && rec.script){             
                 logger.channel("verbose").log(`browserify: ${rec.script}`);
-                const outputPath = Path.join(this.output_directory, Path.parse(rec.script).name + ".js");
+                const outputPath = Path.join(constants.GENERATED_DIR, Path.parse(rec.script).name + ".js");
                 
                 try{
                     await renderJS(rec.script, rec.dependencies, outputPath);
@@ -71,8 +75,8 @@ class Watcher {
     // re-render all root files that depend on filename
     render(filename) {
         const nidget_preprocessor = new NidgetPreprocessor();        
-        nidget_preprocessor.addNidgetPath(constants.NIDGET_PATH);            
-        nidget_preprocessor.addRootPath(constants.EJS_VIEW_DIR, constants.SCRIPT_SOURCE_DIR);       
+        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);            
+        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
         const parsed = Path.parse(filename);
         const dependents = nidget_preprocessor.reverseLookup(parsed.name);
 

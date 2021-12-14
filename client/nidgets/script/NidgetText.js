@@ -28,10 +28,10 @@ class FitText {
         return value;
     }
 
-    notify(cb){
+    notify(cb){ 
         this.direction = 0;
         setImmediate(()=>this.onResize(cb));
-    }
+    } 
 
     /**
      * Retrieve the settings from css
@@ -45,9 +45,9 @@ class FitText {
             return;
         }
 
-        if (typeof(args) == "string"){
+        if (typeof(args) == "string"){ 
             if (args.search("height") !== -1) this.hValue = 1;
-            if (args.search("width") !== -1) this.wValue = 1;
+            if (args.search("width") !== -1) this.wValue = 1; 
         }
     }
 
