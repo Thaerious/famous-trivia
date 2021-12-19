@@ -1,6 +1,8 @@
 Server
 ======
 
+
+
 Startup
 -------
 
@@ -19,6 +21,12 @@ Verbose (debug) mode::
     node . -v
     node . --verbose
 
+.. note::
+
+    The server needs to be run in the same environment that npm i was run.
+    It references famous-trivia/game as a symbolic link.  Since windows and 
+    linux have different link structures.  To work around, pack famous-trivia/game 
+    as a tarball and npm i <tarball>.
 
 Implementation
 --------------

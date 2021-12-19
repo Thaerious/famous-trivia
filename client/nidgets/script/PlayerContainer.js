@@ -57,13 +57,8 @@ class PlayerContainer extends NidgetElement {
         return this.querySelectorAll("player-card.visible");
     }
 
-    topPlayer(){
-        let currentInner = this.querySelector(".row.first");
-        return currentInner.querySelector("player-panel");
-    }
-
     getPlayer(name){
-        for (let panel of this.querySelectorAll("player-panel")){
+        for (let panel of this.querySelectorAll("player-card")){
             if (panel.name === name) return panel;
         }
         return null;

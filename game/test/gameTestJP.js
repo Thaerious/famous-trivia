@@ -1,7 +1,9 @@
 // noinspection DuplicatedCode
 import assert from 'assert';
 import * as Partials from "./partials/game_partials.js"
-import {GAME_MODEL_STYLE, GAME_MODEL_STATES} from "../src/constants.js";
+import constants from "../src/constants.js";
+
+const GAME_MODEL_STYLE = constants.GAME_MODEL_STYLE;
 
 function situationSetup(path) {
     const game = Partials.newGame(path);

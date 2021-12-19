@@ -2,12 +2,16 @@ import constants from "../constants.js";
 import JeopardyModel from "./JeopardyModel.js";
 import EndOfGame from "./EndOfGame.js";
 import GameNotStarted from "./GameNotStarted.js";
+import Logger from "@thaerious/logger";
+const logger = Logger.getLogger().channel("game_model");
+logger.prefix = ()=>"GameModel ";
 
 class GameModel {
     constructor(gameDescription) {
+        logger.log("#constructor");
         if (typeof gameDescription === "string") gameDescription = JSON.parse(gameDescription);
         this.gameDescription = gameDescription;
-        this._players = []; // name, score, enabled
+        this._players = []; // {name, score, enabled}
         this.listeners = {};
         if (gameDescription) this.setupRounds();
     }
@@ -16,6 +20,7 @@ class GameModel {
      * Perform initialization of each round in the model.
      */
     setupRounds(){
+        logger.log("#setupRounds");
         this.rounds = [];
         this.roundIndex = -1;
 
@@ -34,6 +39,7 @@ class GameModel {
      * @returns {{round: *}}
      */
     getUpdate() {
+        logger.log("#getUpdate");
         const update = this.getRound().getUpdate();
         if (!update.players) Object.assign(update, {players : this.players});
         return update;
@@ -45,6 +51,7 @@ class GameModel {
      * @returns {*}
      */
     getRound(index) {
+        logger.log("#getRound");
         index = index ?? this.roundIndex;
         if (index < 0) return new GameNotStarted();
         return this.rounds[index];
@@ -56,16 +63,19 @@ class GameModel {
      * @return current round object.
      */
     setRound(index) {
+        logger.log("#setRound");
         if (index < 0 || index > this.gameDescription.rounds.length) return this.getRound();
         this.roundIndex = index;
         return this.getRound();
     }
 
     nextRound() {
+        logger.log("#nextRound");
         return this.setRound(this.roundIndex + 1);
     }
 
     prevRound() {
+        logger.log("#prevRound");
         return this.setRound(this.roundIndex - 1);
     }
 
@@ -76,7 +86,9 @@ class GameModel {
      * @returns the added player
      */
     addPlayer(name) {
+        logger.log("#addPlayer");
         if (this.hasPlayer(name)) {
+            console.log("has player already");
             return this.getPlayer(name);
         }
 
@@ -87,20 +99,24 @@ class GameModel {
         };
 
         this._players.push(player);
+        console.log(this._players);
         return player;
     }
 
     disablePlayer(name) {
+        logger.log("#disablePlayer");
         if (!this.hasPlayer(name)) return;
         this.getPlayer(name).enabled = false;
     }
 
     enablePlayer(name) {
+        logger.log("#enablePlayer");
         if (!this.hasPlayer(name)) return;
         this.getPlayer(name).enabled = true;
     }
 
     isEnabled(name) {
+        logger.log("#isEnabled");
         if (!this.hasPlayer(name)) return;
         return this.getPlayer(name).enabled;
     }
@@ -112,6 +128,7 @@ class GameModel {
      * @returns {*[]}
      */
     get players() {
+        logger.log(".players");
         return [...this._players];
     }
 
@@ -120,6 +137,7 @@ class GameModel {
      * @returns {null|*}
      */
     get activePlayer() {
+        logger.log(".activePlayer");
         if (this._players.length === 0) return null;
         return this._players[0];
     }
@@ -131,11 +149,13 @@ class GameModel {
      * @returns {null|*}
      */
     getPlayer(name) {
+        logger.log("#getPlayer");
         for (let player of this._players) if (player.name === name) return player;
         return null;
     }
 
     hasPlayer(name) {
+        logger.log("#hasPlayer");
         return this.getPlayer(name) !== null;
     }
 
@@ -146,6 +166,7 @@ class GameModel {
      * Returns null when the player is not found.
      */
     removePlayer(name) {
+        logger.log("#removePlayer");
         let player = this.getPlayer(name);
         let index = this._players.indexOf(player);
         if (index === -1) return null;
@@ -162,6 +183,7 @@ class GameModel {
      * Returns, JSON object to broadcast
      */
     nextActivePlayer() {
+        logger.log("#nextActivePlayer");
         if (this._players.length === 0) return null;
 
         do {

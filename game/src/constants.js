@@ -24,5 +24,9 @@ export default {
     SCHEMA_CONSTANTS : {
         CATEGORY : "categorical",
         MULTIPLE_CHOICE : "multiple_choice"
-    }
+    },
+
+    NAMES: {
+        HOST : "@HOST"
+    },
 };

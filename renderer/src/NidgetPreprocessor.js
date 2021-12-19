@@ -22,14 +22,14 @@ class NidgetRecord {
     }
 
     /* return a non-reflective set of dependency records */
-    get dependencies(){
+    get dependencies() {
         const set = new Set();
         const stack = [this];
-        
-        while(stack.length > 0){
-            if (!set.has(stack[0])){
+
+        while (stack.length > 0) {
+            if (!set.has(stack[0])) {
                 if (stack[0] !== this) set.add(stack[0]);
-                for (const dep of stack[0]._dependencies){
+                for (const dep of stack[0]._dependencies) {
                     stack.push(dep);
                 }
             }
@@ -58,22 +58,24 @@ class NidgetRecord {
     }
     get root() {
         return this._root;
-    }    
+    }
 
-    toString(){        
-        return `NidgetRecord {\n` + 
-               `\tname : ${this.name}\n` + 
-               `\tscript : ${this.script}\n` + 
-               `\tview : ${this.view}\n` + 
-               `\troot : ${this.root}\n` + 
-               `\tdependencies : Set(${this.dependencies.size}){\n` + 
-               [...this.dependencies].reduce((p, c)=> `${p}\t\t${c.name}\n`, "") +
-               `\t}\n`;
+    toString() {
+        return (
+            `NidgetRecord {\n` +
+            `\tname : ${this.name}\n` +
+            `\tscript : ${this.script}\n` +
+            `\tview : ${this.view}\n` +
+            `\troot : ${this.root}\n` +
+            `\tdependencies : Set(${this.dependencies.size}){\n` +
+            [...this.dependencies].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
+            `\t}\n`
+        );
     }
 
     /**
      * Get all dependencies for a single nidget ejs file.
-     * 
+     *
      * Adds any dependencies in the data-include attribute of the template (comma or space delimited).
      * Then searches for any tag-names that match any .ejs files in the nidgets subdirectory.
      */
@@ -90,7 +92,7 @@ class NidgetRecord {
             if (this._dependencies.has(record)) continue;
 
             let template = dom.window.document.querySelector(`template`);
-            if (template){
+            if (template) {
                 let includes = template.getAttribute("data-include") ?? "";
                 let split = includes.split(/[ ,]+/g);
 
@@ -99,7 +101,7 @@ class NidgetRecord {
                         this._dependencies.add(nidgetRecords[s.trim()]);
                     }
                 }
-                
+
                 if (template.content.querySelector(nidgetName)) {
                     this._dependencies.add(record);
                 }
@@ -127,49 +129,47 @@ class NidgetPreprocessor {
      * @returns {NidgetPreprocessor}
      */
     addNidgetPath(...filepaths) {
-        return this.addPath(filename=>this.addNidget(filename), ...filepaths);
+        return this.addPath(filename => this.addNidget(filename), ...filepaths);
     }
 
     addRootPath(...filepaths) {
-        return this.addPath(filename=>this.addRoot(filename), ...filepaths);
+        return this.addPath(filename => this.addRoot(filename), ...filepaths);
     }
 
-    addPath(addRecordCB, ...filepaths){
-        for (let filepath of filepaths){
-            let recursive = false;
-            if (filepath.endsWith("/**")){
-                recursive = true;
-                filepath = filepath.substring(0, filepath.length - 3);
-            }
+    addPath(addRecordCB, ...filepaths) {
+        for (let filename of getFiles(...filepaths)) {
+            if (!filename.endsWith(".ejs") && !filename.endsWith(".js")) continue;
 
-            /** look through .ejs files to identify nidgets */
-            for (let fileRecord of getFiles(filepath, recursive)) {
-                const filename = fileRecord.name;
-                if (!filename.endsWith(".ejs") && !filename.endsWith(".js")) continue;
+            const record = addRecordCB(filename);
 
-                const record = addRecordCB(filename.substring(0, filename.lastIndexOf(".")));
-
-                if (filename.endsWith(".ejs"))     record.view = Path.join(filepath, fileRecord.relative);
-                else if (filename.endsWith(".js")) record.script = Path.join(filepath, fileRecord.relative);       
-            }
-
-            for (const nidget in this.nidgetRecords) {
-                this.nidgetRecords[nidget].seekDependencies(this.nidgetRecords);
-            }
+            if (filename.endsWith(".ejs")) record.view = filename;
+            else if (filename.endsWith(".js")) record.script = filename;
         }
 
-        return this;        
+        for (const nidget in this.nidgetRecords) {
+            this.nidgetRecords[nidget].seekDependencies(this.nidgetRecords);
+        }
+
+        return this;
     }
 
-    getRecord(name){
+    getRecord(name) {
         if (this.nidgetRecords[name]) return this.nidgetRecords[name];
         return this.nidgetRecords[this.convertToDash(name)];
+    }
+
+    get records() {
+        const array = [];
+        for (const name in this.nidgetRecords) {
+            array.push(this.nidgetRecords[name]);
+        }
+        return array;
     }
 
     /**
      * Retrieve a non-reflective array of known Nidget names.
      */
-    get directory(){
+    get directory() {
         const array = [];
         for (const name in this.nidgetRecords) {
             array.push(name);
@@ -180,11 +180,11 @@ class NidgetPreprocessor {
     /**
      * Retrieve a non-reflective set nidgets that depend on a nidget
      */
-    reverseLookup(nidgetName){
+    reverseLookup(nidgetName) {
         if (!this.getRecord(nidgetName)) throw new Error(`Unknown Nidget: ${nidgetName}`);
         const return_set = new Set();
 
-        if (this.getRecord(nidgetName).root === false){
+        if (this.getRecord(nidgetName).root === false) {
             nidgetName = this.convertToDash(nidgetName);
         }
 
@@ -200,16 +200,17 @@ class NidgetPreprocessor {
         return return_set;
     }
 
-    addRoot(name) {
-        if (!this.nidgetRecords[name]){
-             this.nidgetRecords[name] = new NidgetRecord(name);
-             this.nidgetRecords[name].root = true;
+    addRoot(filename) {
+        const name = Path.parse(filename).name;
+        if (!this.nidgetRecords[name]) {
+            this.nidgetRecords[name] = new NidgetRecord(name);
+            this.nidgetRecords[name].root = true;
         }
         return this.nidgetRecords[name];
     }
 
-    addNidget(name) {
-        name = this.validateNidgetName(name);
+    addNidget(filename) {    
+        const name = this.validateNidgetName(Path.parse(filename).name);
         if (!this.nidgetRecords[name]) this.nidgetRecords[name] = new NidgetRecord(name);
         return this.nidgetRecords[name];
     }

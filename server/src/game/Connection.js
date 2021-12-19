@@ -46,7 +46,7 @@ class Connection{
         if (this.role === "host"){
             this.send(this.game.getUpdate());
         } else {
-            this.game.joinPlayer(this.name);
+            this.send(this.game.getUpdate());
         }
     }
 

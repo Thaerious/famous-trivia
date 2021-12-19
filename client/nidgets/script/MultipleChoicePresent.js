@@ -1,5 +1,5 @@
 import NidgetElement from "./NidgetElement.js";
-require("./CheckBox.js");
+require("../check-box/CheckBox.js");
 
 class ValueUpdate extends CustomEvent {
     constructor(index, value, checked) {

@@ -5,32 +5,77 @@ import NidgetPreprocessor from "./NidgetPreprocessor.js";
 import Path from "path";
 import renderEJS from "./renderEJS.js";
 import renderJS from "./RenderJS.js";
-import Crypto from "crypto";
+import Crypto, { getFips } from "crypto";
+import ParseArgs from "@thaerious/parseargs";
+import parseArgsOptions from "./parseArgsOptions.js";
+import getFiles from "./getFiles.js";
 
+const args = new ParseArgs().loadOptions(parseArgsOptions).run();
 const logger = Logger.getLogger();
+
+logger.channel("standard").enabled = true;
+logger.channel("verbose").enabled = false;
+logger.channel("very-verbose").enabled = false;
+
+if (args.count("silent") > 0) logger.channel("standard").enabled = false;
+if (args.count("verbose") >= 1) logger.channel("verbose").enabled = true;
+if (args.count("verbose") >= 2) logger.channel("very-verbose").enabled = true;
 
 class Watcher {
     constructor() {
         this.blacklist = new Set();
         this.md5 = new Map();
 
-        if (!FS.existsSync(constants.GENERATED_DIR)){
-            FS.mkdirSync(constants.GENERATED_DIR, {recursive : true});
+        if (!FS.existsSync(constants.GENERATED_DIR)) {
+            FS.mkdirSync(constants.GENERATED_DIR, { recursive: true });
         }
-        
-        for (let dir of [...constants.NIDGET_PATH, ...constants.ROOT_PATH]){
+    }
+
+    watch() {
+        logger.channel("standard").log("Watching Files - ctrl-c to Exit");
+        for (let dir of [...constants.NIDGET_PATH, ...constants.ROOT_PATH]) {
+            logger.channel("verbose").log(`Watching directory: ${dir}`);
             let recursive = false;
-            if (dir.endsWith("/**")){
+            if (dir.endsWith("/**")) {
                 recursive = true;
                 dir = dir.substring(0, dir.length - 3);
             }
 
             logger.channel("verbose").log(dir);
-            FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));        
+            FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));
         }
     }
 
-    async startup(directory){}
+    async startup() {
+        this.nidget_preprocessor = new NidgetPreprocessor();
+        this.nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
+        this.nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
+    }
+
+    async renderAllRecords() {
+        logger.channel("standard").log("rendering files:");
+        for (const record of this.nidget_preprocessor.records) {
+            this.renderRecord(record);
+        }
+
+        for (const filename of getFiles(...constants.NIDGET_PATH, ...constants.ROOT_PATH)) {
+            const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(filename)).digest("hex");
+            this.md5.set(filename, md5_hash);
+        }
+    }
+
+    async renderRecord(record) {
+        if (record.root) {
+            if (record.script) {
+                logger.channel("standard").log(record.script);
+                await this.browserify(record.script);
+            }
+            if (record.view) {
+                logger.channel("standard").log(record.view);
+                this.render(record.view);
+            }
+        }
+    }
 
     async listener(directory, event, filename) {
         const fullpath = Path.join(directory, filename);
@@ -50,20 +95,20 @@ class Watcher {
     }
 
     async browserify(filename) {
-        const nidget_preprocessor = new NidgetPreprocessor();        
-        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);            
-        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);       
+        const nidget_preprocessor = new NidgetPreprocessor();
+        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
+        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
         const parsed = Path.parse(filename);
-        const dependents = nidget_preprocessor.reverseLookup(parsed.name); 
-        
-        for (const rec of dependents){
-            if (rec.root && rec.script){             
+        const dependents = nidget_preprocessor.reverseLookup(parsed.name);
+
+        for (const rec of dependents) {
+            if (rec.root && rec.script) {
                 logger.channel("verbose").log(`browserify: ${rec.script}`);
                 const outputPath = Path.join(constants.GENERATED_DIR, Path.parse(rec.script).name + ".js");
-                
-                try{
+
+                try {
                     await renderJS(rec.script, rec.dependencies, outputPath);
-                } catch (error){
+                } catch (error) {
                     console.log(error.constructor.name);
                     console.log(error.toString());
                     console.log(error.code);
@@ -74,15 +119,15 @@ class Watcher {
 
     // re-render all root files that depend on filename
     render(filename) {
-        const nidget_preprocessor = new NidgetPreprocessor();        
-        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);            
+        const nidget_preprocessor = new NidgetPreprocessor();
+        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
         nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
         const parsed = Path.parse(filename);
         const dependents = nidget_preprocessor.reverseLookup(parsed.name);
 
-        for (const rec of dependents){
-            if (rec.root){
-                renderEJS(rec.view, rec.dependencies, this.output_directory);
+        for (const rec of dependents) {
+            if (rec.root) {
+                renderEJS(rec.view, rec.dependencies, constants.GENERATED_DIR);
             }
         }
 
@@ -90,4 +135,21 @@ class Watcher {
     }
 }
 
-new Watcher(constants.GENERATED_DIR, constants.EJS_VIEW_DIR, constants.SCRIPT_SOURCE_DIR, constants.NIDGET_PATH);
+const watcher = new Watcher();
+
+if (args.flags["filename"]) {
+    await watcher.startup();
+    const parsed = Path.parse(args.flags["filename"]);
+    const record = watcher.nidget_preprocessor.getRecord(parsed.name);
+    if (record) {
+        logger.channel("very-verbose").log(record.toString());
+        await watcher.renderRecord(record);
+    }
+} else {
+    await watcher.startup();
+    await watcher.renderAllRecords();
+}
+
+if (args.flags["watch"]) {
+    watcher.watch();
+}

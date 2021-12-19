@@ -11,6 +11,8 @@ class PortalController {
 
         this.view.addEventListener('click', (event)=>this.send(event.detail));
         this.view.addEventListener('cell-select', (event)=>this.send(event.detail));
+
+        this.last_model_update = null;
     }
 
     /**

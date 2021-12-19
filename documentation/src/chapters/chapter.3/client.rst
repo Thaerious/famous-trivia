@@ -16,12 +16,22 @@ Vanilla::
 
     cd client
     npm run build-css
-    node . -v # the -v flag provides details
+    node ../renderer -v # the -v flag provides details
 
 Specify single file to build::
 
-    node . -f editor.ejs # the -f flag for filename
+    node ../renderer -f editor.ejs # the -f flag for filename
+
+Watch for file changes::
+
+    node ../renderer -w
+
 
 .. note::
 
     The node rendering program runs faster in Windows as opposed to WSL.
+
+.. note::
+
+    When testing, browse to localhost:8000 not 127.0.0.1:8000.  Google auth Only
+    recognized the former.

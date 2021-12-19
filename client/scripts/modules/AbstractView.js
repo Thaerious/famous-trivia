@@ -19,23 +19,24 @@ class AbstractView extends EventTarget{
 
     startTimer(update){
         this.DOM.timer.show(update.time);
+        currentPanel.setTimer(100);
     }
 
     updateTimer(update){
-        if (this.lastUpdate.model.players.length <= 0) return;
+        if (this.last_update.model.players.length <= 0) return;
         this.DOM.timer.show();
         this.DOM.timer.set(update.time);
 
-        if (this.lastUpdate.state === 6 || this.lastUpdate.state === 8) {
-            let currentName = this.lastUpdate.model.players[0].name;
-            let currentPanel = this.DOM.playerContainer.topPlayer();
-            currentPanel.setTimer(update.progress);
+        if (this.last_update.state === 6 || this.last_update.state === 8) {
+            let current_name = this.last_update.model.players[0].name;
+            let current_player_card = this.DOM.playerContainer.getPlayer(current_name);
+            current_player_card.setTimer(update.progress);
         }
     }
 
     updateModel(update){
         this.DOM.playerContainer.setPlayers(update.model.players);
-        this.lastUpdate = update;
+        this.last_update = update;
 
         this.DOM.multipleChoice.hide();
 

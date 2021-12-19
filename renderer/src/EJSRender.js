@@ -40,7 +40,6 @@ class EJSRender {
         let jsFilePath = './src/client/' + path;
         let htmlFilePath = './views/pages/' + name + '.ejs';
 
-        console.log("JIT Browserify: " + jsFilePath);
         await this.syncBrowserify(jsFilePath, htmlFilePath, res);
     }
 

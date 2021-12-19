@@ -1,35 +1,37 @@
-import { dir } from 'console';
-import FS from 'fs';
-import Path from 'path';
+import { dir } from "console";
+import FS from "fs";
+import Path from "path";
 
 /**
  * Recursively retrieve a list of files from the specified directory.
- * @param {String} directory 
+ * @param {String} directory
  * @returns An array of {fullpath, name} objects.
  */
- function getFiles(directory = ".", recursive = true){
-      const dirEntries = FS.readdirSync(directory, { withFileTypes: true });
-      let files = dirEntries.map((dirEntry) => {
-          const resolved = Path.resolve(directory, dirEntry.name);
+function getFiles(...directories) {
+    let return_files = [];
+    
+    for (let directory of directories) {
+        let recursive = false;
 
-          if (recursive){
-            return dirEntry.isDirectory() 
-                ? getFiles(resolved, recursive) 
-                : {fullpath : resolved, name : dirEntry.name};
-          } else {
-            return dirEntry.isDirectory() 
-                ? []
-                : {fullpath : resolved, name : dirEntry.name};
-          }
-      });
+        if (directory.endsWith("/**")) {
+            recursive = true;
+            directory = directory.substring(0, directory.length - 3);
+        }
 
-      files = files.flat();
+        const dirEntries = FS.readdirSync(directory, { withFileTypes: true });
+        let files = dirEntries.map(dirEntry => {
+            const joined_path = Path.join(directory, dirEntry.name);
 
-      for (const record of files){
-          record.relative = Path.relative(directory, record.fullpath);
-      }
+            if (recursive) {
+                return dirEntry.isDirectory() ? getFiles(joined_path) : joined_path;
+            } else {
+                return dirEntry.isDirectory() ? [] : joined_path;
+            }
+        });
 
-      return files;
-  }
+        return_files.push(files.flat());
+    }
+    return return_files.flat();
+}
 
-  export default getFiles;
+export default getFiles;

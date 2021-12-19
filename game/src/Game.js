@@ -3,8 +3,9 @@ import config from "./config.js";
 import crypto from "crypto";
 import constants from "./constants.js";
 import Logger from "@thaerious/logger";
-const logger = Logger.getLogger();
-logger.channel("debug").enabled = false;
+
+const logger = Logger.getLogger().channel("game");
+logger.prefix = ()=>"Game ";
 
 /**
  * Use PlayerValues to record possibly transient values between
@@ -125,8 +126,8 @@ class Game {
      * @param input {action : string, data : {}}
      */
     onInput(input) {
-        logger.channel("debug").log(`(${this.state}) - ${JSON.stringify(input)}`);
-        logger.channel("debug").log(`-----------------------------------`);
+        logger.log(`#onInput state:${this.state}) input:${JSON.stringify(input)}`);
+        logger.log(`-----------------------------------`);
 
         switch (input.action) {
             case "set_score":
@@ -151,8 +152,9 @@ class Game {
     }
 
     joinPlayer(name) {
+        logger.log(`#joinPlayer(${name})`);
         this.gameModel.addPlayer(name);
-        this.broadcast();
+        this.updateState();
     }
 
     updateState(state, extraData = {}) {
@@ -194,16 +196,14 @@ class Game {
     broadcast(msg) {
         msg = msg ?? this.lastUpdate;
 
+        logger.log(`#broadcast`);
+        logger.log(JSON.stringify(msg, null, 2));        
+
         let i = 0;
         for (let name in this.listeners) {
             i = i + 1;
             this.listeners[name](msg);
         }
-
-        logger.channel("debug").log(`Server Broadcast`);
-        logger.channel("debug").log(JSON.stringify(msg, null, 2));
-        logger.channel("debug").log(`Recipients ${i}`);
-        logger.channel("debug").log(``);
     }
 
     notify(name, msg) {
@@ -244,7 +244,7 @@ class Game {
                     this.gameModel.getRound().setQuestionState(input.data.col, input.data.row);
                     this.gameModel.getRound().setPlayerSpent();
                     this.updateState(5);
-                    this.notify(constants.names.HOST, {
+                    this.notify(constants.NAMES.HOST, {
                         action: "provide_answer",
                         'id-hash': crypto.randomBytes(8).toString('hex'),
                         'time-stamp': new Date(),

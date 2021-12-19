@@ -9,9 +9,9 @@ function renderJS(sourcePath, nidgetDependencies, outputPath){
         b.add(sourcePath);
 
         for (let record of nidgetDependencies) {
-            logger.channel("verbose").log(`JS Dependency: ${record.script}`);
+            logger.channel("very-verbose").log(`JS Dependency: ${record.script}`);
             b.add(record.script);
-        }    
+        }
 
         b.transform("babelify");
         const rs = b.bundle();

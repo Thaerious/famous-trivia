@@ -1,5 +1,5 @@
 import NidgetElement from "./NidgetElement.js";
-import CheckBox from "./CheckBox";
+import CheckBox from "../check-box/CheckBox";
 
 class NidgetRadioGroup extends NidgetElement {
 
