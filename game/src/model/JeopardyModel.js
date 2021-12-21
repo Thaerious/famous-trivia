@@ -224,7 +224,7 @@ class JeopardyModel {
         return this.model.column[col].cell[row].type;
     }
 
-    getUpdate() {
+    getUpdate(external_update = {}) {
         const players = this.parent.players;
 
         for (let player of players) {
@@ -239,17 +239,17 @@ class JeopardyModel {
             }
         }
 
-        const r = {
-            round : {
-                current_player : this.currentPlayer,
-                categories : this.categories,
-                values : this.values,
-                spent_players : [...this.spentPlayers]
-            },
-            players : players,            
-        }
-        Object.assign(r.round, this.stateData);
-        return r;
+        external_update.round = {
+            current_player : this.currentPlayer,
+            categories : this.categories,
+            values : this.values,
+            spent_players : [...this.spentPlayers]
+        };
+
+        external_update.players = players;
+        Object.assign(external_update.round, this.stateData);
+
+        return JSON.parse(JSON.stringify(external_update));
     }
 
     /**

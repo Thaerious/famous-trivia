@@ -18,8 +18,12 @@ class AbstractView extends EventTarget{
     }
 
     startTimer(update){
+        console.log(this.last_update);
+
         this.DOM.timer.show(update.time);
-        currentPanel.setTimer(100);
+        let current_name = this.last_update.model.players[0].name;
+        let current_player_card = this.DOM.playerContainer.getPlayer(current_name);        
+        current_player_card.setTimer(100);
     }
 
     updateTimer(update){

@@ -65,8 +65,9 @@ class ContestantPortalView extends AbstractView {
                 this.DOM.multipleChoice.querySelector(".row.total > .amount").text = total;
                 break;
             case 7:
-                let check = update.model.round.spentPlayers.indexOf(this.name);
-                if (update.model.round.spentPlayers.indexOf(this.name) === -1) {
+                console.log(update);
+                let check = update.model.round.spent_players.indexOf(this.name);
+                if (update.model.round.spent_players.indexOf(this.name) === -1) {
                     this.DOM.buzzButton.show();
                 }
                 break;

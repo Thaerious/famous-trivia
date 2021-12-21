@@ -98,11 +98,17 @@ class PlayerCard extends NidgetElement {
     }
 
     setTimer(percent) {
+        console.log("Set Timer " + percent);
         if (percent <= 80) this.querySelector(".clock-tick[data-index='4']").classList.add("spent");
+        else this.querySelector(".clock-tick[data-index='4']").classList.remove("spent");
         if (percent <= 60) this.querySelector(".clock-tick[data-index='3']").classList.add("spent");
+        else this.querySelector(".clock-tick[data-index='3']").classList.remove("spent");
         if (percent <= 40) this.querySelector(".clock-tick[data-index='2']").classList.add("spent");
+        else this.querySelector(".clock-tick[data-index='2']").classList.remove("spent");
         if (percent <= 20) this.querySelector(".clock-tick[data-index='1']").classList.add("spent");
+        else this.querySelector(".clock-tick[data-index='1']").classList.remove("spent");
         if (percent <= 0) this.querySelector(".clock-tick[data-index='0']").classList.add("spent");
+        else this.querySelector(".clock-tick[data-index='0']").classList.remove("spent");
     }
 }
 

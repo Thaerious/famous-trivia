@@ -38,11 +38,11 @@ class GameModel {
      * This object will be used to update the client view.
      * @returns {{round: *}}
      */
-    getUpdate() {
+    getUpdate(external_update = {}) {
         logger.log("#getUpdate");
-        const update = this.getRound().getUpdate();
-        if (!update.players) Object.assign(update, {players : this.players});
-        return update;
+        Object.assign(external_update, {players : this.players});
+        external_update = JSON.parse(JSON.stringify(external_update));
+        return this.getRound().getUpdate(external_update);
     }
 
     /**
@@ -88,7 +88,6 @@ class GameModel {
     addPlayer(name) {
         logger.log("#addPlayer");
         if (this.hasPlayer(name)) {
-            console.log("has player already");
             return this.getPlayer(name);
         }
 
@@ -99,7 +98,6 @@ class GameModel {
         };
 
         this._players.push(player);
-        console.log(this._players);
         return player;
     }
 

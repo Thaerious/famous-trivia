@@ -53,6 +53,7 @@ describe(`add_player_test.js`, function () {
             it(`true for Adam`, function () {
                 this.game.joinPlayer("Adam");
                 const update = this.game.gameModel.getUpdate();
+                console.log(update);
                 assert.strictEqual(update.players[0].name, "Adam");
             });
             it(`true for Beth`, function () {
