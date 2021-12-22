@@ -1,6 +1,11 @@
 =======
 Nidgets
 =======
+
+Nidgets are a solution to automatically reusing template elements.  A template element holds HTML code
+without actually inserting it into the DOM.  Each nidget template lives in it's own .ejs file located in the
+``/views/nidgets/`` directory.
+
 The term "Nidget" stands for "Not-a-Widget", which is a little tongue in cheek as it is a widget.
 A Widget (and a Nidget) being a reusable GUI element.  I chose Nidget as the term Widget is used quite often
 already.
@@ -11,9 +16,6 @@ A Nidget consists of 3 files:
 * A style file (either .css or .scss).
 * A .js file.
 
-Nidgets are a solution to automatically reusing template elements.  A template element holds HTML code
-without actually inserting it into the DOM.  Each nidget template lives in it's own .ejs file located in the
-``/views/nidgets/`` directory.
 
 **Template File** (/views/nidgets/check-box.ejs)::
 

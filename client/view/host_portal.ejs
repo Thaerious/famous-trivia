@@ -9,7 +9,12 @@
 
 <div class="bg"></div>
 
-<div id="page-container" class="aspect-fit">
+<div id="page-container" class="aspect-fit">  
+    <player-context-menu id="player-context-menu">   
+        <context-menu-item>Set Score</context-menu-item> 
+        <context-menu-item>Remove Player</context-menu-item> 
+    </player-context-menu>
+
     <div class="top-bar" id="top-bar">
         <menu-container id="menu-container" image-src="assets/images/menu.png">
             <menu-item  id="menu-terminate" event-name="terminate">Terminate Hosting</menu-item>

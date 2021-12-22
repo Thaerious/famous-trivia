@@ -178,7 +178,7 @@ class NidgetElement extends HTMLElement {
      * Remove this element from it's parent.
      */
     detach(){
-        this.parentNode.removeChild(this);
+        return this.parentNode.removeChild(this);
     }
 
     /**

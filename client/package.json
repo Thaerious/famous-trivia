@@ -21,7 +21,7 @@
     },
     "scripts": {
         "build-css": "sass styles:output && sass nidgets/style:output",
-        "watch-css": "sass --watch styles:output",
+        "watch-css": "sass --watch nidgets/style:output styles:output",
         "build": "npm run clean && node . && npm run build-css",
         "clean": "rm -rf output"
     }

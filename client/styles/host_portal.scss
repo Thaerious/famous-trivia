@@ -4,3 +4,9 @@
 @import 'portal/button_layout';
 @import 'components/bg';
 @import 'components/shared';
+
+player-context-menu{
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
