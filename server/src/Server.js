@@ -74,7 +74,7 @@ class Server {
         this.app.use("*", (req, res, next)=>{
             // logger when -v/--verbose flag is active
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
-            logger.channel("verbose").log(ip + " " + req.originalUrl);
+            logger.channel("server").log(ip + " " + req.originalUrl);
             next();
         });
         
@@ -92,10 +92,10 @@ class Server {
     setupWebsocket(sessionManager, gameManager, gameManagerEndpoint) {
         const wss = new WebSocketServer({server: this.httpServer, path: "/game-service.ws"});
         wss.on('connection', async (ws, req) => {
+            logger.channel("server").log("/game-service.ws");
             await sessionManager.applyTo(req);
 
             try {
-                console.log("ws.on.connection");
                 await new Connection(ws, req, gameManager, gameManagerEndpoint).connect();
             } catch (err) {
                 console.log(err);
@@ -111,7 +111,7 @@ class Server {
 
     setup404(){
         this.app.use("*", (req, res)=>{
-            logger.channel("verbose").log("404 " + req.originalUrl);           
+            logger.channel("server").log("404 " + req.originalUrl);           
             res.statusMessage = "Page Not Found: 404";
             res.status(404);
             res.send("404: page not found");
