@@ -1,4 +1,6 @@
 import ErrorResponse from "./responses/ErrorResponse.js";
+import Logger from "@thaerious/logger";
+const logger = Logger.getLogger();
 
 /**
  * All incoming messages to the server should take the form of
@@ -58,12 +60,9 @@ class Connection{
      */
     async establishConnection(){
         let sessionHash = this.req.session.hash;
-        console.log("establishConnection " + sessionHash);
-
         [this.game, this.name, this.role] = this.connectionInfo(sessionHash);
         this.addListeners();
-        console.log("establishConnection() " + sessionHash);
-        console.log([this.name, this.role]);
+        logger.channel("verbose").log(`connection ${this.name} ${this.role}`);
     }
 
     addListeners() {

@@ -19,6 +19,9 @@ logger.channel("log").prefix = (f, l)=>`l ${f}:${l}\t `;
 logger.channel("verbose").prefix = (f, l)=>`v ${f}:${l}\t `;
 logger.channel('verbose').enabled = flags['verbose'];
 
+logger.channel("game_model").enabled = false;
+logger.channel("game").enabled = false;
+
 logger.channel('verbose').log("setting up database");
 await setupDB(config.server.db.dir, config.server.db.name, config.server.db.script_full_path);
 

@@ -1,13 +1,7 @@
-# **/.*/
-# **/jit/
-# **/generated/
-# **/logs/
-# coverage/
-# db/
-
 **/node_modules/
 documentation/build/
 **/coverage/
 .vscode
 **/generated/
 client/output
+server/db/trivia.db
