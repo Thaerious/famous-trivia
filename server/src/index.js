@@ -12,6 +12,7 @@ import NameValidator from "./game/NameValidator.js";
 import verify from "./mechanics/verify.js";
 import parseArgsOptions from './parseArgsOptions.js';
 import Logger from '@thaerious/logger';
+import FS from 'fs';
 
 const flags = new ParseArgs().loadOptions(parseArgsOptions).run().flags;
 const logger = Logger.getLogger();
@@ -30,6 +31,13 @@ const gameManager = new GameManager();
 gameManager.timeAnswer = flags['ta'];
 gameManager.timeBuzz = flags['tb'];
 gameManager.timeMultipleChoice = flags['tm'];    
+
+// create the db if it doesn't exist
+const dbName = Path.join(config.server.db.dir, config.server.db.name);
+const emptyDbName = Path.join(config.server.db.dir, config.server.db.empty);
+if (!FS.existsSync(dbName)){
+    FS.copyFileSync(emptyDbName, dbName);
+}
 
 logger.channel('verbose').log("initializing session manager");
 const sessionManager = new SessionManager(Path.join(config.server.db.dir, config.server.db.name));

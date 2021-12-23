@@ -16,43 +16,17 @@ const config = {
         scope: "https://www.googleapis.com/auth/drive.file"
     },
     server : {
-        // The port to start Express on.
-        port : 8000,
-
         // The directories to server files out of
         PUBLIC_STATIC : "public",
         PUBLIC_GENERATED : "../client/output",
 
-        // Public script dir (target)
-        public_scripts : "public/scripts/",
-
-        // Public script dir (target of JIT pre-compiler).
-        GENERATED_SCRIPT_DIR : "./public/scripts/generated/",
-
-        // Target of .ejs precompile
-        GENERATED_EJS_DIR : "./public/html/generated/",
-
-        // .ejs source directory
-        ejs_src : "./views/",
-
-        // .ejs sub-directory for nidget template .ejs pages.
-        NIDGET_EJS_SRC : "./src/views/nidgets/",
-
         // .ejs public sub-directory for .ejs root pages (pages users will browse to).
         EJS_ROOT_DIR : "./src/views/pages/",
-
-        // Path the browser used to request generated ejs files
-        JIT_URL : "/jit/*.js",
-
-        // Client source files, all files in this dir get browserified unless --jit is flagged.
-        client_path : "./src/client/",
-
-        // Client source files, all files in this dir get browserified unless --jit is flagged.
-        NIDGET_JS_DIR : "./src/client/nidgets/",
 
         db : {
             dir : "./db",
             name : "trivia.db",
+            empty : "empty.db",
             script_full_path : "./accessory/create_tables.sql"
         },
     },
