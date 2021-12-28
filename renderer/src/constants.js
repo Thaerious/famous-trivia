@@ -1,5 +1,4 @@
 export default {
-    GENERATED_DIR : "./output/",
-    NIDGET_PATH : ["./nidgets/**"],
-    ROOT_PATH : ["./view", "./scripts"]
+    NIDGET_PROPERTY_FILE : "nidgets.json",
+    DEFAULT_OUTPUT : "output"
 }; 

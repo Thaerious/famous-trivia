@@ -1,14 +1,16 @@
-import FS from "fs";
+import FS, { watch } from "fs";
 import Logger from "@thaerious/logger";
 import constants from "./constants.js";
 import NidgetPreprocessor from "./NidgetPreprocessor.js";
 import Path from "path";
 import renderEJS from "./renderEJS.js";
 import renderJS from "./RenderJS.js";
+import renderSCSS from "./renderSCSS.js";
 import Crypto, { getFips } from "crypto";
 import ParseArgs from "@thaerious/parseargs";
 import parseArgsOptions from "./parseArgsOptions.js";
-import getFiles from "./getFiles.js";
+import glob_fs from "glob-fs";
+const glob = glob_fs();
 
 const args = new ParseArgs().loadOptions(parseArgsOptions).run();
 const logger = Logger.getLogger();
@@ -25,10 +27,7 @@ class Watcher {
     constructor() {
         this.blacklist = new Set();
         this.md5 = new Map();
-
-        if (!FS.existsSync(constants.GENERATED_DIR)) {
-            FS.mkdirSync(constants.GENERATED_DIR, { recursive: true });
-        }
+        this.paths = [];
     }
 
     watch() {
@@ -48,8 +47,30 @@ class Watcher {
 
     async startup() {
         this.nidget_preprocessor = new NidgetPreprocessor();
-        this.nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
-        this.nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
+
+        let settings = {};
+        if (FS.existsSync(constants.NIDGET_PROPERTY_FILE)) {
+            const settings_text = FS.readFileSync(constants.NIDGET_PROPERTY_FILE);
+            settings = JSON.parse(settings_text);
+
+            if (settings.input) for (const path of settings.input) this.addPath(path);
+        }
+
+        const directories = args.args.slice(2);
+
+        for (const dir of directories) this.addPath(dir);
+        this.output_path = settings.output ?? constants.DEFAULT_OUTPUT;
+
+        if (args.flags["output"]) this.output_path = args.flags["output"];
+
+        if (!FS.existsSync(this.output_path)) {
+            FS.mkdirSync(this.output_path, { recursive: true });
+        }
+    }
+
+    addPath(path) {
+        this.paths.push(path);
+        this.nidget_preprocessor.addPath(path);
     }
 
     async renderAllRecords() {
@@ -58,21 +79,31 @@ class Watcher {
             this.renderRecord(record);
         }
 
-        for (const filename of getFiles(...constants.NIDGET_PATH, ...constants.ROOT_PATH)) {
-            const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(filename)).digest("hex");
-            this.md5.set(filename, md5_hash);
+        for (const input_path of this.paths) {
+            for (const filename of glob.readdirSync(input_path)) {
+                if (!FS.lstatSync(filename).isDirectory()){
+                    const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(filename)).digest("hex");
+                    this.md5.set(filename, md5_hash);
+                }
+            }
         }
     }
 
     async renderRecord(record) {
-        if (record.root) {
+        if (record.type === "view") {
             if (record.script) {
                 logger.channel("standard").log(record.script);
-                await this.browserify(record.script);
+                await this.browserify(record);
             }
             if (record.view) {
                 logger.channel("standard").log(record.view);
-                this.render(record.view);
+                this.render(record);
+            }
+        }
+
+        if (record.type === "view" || record.type === "nidget") {
+            if (record.style) {
+                renderSCSS(record.style, Path.join(this.output_path, record.name + ".css"));
             }
         }
     }
@@ -94,61 +125,39 @@ class Watcher {
         }
     }
 
-    async browserify(filename) {
+    async browserify(record) {
+        console.log(`browserify(${record.name})`);
         const nidget_preprocessor = new NidgetPreprocessor();
-        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
-        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
-        const parsed = Path.parse(filename);
-        const dependents = nidget_preprocessor.reverseLookup(parsed.name);
+        nidget_preprocessor.addPath(...this.paths);
 
-        for (const rec of dependents) {
-            if (rec.root && rec.script) {
-                logger.channel("verbose").log(`browserify: ${rec.script}`);
-                const outputPath = Path.join(constants.GENERATED_DIR, Path.parse(rec.script).name + ".js");
+        logger.channel("verbose").log(`browserify: ${record.script}`);
+        const outputPath = Path.join(this.output_path, Path.parse(record.script).name + ".js");
 
-                try {
-                    await renderJS(rec.script, rec.dependencies, outputPath);
-                } catch (error) {
-                    console.log(error.constructor.name);
-                    console.log(error.toString());
-                    console.log(error.code);
-                }
-            }
+        try {
+            await renderJS(record.script, record.dependencies, outputPath);
+        } catch (error) {
+            console.log(error.constructor.name);
+            console.log(error.toString());
+            console.log(error.code);
         }
     }
 
-    // re-render all root files that depend on filename
-    render(filename) {
+    render(record) {
         const nidget_preprocessor = new NidgetPreprocessor();
-        nidget_preprocessor.addNidgetPath(...constants.NIDGET_PATH);
-        nidget_preprocessor.addRootPath(...constants.ROOT_PATH);
-        const parsed = Path.parse(filename);
+        nidget_preprocessor.addPath(...this.paths);
+        const parsed = Path.parse(record.view);
         const dependents = nidget_preprocessor.reverseLookup(parsed.name);
-
-        for (const rec of dependents) {
-            if (rec.root) {
-                renderEJS(rec.view, rec.dependencies, constants.GENERATED_DIR);
-            }
-        }
-
-        this.blacklist.delete(filename);
+        renderEJS(record.view, record.dependencies, this.output_path);
+        this.blacklist.delete(record.view);
     }
 }
 
 const watcher = new Watcher();
+await watcher.startup();
 
-if (args.flags["filename"]) {
-    await watcher.startup();
-    const parsed = Path.parse(args.flags["filename"]);
-    const record = watcher.nidget_preprocessor.getRecord(parsed.name);
-    if (record) {
-        logger.channel("very-verbose").log(record.toString());
-        await watcher.renderRecord(record);
-    }
-} else {
-    await watcher.startup();
-    await watcher.renderAllRecords();
-}
+// console.log(watcher.nidget_preprocessor.records);
+
+await watcher.renderAllRecords();
 
 if (args.flags["watch"]) {
     watcher.watch();

@@ -4,6 +4,8 @@ import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 
 function renderJS(sourcePath, nidgetDependencies, outputPath){
+    console.log(sourcePath + ", " + outputPath);
+
     return new Promise((resolve, reject) => {
         const b = browserify({ debug: true });   
         b.add(sourcePath);

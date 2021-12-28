@@ -1,16 +1,30 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import Path from "path";
-import getFiles from "./getFiles.js";
 import Logger from "@thaerious/logger";
-import {Parser} from "acorn";
-import {bfsObject, bfsAll} from "./include/bfsObject.js";
+import { Parser } from "acorn";
+import { bfsObject, bfsAll } from "./include/bfsObject.js";
 import FS from "fs";
+import glob_fs from "glob-fs";
+const glob = glob_fs();
+
+class Warn{
+    constructor(){
+        this.previous = new Set();
+    }
+
+    warn(file, nidget){
+        if (this.previous.has(`${file}:${nidget}`)) return;
+        this.previous.add(`${file}:${nidget}`);
+        logger.warn(`warning: unknown data-include ${nidget} in ${file}`);        
+    }
+}
+const warner = new Warn();
 
 const logger = Logger.getLogger().channel("nidget_preprocessor");
-Logger.getLogger().channel("nidget_preprocessor").prefix = (f, l, c) =>{
-    return (`${f}:${l}\n`);
-};
+// Logger.getLogger().channel("nidget_preprocessor").prefix = (f, l, c) => {
+//     return `${f}:${l}\n`;
+// };
 
 /**
  * A record object for a single Nidget or root file.
@@ -22,6 +36,7 @@ class DependencyRecord {
         this._name = nidgetName;
         this._script = undefined;
         this._view = undefined;
+        this._style = undefined;
         this._dependencies = new Set();
         this._type = "nidget";
     }
@@ -53,11 +68,11 @@ class DependencyRecord {
     get script() {
         return this._script;
     }
-    get view() {
-        return this._view;
-    }
     set script(value) {
         this._script = value;
+    }
+    get view() {
+        return this._view;
     }
     set view(value) {
         this._view = value;
@@ -68,6 +83,12 @@ class DependencyRecord {
     get type() {
         return this._type;
     }
+    get style() {
+        return this._style;
+    }
+    set style(value) {
+        this._style = value;
+    }
 
     toString() {
         return (
@@ -75,6 +96,7 @@ class DependencyRecord {
             `\tname : ${this.name}\n` +
             `\tscript : ${this.script}\n` +
             `\tview : ${this.view}\n` +
+            `\tstyle : ${this.style}\n` +
             `\ttype : ${this.type}\n` +
             `\tdependencies : Set(${this.dependencies.size}){\n` +
             [...this.dependencies].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
@@ -88,7 +110,7 @@ class DependencyRecord {
      * Adds any dependencies in the data-include attribute of the template (comma or space delimited).
      * Then searches for any tag-names that match any .ejs files in the nidgets subdirectory.
      */
-    seekEJSDependencies(nidget_preprocessor) {        
+    seekEJSDependencies(nidget_preprocessor) {
         if (this.view === "") return;
         if (!fs.existsSync(this.view)) return;
         const nidget_records = nidget_preprocessor.nidgetRecords;
@@ -108,11 +130,11 @@ class DependencyRecord {
 
                 for (let s of split) {
                     if (s.trim() != "") {
-                        if (nidget_preprocessor.hasRecord(s.trim())){
+                        if (nidget_preprocessor.hasRecord(s.trim())) {
                             this.addDependency(nidget_records[s.trim()]);
                         } else {
-                            logger.warn(`warning: unknown nidget in data-include attribute: ${s.trim()}`);
-                        }                        
+                            warner.warn(this.name, s.trim());
+                        }
                     }
                 }
 
@@ -131,18 +153,18 @@ class DependencyRecord {
      * Seek out JS dependencies in this record's script.
      * The dependency is not neccisarily a Nidget.
      */
-    seekJSDependencies(nidget_preprocessor){
+    seekJSDependencies(nidget_preprocessor) {
         if (this.script === "") return;
-        if (!fs.existsSync(this.script)) return;  
-                
+        if (!fs.existsSync(this.script)) return;
+
         const code = FS.readFileSync(this.script);
-        const ast = Parser.parse(code, {ecmaVersion: "latest", sourceType: "module"});        
+        const ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
         const import_declarations = bfsAll(ast, "type", "ImportDeclaration");
         const import_sources = bfsAll(import_declarations, "source");
-        
-        for (const import_source of import_sources){
+
+        for (const import_source of import_sources) {
             const name = import_source.source.value;
-            if (nidget_preprocessor.hasRecord(name)){
+            if (nidget_preprocessor.hasRecord(name)) {
                 this.addDependency(nidget_preprocessor.getRecord(name));
             } else {
                 const record = nidget_preprocessor.addInclude(import_source.source.value);
@@ -163,25 +185,34 @@ class NidgetPreprocessor {
     addPath(...filepaths) {
         const jsFiles = [];
         const ejsFiles = [];
+        const scssFiles = [];
 
-        for (let filepath of getFiles(...filepaths)) {
-            if (filepath.endsWith(".ejs")) ejsFiles.push(filepath);
-            if (filepath.endsWith(".js")) jsFiles.push(filepath);
+        for (const input_path of filepaths) {
+            for (const filepath of glob.readdirSync(input_path)){
+                if (filepath.endsWith(".ejs")) ejsFiles.push(filepath);
+                if (filepath.endsWith(".js")) jsFiles.push(filepath);
+                if (filepath.endsWith(".scss")) scssFiles.push(filepath);
+            }
         }
 
-        for (let filepath of jsFiles){    
+        for (let filepath of jsFiles) {
             if (this.hasRecord(filepath)) continue;
             if (isNidgetScript(filepath)) this.addNidget(filepath);
-            else this.addInclude(filepath);            
+            else this.addInclude(filepath);
         }
 
-        for (let filepath of ejsFiles){            
-            if (this.hasRecord(filepath)){
+        for (let filepath of ejsFiles) {
+            if (this.hasRecord(filepath)) {
                 this.getRecord(filepath).view = filepath;
                 if (this.getRecord(filepath).type === "include") this.getRecord(filepath).type = "view";
             } else {
                 this.addView(filepath);
-            }            
+            }
+        }
+
+        for (let filepath of scssFiles) {
+            if (!this.hasRecord(filepath)) this.addStyle(filepath);
+            else this.getRecord(filepath).style = filepath;
         }
 
         for (const nidget in this.nidgetRecords) {
@@ -197,7 +228,7 @@ class NidgetPreprocessor {
         return this.nidgetRecords[this.convertToDash(name)];
     }
 
-    hasRecord(name){
+    hasRecord(name) {
         if (this.nidgetRecords[name]) return true;
         if (this.nidgetRecords[this.convertToDash(name)]) return true;
         return false;
@@ -245,6 +276,16 @@ class NidgetPreprocessor {
         return return_set;
     }
 
+    addStyle(filepath) {
+        const name = this.convertToDash(Path.parse(filepath).name);
+        if (!this.nidgetRecords[name]) {
+            this.nidgetRecords[name] = new DependencyRecord(name);
+            this.nidgetRecords[name].type = "include";
+            this.nidgetRecords[name].style = filepath;
+        }
+        return this.nidgetRecords[name];
+    }
+
     addInclude(filepath) {
         const name = this.convertToDash(Path.parse(filepath).name);
         if (!this.nidgetRecords[name]) {
@@ -265,8 +306,8 @@ class NidgetPreprocessor {
         return this.nidgetRecords[name];
     }
 
-    addNidget(filepath) {    
-        const name = this.validateNidgetName(Path.parse(filepath).name);        
+    addNidget(filepath) {
+        const name = this.validateNidgetName(Path.parse(filepath).name);
         if (!this.nidgetRecords[name]) this.nidgetRecords[name] = new DependencyRecord(name);
         this.nidgetRecords[name].script = filepath;
         return this.nidgetRecords[name];
@@ -322,10 +363,10 @@ class NidgetPreprocessor {
     }
 }
 
-function isNidgetScript(filepath){
+function isNidgetScript(filepath) {
     const code = FS.readFileSync(filepath);
-    let ast = Parser.parse(code, {ecmaVersion: "latest", sourceType: "module"});
-    
+    let ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
+
     ast = bfsObject(ast, "type", "ClassDeclaration");
     return ast?.superClass?.name === "NidgetElement";
 }

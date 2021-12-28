@@ -1,3 +1,5 @@
+import constants from "./constants.js";
+
 export default {
     flags: [{
         "long" : "verbose",
@@ -8,8 +10,8 @@ export default {
         "short" : "s",
         "type" : "boolean"
     },{
-        "long" : "filename",
-        "short" : "f",
+        "long" : "destination",
+        "short" : "d",
         "type" : "string"
     },{
         "long" : "watch",

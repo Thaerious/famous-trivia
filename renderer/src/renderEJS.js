@@ -15,11 +15,15 @@ function renderEJS(sourceFullpath, nidgetDependencies, outputDirectory) {
             nidget_records: nidgetDependencies,
         },
         (err, str) => {
-            if (err) console.log(err);
-            if (!FS.existsSync(outputDirectory)) {
-                FS.mkdirSync(outputDirectory, { recursive: true });
+            if (err){
+                 console.log(err);
             }
-            FS.writeFileSync(Path.join(outputDirectory, basename + ".html"), str);
+            else{
+                if (!FS.existsSync(outputDirectory)) {
+                    FS.mkdirSync(outputDirectory, { recursive: true });
+                }
+                FS.writeFileSync(Path.join(outputDirectory, basename + ".html"), str);
+            }
         }
     );
 }

@@ -1,0 +1,9 @@
+{
+    "output" : "./test/output",
+    "input" : [
+        "./test/mock/nidgets/**",
+        "./test/mock/view/scripts/**",
+        "./test/mock/view/styles/**",
+        "./test/mock/view/*"
+    ]
+}
