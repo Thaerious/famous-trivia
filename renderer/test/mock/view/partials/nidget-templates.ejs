@@ -1,0 +1,8 @@
+<% for (let nidget_record of nidget_records){
+    if(nidget_record.view){
+    console.log(`view : ${nidget_record.view}`);  
+    const fullpath = process.cwd() + "\\" + nidget_record.view;
+%>
+<%- include(fullpath); %>
+    <% } 
+} %>

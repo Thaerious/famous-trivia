@@ -37,28 +37,29 @@ class DependencyRecord {
         this._script = undefined;
         this._view = undefined;
         this._style = undefined;
-        this._dependencies = new Set();
+        this._dependents = new Set();
         this._type = "nidget";
     }
 
     addDependency(record) {
-        this._dependencies.add(record);
+        this._dependents.add(record);
     }
 
     /* return a non-reflective set of dependency records */
-    get dependencies() {
+    get dependents() {
         const set = new Set();
         const stack = [this];
 
         while (stack.length > 0) {
-            if (!set.has(stack[0])) {
-                if (stack[0] !== this) set.add(stack[0]);
-                for (const dep of stack[0]._dependencies) {
+            const current = stack.shift();
+            if (!set.has(current)) {
+                set.add(current);
+                for (const dep of current._dependents) {
                     stack.push(dep);
                 }
             }
-            stack.shift();
         }
+        set.delete(this);
         return set;
     }
 
@@ -98,8 +99,8 @@ class DependencyRecord {
             `\tview : ${this.view}\n` +
             `\tstyle : ${this.style}\n` +
             `\ttype : ${this.type}\n` +
-            `\tdependencies : Set(${this.dependencies.size}){\n` +
-            [...this.dependencies].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
+            `\tdependents : Set(${this.dependents.size}){\n` +
+            [...this.dependents].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
             `\t}\n`
         );
     }
@@ -121,7 +122,7 @@ class DependencyRecord {
 
         for (let nidget_name in nidget_records) {
             const record = nidget_records[nidget_name];
-            if (this._dependencies.has(record)) continue;
+            if (this._dependents.has(record)) continue;
 
             let template = dom.window.document.querySelector(`template`);
             if (template) {
@@ -197,7 +198,7 @@ class NidgetPreprocessor {
 
         for (let filepath of jsFiles) {
             if (this.hasRecord(filepath)) continue;
-            if (isNidgetScript(filepath)) this.addNidget(filepath);
+            if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
             else this.addInclude(filepath);
         }
 
@@ -225,12 +226,12 @@ class NidgetPreprocessor {
 
     getRecord(name) {
         if (this.nidgetRecords[name]) return this.nidgetRecords[name];
-        return this.nidgetRecords[this.convertToDash(name)];
+        return this.nidgetRecords[NidgetPreprocessor.convertToDash(name)];
     }
 
     hasRecord(name) {
         if (this.nidgetRecords[name]) return true;
-        if (this.nidgetRecords[this.convertToDash(name)]) return true;
+        if (this.nidgetRecords[NidgetPreprocessor.convertToDash(name)]) return true;
         return false;
     }
 
@@ -261,7 +262,7 @@ class NidgetPreprocessor {
         const return_set = new Set();
 
         if (this.getRecord(nidgetName).type === "nidget") {
-            nidgetName = this.convertToDash(nidgetName);
+            nidgetName = NidgetPreprocessor.convertToDash(nidgetName);
         }
 
         return_set.add(this.getRecord(nidgetName));
@@ -277,7 +278,7 @@ class NidgetPreprocessor {
     }
 
     addStyle(filepath) {
-        const name = this.convertToDash(Path.parse(filepath).name);
+        const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
         if (!this.nidgetRecords[name]) {
             this.nidgetRecords[name] = new DependencyRecord(name);
             this.nidgetRecords[name].type = "include";
@@ -287,7 +288,7 @@ class NidgetPreprocessor {
     }
 
     addInclude(filepath) {
-        const name = this.convertToDash(Path.parse(filepath).name);
+        const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
         if (!this.nidgetRecords[name]) {
             this.nidgetRecords[name] = new DependencyRecord(name);
             this.nidgetRecords[name].type = "include";
@@ -297,7 +298,7 @@ class NidgetPreprocessor {
     }
 
     addView(filepath) {
-        const name = this.convertToDash(Path.parse(filepath).name);
+        const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
         if (!this.nidgetRecords[name]) {
             this.nidgetRecords[name] = new DependencyRecord(name);
             this.nidgetRecords[name].type = "view";
@@ -321,7 +322,7 @@ class NidgetPreprocessor {
      * @param nidgetName
      */
     validateNidgetName(nidgetName) {
-        const ctdNidgetName = this.convertToDash(nidgetName);
+        const ctdNidgetName = NidgetPreprocessor.convertToDash(nidgetName);
         if (ctdNidgetName.indexOf("-") === -1) {
             throw new Error("Invalid nidget name: " + nidgetName);
         }
@@ -332,7 +333,7 @@ class NidgetPreprocessor {
      * Converts string to dash delimited.
      * @param string
      */
-    convertToDash(string) {
+    static convertToDash(string) {
         string = Path.parse(string).name;
         string = string.charAt(0).toLocaleLowerCase() + string.substr(1); // leading lower case
         string = string.replace(/_+/g, "-"); // replace underscore with dash
@@ -361,14 +362,24 @@ class NidgetPreprocessor {
         }
         return includes;
     }
-}
 
-function isNidgetScript(filepath) {
-    const code = FS.readFileSync(filepath);
-    let ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
-
-    ast = bfsObject(ast, "type", "ClassDeclaration");
-    return ast?.superClass?.name === "NidgetElement";
+    static isNidgetScript(filepath) {
+        const code = FS.readFileSync(filepath);
+        let ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
+        ast = bfsAll(ast, "type", "ClassDeclaration");
+        const name = NidgetPreprocessor.convertToDash(filepath);
+    
+        for (const node of ast){
+            if (node?.superClass?.name){                
+                if (name !== NidgetPreprocessor.convertToDash(node.id.name)) continue;
+                if (node?.superClass?.name === "NidgetElement"){
+                    return true;
+                }
+            }
+        }    
+    
+        return false;
+    }    
 }
 
 export default NidgetPreprocessor;

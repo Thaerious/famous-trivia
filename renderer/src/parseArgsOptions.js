@@ -17,5 +17,9 @@ export default {
         "long" : "watch",
         "short" : "w",
         "type" : "boolean"
+    },{
+    "long" : "name",
+    "short" : "n",
+    "type" : "string"
     }]
 }

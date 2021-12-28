@@ -13,8 +13,9 @@
  */
 function bfsObject(root, key, value, test) {
     const queue = [];
-    if (value) test = test ?? (i => i === value);
-    else test = test ?? (i => i !== undefined);
+
+    if (value) test = i => i === value;
+    else test = i => i !== undefined;
 
     if (typeof(root) == "object") queue.push(root);
     else if (typeof(root) == "array") for (const item of root) queue.push(item);
@@ -33,8 +34,8 @@ function bfsAll(root, key, value, test) {
     const return_array = [];
     const queue = [];
     
-    if (value) test = test ?? (i => i === value);
-    else test = test ?? (i => i !== undefined);
+    if (value) test = i => i === value;
+    else test = i => i !== undefined;
 
     if (typeof(root) == "object") queue.push(root);
     else if (typeof(root) == "array") for (const item of root) queue.push(item);

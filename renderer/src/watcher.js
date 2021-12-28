@@ -46,6 +46,7 @@ class Watcher {
     }
 
     async startup() {
+        logger.channel("verbose").log("# startup");
         this.nidget_preprocessor = new NidgetPreprocessor();
 
         let settings = {};
@@ -74,11 +75,13 @@ class Watcher {
     }
 
     async renderAllRecords() {
-        logger.channel("standard").log("rendering files:");
+        logger.channel("verbose").log("# render all records");
+
         for (const record of this.nidget_preprocessor.records) {
-            this.renderRecord(record);
+            await this.renderRecord(record);  
         }
 
+        logger.channel("verbose").log("# hash files");
         for (const input_path of this.paths) {
             for (const filename of glob.readdirSync(input_path)) {
                 if (!FS.lstatSync(filename).isDirectory()){
@@ -90,13 +93,13 @@ class Watcher {
     }
 
     async renderRecord(record) {
+        logger.channel("very-verbose").log(record.toString());
+
         if (record.type === "view") {
             if (record.script) {
-                logger.channel("standard").log(record.script);
                 await this.browserify(record);
             }
             if (record.view) {
-                logger.channel("standard").log(record.view);
                 this.render(record);
             }
         }
@@ -126,15 +129,13 @@ class Watcher {
     }
 
     async browserify(record) {
-        console.log(`browserify(${record.name})`);
         const nidget_preprocessor = new NidgetPreprocessor();
         nidget_preprocessor.addPath(...this.paths);
 
-        logger.channel("verbose").log(`browserify: ${record.script}`);
         const outputPath = Path.join(this.output_path, Path.parse(record.script).name + ".js");
 
         try {
-            await renderJS(record.script, record.dependencies, outputPath);
+            await renderJS(record.script, record.dependents, outputPath);
         } catch (error) {
             console.log(error.constructor.name);
             console.log(error.toString());
@@ -145,9 +146,8 @@ class Watcher {
     render(record) {
         const nidget_preprocessor = new NidgetPreprocessor();
         nidget_preprocessor.addPath(...this.paths);
-        const parsed = Path.parse(record.view);
-        const dependents = nidget_preprocessor.reverseLookup(parsed.name);
-        renderEJS(record.view, record.dependencies, this.output_path);
+
+        renderEJS(record.view, record.dependents, this.output_path);
         this.blacklist.delete(record.view);
     }
 }
@@ -155,9 +155,11 @@ class Watcher {
 const watcher = new Watcher();
 await watcher.startup();
 
-// console.log(watcher.nidget_preprocessor.records);
-
-await watcher.renderAllRecords();
+if (args.flags["name"]){
+    await watcher.renderRecord(watcher.nidget_preprocessor.getRecord(args.flags["name"]));
+}else{
+    await watcher.renderAllRecords();
+}
 
 if (args.flags["watch"]) {
     watcher.watch();
