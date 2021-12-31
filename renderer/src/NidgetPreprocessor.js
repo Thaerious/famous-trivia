@@ -6,7 +6,6 @@ import { Parser } from "acorn";
 import { bfsObject, bfsAll } from "./include/bfsObject.js";
 import FS from "fs";
 import glob_fs from "glob-fs";
-const glob = glob_fs();
 
 class Warn{
     constructor(){
@@ -70,15 +69,18 @@ class DependencyRecord {
         return this._script;
     }
     set script(value) {
+        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);
         this._script = value;
     }
     get view() {
         return this._view;
     }
     set view(value) {
+        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);
         this._view = value;
     }
     set type(value) {
+        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);
         this._type = value;
     }
     get type() {
@@ -88,6 +90,7 @@ class DependencyRecord {
         return this._style;
     }
     set style(value) {
+        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);        
         this._style = value;
     }
 
@@ -165,6 +168,7 @@ class DependencyRecord {
 
         for (const import_source of import_sources) {
             const name = import_source.source.value;
+            if (!name.endsWith(".js")) continue;
             if (nidget_preprocessor.hasRecord(name)) {
                 this.addDependency(nidget_preprocessor.getRecord(name));
             } else {
@@ -183,13 +187,14 @@ class NidgetPreprocessor {
         this.nidgetRecords = {};
     }
 
-    addPath(...filepaths) {
+    addPath(...filepaths) {    
+        Logger.getLogger().channel("verbose").log(filepaths);    
         const jsFiles = [];
         const ejsFiles = [];
         const scssFiles = [];
 
         for (const input_path of filepaths) {
-            for (const filepath of glob.readdirSync(input_path)){
+            for (const filepath of glob_fs().readdirSync(input_path)){
                 if (filepath.endsWith(".ejs")) ejsFiles.push(filepath);
                 if (filepath.endsWith(".js")) jsFiles.push(filepath);
                 if (filepath.endsWith(".scss")) scssFiles.push(filepath);
@@ -197,7 +202,11 @@ class NidgetPreprocessor {
         }
 
         for (let filepath of jsFiles) {
-            if (this.hasRecord(filepath)) continue;
+            if (this.hasRecord(filepath)) {
+                this.getRecord(filepath).script = filepath;
+                if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";      
+            };
+
             if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
             else this.addInclude(filepath);
         }

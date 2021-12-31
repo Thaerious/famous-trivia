@@ -10,7 +10,6 @@ import Crypto, { getFips } from "crypto";
 import ParseArgs from "@thaerious/parseargs";
 import parseArgsOptions from "./parseArgsOptions.js";
 import glob_fs from "glob-fs";
-const glob = glob_fs();
 
 const args = new ParseArgs().loadOptions(parseArgsOptions).run();
 const logger = Logger.getLogger();
@@ -83,10 +82,11 @@ class Watcher {
 
         logger.channel("verbose").log("# hash files");
         for (const input_path of this.paths) {
-            for (const filename of glob.readdirSync(input_path)) {
+            for (const filename of glob_fs().readdirSync(input_path)) {
                 if (!FS.lstatSync(filename).isDirectory()){
                     const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(filename)).digest("hex");
                     this.md5.set(filename, md5_hash);
+                    logger.channel("very-verbose").log(filename + " " + md5_hash);
                 }
             }
         }
@@ -97,7 +97,12 @@ class Watcher {
 
         if (record.type === "view") {
             if (record.script) {
-                await this.browserify(record);
+                try{
+                    await this.browserify(record);
+                } catch (err){
+                    console.log(err);
+                    process.exit();
+                }
             }
             if (record.view) {
                 this.render(record);
@@ -106,7 +111,8 @@ class Watcher {
 
         if (record.type === "view" || record.type === "nidget") {
             if (record.style) {
-                renderSCSS(record.style, Path.join(this.output_path, record.name + ".css"));
+                const outname = Path.parse(record.style).name + ".css";
+                renderSCSS(record.style, Path.join(this.output_path, outname));
             }
         }
     }
@@ -129,24 +135,19 @@ class Watcher {
     }
 
     async browserify(record) {
-        const nidget_preprocessor = new NidgetPreprocessor();
-        nidget_preprocessor.addPath(...this.paths);
-
         const outputPath = Path.join(this.output_path, Path.parse(record.script).name + ".js");
 
         try {
             await renderJS(record.script, record.dependents, outputPath);
-        } catch (error) {
-            console.log(error.constructor.name);
+        } catch (error) {            
             console.log(error.toString());
             console.log(error.code);
+            console.log(record.script);
+            process.exit();
         }
     }
 
     render(record) {
-        const nidget_preprocessor = new NidgetPreprocessor();
-        nidget_preprocessor.addPath(...this.paths);
-
         renderEJS(record.view, record.dependents, this.output_path);
         this.blacklist.delete(record.view);
     }

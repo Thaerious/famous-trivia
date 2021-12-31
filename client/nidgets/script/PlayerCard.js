@@ -1,7 +1,6 @@
 "use strict";
 
 import NidgetElement from "./NidgetElement.js";
-import "./PlayerCard.js";
 import {constants} from "famous-trivia-game";
 
 class PlayerCard extends NidgetElement {

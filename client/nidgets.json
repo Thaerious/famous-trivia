@@ -2,6 +2,8 @@
     "output" : "./output",
     "input" : [
         "./view/*",
+        "./styles/**",
+        "./scripts/**",
         "./nidgets/**"
     ]
 }
