@@ -7,15 +7,15 @@ import { bfsObject, bfsAll } from "./include/bfsObject.js";
 import FS from "fs";
 import glob_fs from "glob-fs";
 
-class Warn{
-    constructor(){
+class Warn {
+    constructor() {
         this.previous = new Set();
     }
 
-    warn(file, nidget){
+    warn(file, nidget) {
         if (this.previous.has(`${file}:${nidget}`)) return;
         this.previous.add(`${file}:${nidget}`);
-        logger.warn(`warning: unknown data-include ${nidget} in ${file}`);        
+        logger.warn(`warning: unknown data-include ${nidget} in ${file}`);
     }
 }
 const warner = new Warn();
@@ -37,11 +37,29 @@ class DependencyRecord {
         this._view = undefined;
         this._style = undefined;
         this._dependents = new Set();
+        this._parents = new Set();
         this._type = "nidget";
     }
 
     addDependency(record) {
         this._dependents.add(record);
+        record._parents.add(this);
+    }
+
+    get parents() {
+        const set = new Set();
+        const stack = [this];
+
+        while (stack.length > 0) {
+            const current = stack.shift();
+            for (const parent of current._parents) {
+                if (!set.has(parent)) {
+                    set.add(parent);
+                    stack.push(parent);
+                }
+            }
+        }
+        return set;
     }
 
     /* return a non-reflective set of dependency records */
@@ -90,7 +108,7 @@ class DependencyRecord {
         return this._style;
     }
     set style(value) {
-        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);        
+        if (typeof value !== "string") throw new Error(`expected string found ${typeof value}`);
         this._style = value;
     }
 
@@ -104,6 +122,8 @@ class DependencyRecord {
             `\ttype : ${this.type}\n` +
             `\tdependents : Set(${this.dependents.size}){\n` +
             [...this.dependents].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
+            `\tparents : Set(${this.parents.size}){\n` +
+            [...this.parents].reduce((p, c) => `${p}\t\t${c.name}\n`, "") +
             `\t}\n`
         );
     }
@@ -184,17 +204,29 @@ class DependencyRecord {
  */
 class NidgetPreprocessor {
     constructor() {
-        this.nidgetRecords = {};
+        this.nidget_records = {};
+        this.input_paths = new Set();
     }
 
-    addPath(...filepaths) {    
-        Logger.getLogger().channel("verbose").log(filepaths);    
+    reprocess() {
+        this.nidget_records = {};
+        for (const input_path of this.input_paths) {
+            this.addPath(input_path);
+        }
+    }
+
+    addPath(...filepaths) {
+        Logger.getLogger().channel("verbose").log("adding filepath " + filepaths);
+
+        if (!this.filepaths) this.filepaths = filepaths;
+
         const jsFiles = [];
         const ejsFiles = [];
         const scssFiles = [];
 
         for (const input_path of filepaths) {
-            for (const filepath of glob_fs().readdirSync(input_path)){
+            this.input_paths.add(input_path);
+            for (const filepath of glob_fs().readdirSync(input_path)) {
                 if (filepath.endsWith(".ejs")) ejsFiles.push(filepath);
                 if (filepath.endsWith(".js")) jsFiles.push(filepath);
                 if (filepath.endsWith(".scss")) scssFiles.push(filepath);
@@ -204,8 +236,8 @@ class NidgetPreprocessor {
         for (let filepath of jsFiles) {
             if (this.hasRecord(filepath)) {
                 this.getRecord(filepath).script = filepath;
-                if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";      
-            };
+                if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";
+            }
 
             if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
             else this.addInclude(filepath);
@@ -225,29 +257,29 @@ class NidgetPreprocessor {
             else this.getRecord(filepath).style = filepath;
         }
 
-        for (const nidget in this.nidgetRecords) {
-            this.nidgetRecords[nidget].seekEJSDependencies(this);
-            this.nidgetRecords[nidget].seekJSDependencies(this);
+        for (const nidget in this.nidget_records) {
+            this.nidget_records[nidget].seekEJSDependencies(this);
+            this.nidget_records[nidget].seekJSDependencies(this);
         }
 
         return this;
     }
 
     getRecord(name) {
-        if (this.nidgetRecords[name]) return this.nidgetRecords[name];
-        return this.nidgetRecords[NidgetPreprocessor.convertToDash(name)];
+        if (this.nidget_records[name]) return this.nidget_records[name];
+        return this.nidget_records[NidgetPreprocessor.convertToDash(name)];
     }
 
     hasRecord(name) {
-        if (this.nidgetRecords[name]) return true;
-        if (this.nidgetRecords[NidgetPreprocessor.convertToDash(name)]) return true;
+        if (this.nidget_records[name]) return true;
+        if (this.nidget_records[NidgetPreprocessor.convertToDash(name)]) return true;
         return false;
     }
 
     get records() {
         const array = [];
-        for (const name in this.nidgetRecords) {
-            array.push(this.nidgetRecords[name]);
+        for (const name in this.nidget_records) {
+            array.push(this.nidget_records[name]);
         }
         return array;
     }
@@ -257,7 +289,7 @@ class NidgetPreprocessor {
      */
     get directory() {
         const array = [];
-        for (const name in this.nidgetRecords) {
+        for (const name in this.nidget_records) {
             array.push(name);
         }
         return array;
@@ -276,8 +308,8 @@ class NidgetPreprocessor {
 
         return_set.add(this.getRecord(nidgetName));
 
-        for (const parentName in this.nidgetRecords) {
-            const parent = this.nidgetRecords[parentName];
+        for (const parentName in this.nidget_records) {
+            const parent = this.nidget_records[parentName];
             for (const child of parent.dependencies) {
                 if (child.name === nidgetName) return_set.add(parent);
             }
@@ -288,39 +320,39 @@ class NidgetPreprocessor {
 
     addStyle(filepath) {
         const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
-        if (!this.nidgetRecords[name]) {
-            this.nidgetRecords[name] = new DependencyRecord(name);
-            this.nidgetRecords[name].type = "include";
-            this.nidgetRecords[name].style = filepath;
+        if (!this.nidget_records[name]) {
+            this.nidget_records[name] = new DependencyRecord(name);
+            this.nidget_records[name].type = "include";
+            this.nidget_records[name].style = filepath;
         }
-        return this.nidgetRecords[name];
+        return this.nidget_records[name];
     }
 
     addInclude(filepath) {
         const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
-        if (!this.nidgetRecords[name]) {
-            this.nidgetRecords[name] = new DependencyRecord(name);
-            this.nidgetRecords[name].type = "include";
-            this.nidgetRecords[name].script = filepath;
+        if (!this.nidget_records[name]) {
+            this.nidget_records[name] = new DependencyRecord(name);
+            this.nidget_records[name].type = "include";
+            this.nidget_records[name].script = filepath;
         }
-        return this.nidgetRecords[name];
+        return this.nidget_records[name];
     }
 
     addView(filepath) {
         const name = NidgetPreprocessor.convertToDash(Path.parse(filepath).name);
-        if (!this.nidgetRecords[name]) {
-            this.nidgetRecords[name] = new DependencyRecord(name);
-            this.nidgetRecords[name].type = "view";
-            this.nidgetRecords[name].view = filepath;
+        if (!this.nidget_records[name]) {
+            this.nidget_records[name] = new DependencyRecord(name);
+            this.nidget_records[name].type = "view";
+            this.nidget_records[name].view = filepath;
         }
-        return this.nidgetRecords[name];
+        return this.nidget_records[name];
     }
 
     addNidget(filepath) {
         const name = this.validateNidgetName(Path.parse(filepath).name);
-        if (!this.nidgetRecords[name]) this.nidgetRecords[name] = new DependencyRecord(name);
-        this.nidgetRecords[name].script = filepath;
-        return this.nidgetRecords[name];
+        if (!this.nidget_records[name]) this.nidget_records[name] = new DependencyRecord(name);
+        this.nidget_records[name].script = filepath;
+        return this.nidget_records[name];
     }
 
     /**
@@ -362,9 +394,9 @@ class NidgetPreprocessor {
         const dom = new JSDOM(fileString);
 
         let includes = new Set();
-        for (let nidget in this.nidgetRecords) {
+        for (let nidget in this.nidget_records) {
             if (dom.window.document.querySelector(nidget)) {
-                for (const dependent of this.nidgetRecords[nidget].dependencies) {
+                for (const dependent of this.nidget_records[nidget].dependencies) {
                     includes.add(dependent);
                 }
             }
@@ -377,18 +409,18 @@ class NidgetPreprocessor {
         let ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
         ast = bfsAll(ast, "type", "ClassDeclaration");
         const name = NidgetPreprocessor.convertToDash(filepath);
-    
-        for (const node of ast){
-            if (node?.superClass?.name){                
+
+        for (const node of ast) {
+            if (node?.superClass?.name) {
                 if (name !== NidgetPreprocessor.convertToDash(node.id.name)) continue;
-                if (node?.superClass?.name === "NidgetElement"){
+                if (node?.superClass?.name === "NidgetElement") {
                     return true;
                 }
             }
-        }    
-    
+        }
+
         return false;
-    }    
+    }
 }
 
 export default NidgetPreprocessor;

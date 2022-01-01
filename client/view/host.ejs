@@ -6,13 +6,14 @@
     <script src="scripts/signin-button.js"></script>
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 </head>
+
 <body class="container">
 <%- include('./partials/nidget-templates'); %>
-
+ 
 <div class="bg"></div>
 
 <input id="upload-anchor" class="hidden-anchor" type="file"/>
-
+    
 <div id="button-container" class="button-container">
     <div class="button disabled" id="create"><div class="text">New</div></div>
     <div class="button disabled" id="upload"><div class="text">Upload</div></div>

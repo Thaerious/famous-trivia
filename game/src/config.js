@@ -69,7 +69,7 @@ const config = {
         SCRIPT_PATH: "./src/client/nidgets"
     },
     locations : {
-        HOST : "host.ejs"
+        HOST : "host.html"
     },
     names: {
         HOST : "@HOST"

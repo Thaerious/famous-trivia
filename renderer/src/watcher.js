@@ -10,6 +10,7 @@ import Crypto, { getFips } from "crypto";
 import ParseArgs from "@thaerious/parseargs";
 import parseArgsOptions from "./parseArgsOptions.js";
 import glob_fs from "glob-fs";
+import ReloadServer from "./ReloadServer.js";
 
 const args = new ParseArgs().loadOptions(parseArgsOptions).run();
 const logger = Logger.getLogger();
@@ -17,6 +18,7 @@ const logger = Logger.getLogger();
 logger.channel("standard").enabled = true;
 logger.channel("verbose").enabled = false;
 logger.channel("very-verbose").enabled = false;
+logger.channel("debug").enabled = true;
 
 if (args.count("silent") > 0) logger.channel("standard").enabled = false;
 if (args.count("verbose") >= 1) logger.channel("verbose").enabled = true;
@@ -31,17 +33,22 @@ class Watcher {
 
     watch() {
         logger.channel("standard").log("Watching Files - ctrl-c to Exit");
-        for (let dir of [...constants.NIDGET_PATH, ...constants.ROOT_PATH]) {
+        for (let dir of this.paths) {
             logger.channel("verbose").log(`Watching directory: ${dir}`);
             let recursive = false;
-            if (dir.endsWith("/**")) {
-                recursive = true;
-                dir = dir.substring(0, dir.length - 3);
-            }
+            new glob_fs().readdirSync(dir)
 
             logger.channel("verbose").log(dir);
-            FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));
+            if (dir.endsWith("/**")){
+                dir = dir.substring(0, dir.length - 3);
+                FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));
+            } else {
+                if (dir.endsWith("/*")) dir = dir.substring(0, dir.length - 2);
+                FS.watch(dir, { recursive: false }, async (e, f) => await this.listener(dir, e, f));
+            }
         }
+        this.reload_server = new ReloadServer();
+        this.reload_server.start(constants.RELOAD_SERVER_PORT);
     }
 
     async startup() {
@@ -93,7 +100,7 @@ class Watcher {
     }
 
     async renderRecord(record) {
-        logger.channel("very-verbose").log(record.toString());
+        logger.channel("debug").log(record.toString());
 
         if (record.type === "view") {
             if (record.script) {
@@ -110,28 +117,80 @@ class Watcher {
         }
 
         if (record.type === "view" || record.type === "nidget") {
-            if (record.style) {
-                const outname = Path.parse(record.style).name + ".css";
-                renderSCSS(record.style, Path.join(this.output_path, outname));
-            }
+            this.scss(record);
         }
     }
 
     async listener(directory, event, filename) {
+        logger.channel("very-verbose").log(`File Change Pending: ${filename}`);
         const fullpath = Path.join(directory, filename);
 
         if (this.blacklist.has(filename)) return;
         this.blacklist.add(filename);
 
+        // Compare and/or update md5 hashes to see if the file has actually changed.
         const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(fullpath)).digest("hex");
-        if (this.md5.has(filename) && this.md5.get(filename) === md5_hash) return;
+        if (this.md5.has(filename) && this.md5.get(filename) === md5_hash){
+            this.blacklist.delete(filename);
+             return;
+        }
         this.md5.set(filename, md5_hash);
 
         if (FS.existsSync(fullpath) && FS.statSync(fullpath).isFile()) {
-            logger.channel("verbose").log(`File Change Detected: ${filename}`);
-            if (filename.endsWith(".js")) await this.browserify(filename);
-            if (filename.endsWith(".ejs")) this.render(filename);
+            logger.channel("verbose").log(`File Change Detected: ${fullpath}`);
+            this.nidget_preprocessor.reprocess();
+            const record = this.nidget_preprocessor.getRecord(filename);
+            if (record) logger.channel("debug").log(record.toString());
+            else logger.channel("verbose").log(`no record found for ${filename}`);
+
+            switch (record.type){
+                case "nidget":
+                    if (record.script === fullpath) {
+                        for (const parent of record.parents){
+                            if (parent.type === "view") await this.browserify(parent);
+                        }
+                    }
+                    if (record.style === fullpath) this.scss(record);
+                    if (record.view === fullpath) {
+                        for (const parent of record.parents){
+                            if (parent.type === "view") this.render(parent);
+                        }
+                    }
+                break;
+                case "include":
+                    if (record.script === fullpath) {
+                        for (const parent of record.parents){
+                            if (parent.type === "view") await this.browserify(parent);
+                        }
+                    }
+                    if (record.style === fullpath) {              
+                        for (const parent of record.parents){
+                            if (parent.type === "view") await this.browserify(parent);
+                            if (parent.type === "nidget") await this.browserify(parent);
+                        }
+                    }
+                    if (record.view === fullpath) {
+                        for (const parent of record.parents){
+                            if (parent.type === "view") this.render(parent);
+                        }
+                    }                    
+                break;
+                case "view":
+                    if (record.script === fullpath) await this.browserify(record);
+                    if (record.view === fullpath) this.render(record);
+                    if (record.script === fullpath) this.scss(record);
+                break;
+            }
+
+            if (record.type === "view") this.reload_server.notify(record.name + ".html");
+            for (const parent of record.parents){
+                if (parent.type === "view"){
+                    this.reload_server.notify(parent.name + ".html");
+                }
+            }
         }
+        
+        this.blacklist.delete(filename);
     }
 
     async browserify(record) {
@@ -150,6 +209,13 @@ class Watcher {
     render(record) {
         renderEJS(record.view, record.dependents, this.output_path);
         this.blacklist.delete(record.view);
+    }
+
+    scss(record){
+        if (record.style) {
+            const outname = Path.parse(record.style).name + ".css";
+            renderSCSS(record.style, Path.join(this.output_path, outname));
+        }        
     }
 }
 

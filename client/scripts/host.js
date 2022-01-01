@@ -3,20 +3,23 @@ import FileOps from "./modules/FileOps.js";
 import GameManagerService from "./modules/GameManagerService.js";
 import emptyRoot from "./json_schema/empty_root.js";
 import emptyCategory from "./json_schema/empty_categorical.js";
-import constants from "./constants.js";
-
+import constants from "./constants.js"; 
+import pageReloader from "./modules/pageReloader.js";
+   
 let fileOps = new FileOps();
 const gameManagerService = new GameManagerService();
-
+     
 // main called from signin-button.js after login complete
 window.main = async function () {
-    console.log("window.main");
     await getHostedHash();
     await fileOps.load();
     addMenuListeners();
-    setupFileList();
+    setupFileList(); 
     document.querySelectorAll(".button").forEach(e=>e.classList.remove("disabled"));
     console.log(gapi.client?.drive);
+    
+    await pageReloader(); 
+    console.log("reload websocket connected");
 };
 
 function onLoad(event) {
