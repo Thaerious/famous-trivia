@@ -6,6 +6,12 @@ class SelectFileEvent extends  CustomEvent{
     }
 }
 
+class CloseDialogEvent extends  CustomEvent{
+    constructor(id) {
+        super('close-dialog');
+    }
+}
+
 class FileList extends NidgetElement{
     constructor() {
         super("file-list");        
@@ -45,6 +51,7 @@ class FileList extends NidgetElement{
 
     hide(){
         this.classList.add("hidden");
+        this.dispatchEvent(new CloseDialogEvent());
     }
 
     set busy(value){

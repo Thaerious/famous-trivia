@@ -87,3 +87,22 @@ body, html {
     left: 50%;
     transform: translateX(-50%);
 }
+
+file-list, file-list > *{
+    font-size: 20px;
+    font-family: "Arial Black";
+}
+
+file-list{
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    height: 80%;
+    width: 400px;
+    border: 3px solid;
+    border-color: #44b3ff;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 1.0);
+}

@@ -3,22 +3,21 @@ import FileOps from "../../scripts/modules/FileOps.js";
 import GameManagerService from "../../scripts/modules/GameManagerService.js";
 import emptyRoot from "../../scripts/json_schema/empty_root.js";
 import emptyCategory from "../../scripts/json_schema/empty_categorical.js";
-import constants from "../../scripts/constants.js"; 
+import constants from "../../scripts/constants.js";
 import pageReloader from "../../scripts/modules/pageReloader.js";
-    
+
 let fileOps = new FileOps();
 const gameManagerService = new GameManagerService();
-      
+
 // main called from signin-button.js after login complete
 window.main = async function () {
     await getHostedHash();
     await fileOps.load();
     addMenuListeners();
-    setupFileList(); 
-    document.querySelectorAll(".button").forEach(e=>e.classList.remove("disabled"));
+    document.querySelectorAll(".button").forEach(e => e.classList.remove("disabled"));
     console.log(gapi.client?.drive);
-    
-    await pageReloader(); 
+
+    await pageReloader();
     console.log("reload websocket connected");
 };
 
@@ -26,7 +25,7 @@ function onLoad(event) {
     let id = event.detail.id;
     window.location = `${constants.locations.EDITOR}?action=load&fileId=${id}`;
 }
- 
+
 async function getHostedHash() {
     let token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
     let response = await gameManagerService.getHostedHash(token);
@@ -34,7 +33,7 @@ async function getHostedHash() {
     if (response.result === "success") {
         window.location = constants.locations.LAUNCH_CONSOLE;
     }
-}  
+}
 
 async function onLaunch(event) {
     let id = event.detail.id; // google file identifier
@@ -52,25 +51,23 @@ async function onLaunch(event) {
     }
 }
 
-function setupFileList() {
+async function deleteFile(event) {
     let fileList = document.querySelector("file-list");
 
-    fileList.addEventListener("delete-file", async (event) => {
-        fileList.busy = true;
-        try {
-            await fileOps.delete(event.detail.id);
-        } catch (err) {
-            console.log(err);
-        }
-        await populateFileList();
-        fileList.busy = false;
-    });
+    fileList.busy = true;
+    try {
+        await fileOps.delete(event.detail.id);
+    } catch (err) {
+        console.log(err);
+    }
+    await populateFileList();
+    fileList.busy = false;
 }
 
 function addMenuListeners() {
     let busyBox = document.querySelector(".busy-box");
 
-    document.querySelector("#create").addEventListener("click", async (e) => {
+    document.querySelector("#create").addEventListener("click", async e => {
         busyBox.classList.remove("hidden");
         let gameDescriptionHelper = new GameDescriptionHelper();
         gameDescriptionHelper.set(emptyRoot);
@@ -81,34 +78,47 @@ function addMenuListeners() {
         window.location = `${constants.locations.EDITOR}?action=load&fileId=${fp}`;
     });
 
-    document.querySelector("#upload").addEventListener("click", async (e) => {
+    document.querySelector("#upload").addEventListener("click", async e => {
         let anchor = document.querySelector("#upload-anchor");
         anchor.click();
 
-        anchor.addEventListener("change", event => {
-            const data = anchor.files[0];
-            const reader = new FileReader();
+        anchor.addEventListener(
+            "change",
+            event => {
+                const data = anchor.files[0];
+                const reader = new FileReader();
 
-            reader.onload = async e => {
-                let name = JSON.parse(e.target.result).name;
-                let fp = await fileOps.create(name + ".json");
-                await fileOps.setBody(fp, e.target.result);
-                window.location =`${constants.locations.EDITOR}?action=load&fileId=` + fp;
-            }
-            reader.readAsText(data);
-        }, {once: true});
+                reader.onload = async e => {
+                    let name = JSON.parse(e.target.result).name;
+                    let fp = await fileOps.create(name + ".json");
+                    await fileOps.setBody(fp, e.target.result);
+                    window.location = `${constants.locations.EDITOR}?action=load&fileId=` + fp;
+                };
+                reader.readAsText(data);
+            },
+            { once: true }
+        );
     });
 
-    document.querySelector("#load").addEventListener("click", async (e) => {
+    document.querySelector("#load").addEventListener("click", async e => {
         await populateFileList();
         let fileList = document.querySelector("file-list");
-        fileList.addEventListener("select-file", onLoad, {once: true});
+        fileList.addEventListener("select-file", onLoad, { once: true });
+        fileList.addEventListener("close-dialog", ()=>fileList.removeEventListener("select-file", onLoad));
     });
 
-    document.querySelector("#launch").addEventListener("click", async (e) => {
+    document.querySelector("#launch").addEventListener("click", async e => {
         await populateFileList();
         let fileList = document.querySelector("file-list");
-        fileList.addEventListener("select-file", onLaunch, {once: true});
+        fileList.addEventListener("select-file", onLaunch, { once: true });
+        fileList.addEventListener("close-dialog", ()=>fileList.removeEventListener("select-file", onLaunch));
+    });
+
+    document.querySelector("#delete").addEventListener("click", async e => {
+        await populateFileList();
+        let fileList = document.querySelector("file-list");
+        fileList.addEventListener("select-file", deleteFile);
+        fileList.addEventListener("close-dialog", ()=>fileList.removeEventListener("select-file", deleteFile));
     });
 }
 
