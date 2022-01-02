@@ -1,14 +1,14 @@
-import GameDescriptionHelper from "./modules/GameDescriptionHelper.js";
-import FileOps from "./modules/FileOps.js";
-import GameManagerService from "./modules/GameManagerService.js";
-import emptyRoot from "./json_schema/empty_root.js";
-import emptyCategory from "./json_schema/empty_categorical.js";
-import constants from "./constants.js"; 
-import pageReloader from "./modules/pageReloader.js";
-   
+import GameDescriptionHelper from "../../scripts/modules/GameDescriptionHelper.js";
+import FileOps from "../../scripts/modules/FileOps.js";
+import GameManagerService from "../../scripts/modules/GameManagerService.js";
+import emptyRoot from "../../scripts/json_schema/empty_root.js";
+import emptyCategory from "../../scripts/json_schema/empty_categorical.js";
+import constants from "../../scripts/constants.js"; 
+import pageReloader from "../../scripts/modules/pageReloader.js";
+    
 let fileOps = new FileOps();
 const gameManagerService = new GameManagerService();
-     
+      
 // main called from signin-button.js after login complete
 window.main = async function () {
     await getHostedHash();
@@ -26,7 +26,7 @@ function onLoad(event) {
     let id = event.detail.id;
     window.location = `${constants.locations.EDITOR}?action=load&fileId=${id}`;
 }
-
+ 
 async function getHostedHash() {
     let token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
     let response = await gameManagerService.getHostedHash(token);

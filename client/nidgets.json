@@ -4,6 +4,7 @@
         "./view/*",
         "./styles/**",
         "./scripts/**",
-        "./nidgets/**"
+        "./nidgets/**",
+        "./views/**"
     ]
 }

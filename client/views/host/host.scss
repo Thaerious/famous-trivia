@@ -1,7 +1,6 @@
-@import 'components/check_box';
-@import 'components/file_list';
-@import 'components/button';
-@import 'components/shared';
+// @import '../../styles/components/file_list';
+@import '../../styles/components/button';
+@import '../../styles/components/shared';
 
 *{
     box-sizing: border-box;
@@ -64,39 +63,19 @@ body, html {
     border: 3px solid #144369;
     border-radius: 20px;
     background-color: var(--ui-background-panel);
-    height: 315px;
     width: 350px;
-
-    #sign-in{
-        top: 250px;
-    }
 }
 
-.button{
-    position: absolute;
+.button, #sign-in{
+    position: relative;
     height: 50px;
     width: 300px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-160px);
     --ui-bg : 64, 255, 64;
     --ui-border-color: 60, 120, 55;
     --ui-border-color-hover: 39, 213, 23;
-
-    &#create{
-        top: 10px;
-    }
-
-    &#upload{
-        top: 70px;
-    }
-
-    &#load{
-        top: 130px;
-    }
-
-    &#launch{
-        top: 190px;
-    }
+    margin: 10px; 
 }
 
 #sign-in{

@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+:host(player-context-menu.hidden) {
+    visibility: hidden;
+}
+
+:host(player-context-menu){
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    background-color: rgba(245, 245, 245, 0.85);
+    border-radius: 10px;
+    border: 1px solid gray;
+    box-shadow: 0px 0px 15px rgba(169, 169, 169, 1);
+    z-index: 5000;
+}
+
+
