@@ -1,0 +1,12 @@
+// host_portal.scss
+
+@import '../../styles/portal/layout';
+@import '../../styles/portal/button_layout';
+@import '../../styles/components/bg';
+@import '../../styles/components/shared';
+
+player-context-menu{
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}

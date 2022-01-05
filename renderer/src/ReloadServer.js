@@ -12,12 +12,23 @@ class ReloadInstance{
         this.server = server;
         this.ws = ws;
         this.server.connections.add(this);
-        // ping(ws);
+        this.isAlive = true;
 
         ws.on('close', async (ws, req) => {
             logger.channel("verbose").log("reload_url.ws closed");
             server.connections.delete(this);
+            clearInterval(this.heartbeat);
         });
+    }
+
+    setupHeartBeat(){
+        this.ws.on('pong', ()=>this.isAlive = true);
+
+        this.heartbeat = setInterval(()=>{
+            if (!this.isAlive) return ws.terminate();
+            this.isAlive = false;
+            this.ws.ping();
+        }, 10000);
     }
 
     notify(url){
@@ -27,12 +38,18 @@ class ReloadInstance{
         }
         this.ws.send(JSON.stringify(msg));
     }
+
+    error(message){
+        const msg = {
+            action : `error`,
+            message : message
+        }
+        this.ws.send(JSON.stringify(msg));
+    }    
 }
 
 function ping(ws){
-    console.log("ping");
     ws.send(JSON.stringify({action : "ping"}));
-    setTimeout(()=>ping(ws), 1000);
 }
 
 class ReloadServer {
@@ -62,6 +79,10 @@ class ReloadServer {
         for (const connection of this.connections) connection.notify(url);
         logger.channel("verbose").log(`${this.connections.size} listeners notified`);
         logger.channel("verbose").log(`notify all ${url}`);
+    }
+
+    error(message){
+        for (const connection of this.connections) connection.error(message);
     }
 }
 

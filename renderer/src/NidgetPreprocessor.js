@@ -19,8 +19,7 @@ class Warn {
     }
 }
 const warner = new Warn();
-
-const logger = Logger.getLogger().channel("nidget_preprocessor");
+const logger = Logger.getLogger();
 // Logger.getLogger().channel("nidget_preprocessor").prefix = (f, l, c) => {
 //     return `${f}:${l}\n`;
 // };
@@ -137,45 +136,41 @@ class DependencyRecord {
     seekEJSDependencies(nidget_preprocessor) {
         if (this.view === "") return;
         if (!fs.existsSync(this.view)) return;
-        const nidget_records = nidget_preprocessor.nidgetRecords;
 
         const file_string = fs.readFileSync(this.view);
         const html_string = `<html><body>${file_string}</body></html>`;
         const dom = new JSDOM(html_string);
 
-        for (let nidget_name in nidget_records) {
-            const record = nidget_records[nidget_name];
-            if (this._dependents.has(record)) continue;
+        let template = dom.window.document.querySelector(`template`);
+        if (template) {
+            let includes = template.getAttribute("data-include") ?? "";
+            let split = includes.split(/[ ,]+/g);
 
-            let template = dom.window.document.querySelector(`template`);
-            if (template) {
-                let includes = template.getAttribute("data-include") ?? "";
-                let split = includes.split(/[ ,]+/g);
-
-                for (let s of split) {
-                    if (s.trim() != "") {
-                        if (nidget_preprocessor.hasRecord(s.trim())) {
-                            this.addDependency(nidget_records[s.trim()]);
-                        } else {
-                            warner.warn(this.name, s.trim());
-                        }
+            for (let s of split) {
+                const dependency_name = s.trim();
+                if (dependency_name != "") {
+                    if (nidget_preprocessor.hasRecord(dependency_name)) {
+                        const record = nidget_preprocessor.getRecord(dependency_name);
+                        this.addDependency(record);
+                    } else {
+                        warner.warn(this.name, s.trim());
                     }
                 }
+            }
+        }
 
-                if (template.content.querySelector(nidget_name)) {
-                    this.addDependency(record);
-                }
-            } else {
-                if (dom.window.document.querySelector(nidget_name)) {
-                    this.addDependency(record);
-                }
+        for (let record of nidget_preprocessor.records) {
+            if (this._dependents.has(record)) continue;
+
+            if (template?.content.querySelector(record.name) || dom.window.document.querySelector(record.name)) {
+                this.addDependency(record);
             }
         }
     }
 
     /**
      * Seek out JS dependencies in this record's script.
-     * The dependency is not neccisarily a Nidget.
+     * The dependency is not neccesarily a Nidget.
      */
     seekJSDependencies(nidget_preprocessor) {
         if (this.script === "") return;
@@ -205,42 +200,68 @@ class DependencyRecord {
 class NidgetPreprocessor {
     constructor() {
         this.nidget_records = {};
-        this.input_paths = new Set();
-    }
-
-    reprocess() {
-        this.nidget_records = {};
-        for (const input_path of this.input_paths) {
-            this.addPath(input_path);
-        }
+        this.input_paths = [];
+        this.exclude_paths = [];
     }
 
     addPath(...filepaths) {
-        Logger.getLogger().channel("verbose").log("adding filepath " + filepaths);
+        Logger.getLogger()
+            .channel("verbose")
+            .log("adding filepath " + filepaths);
+        this.input_paths = [...this.input_paths, ...filepaths];
+    }
 
-        if (!this.filepaths) this.filepaths = filepaths;
+    addExclude(...filepaths) {
+        this.exclude_paths = [...this.exclude_paths, ...filepaths];
+    }
+
+    process() {
+        Logger.getLogger().channel("debig").log("# NPP process");
+
+        this.nidget_records = {};
 
         const jsFiles = [];
         const ejsFiles = [];
         const scssFiles = [];
 
-        for (const input_path of filepaths) {
-            this.input_paths.add(input_path);
-            for (const filepath of glob_fs().readdirSync(input_path)) {
+        for (const input_path of this.input_paths) {
+            const glob = glob_fs();
+
+            for (const exclude_path of this.exclude_paths) {
+                const resolved_exclude_path = Path.resolve(exclude_path);
+
+                glob.use(file => {
+                    if (file.path.indexOf(resolved_exclude_path) == 0) {
+                        logger.channel("debug").log(`excluded ${file.path}`);
+                        file.exclude = true;
+                    }
+                    else {
+                        logger.channel("debug").log(`included ${file.path}`);
+                    }
+                    return file;
+                });
+            }
+
+            for (const filepath of glob.readdirSync(input_path)) {
                 if (filepath.endsWith(".ejs")) ejsFiles.push(filepath);
                 if (filepath.endsWith(".js")) jsFiles.push(filepath);
                 if (filepath.endsWith(".scss")) scssFiles.push(filepath);
             }
         }
 
-        for (let filepath of jsFiles) {
-            if (this.hasRecord(filepath)) {
-                this.getRecord(filepath).script = filepath;
-                if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";
-            }
+        try{
+            for (let filepath of jsFiles) {
+                if (this.hasRecord(filepath)) {
+                    this.getRecord(filepath).script = filepath;
+                    if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";
+                }
 
-            if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
-            else this.addInclude(filepath);
+                if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
+                else this.addInclude(filepath);
+            }
+        } catch (err){
+            console.log("*** JS Parsing Error:");
+            console.log(`\t${err.message}`);
         }
 
         for (let filepath of ejsFiles) {
@@ -406,7 +427,14 @@ class NidgetPreprocessor {
 
     static isNidgetScript(filepath) {
         const code = FS.readFileSync(filepath);
-        let ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
+        let ast = null;
+
+        try{
+            ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
+        } catch (err){
+            throw new Error(`${err.message} in ${filepath}`);
+        }
+
         ast = bfsAll(ast, "type", "ClassDeclaration");
         const name = NidgetPreprocessor.convertToDash(filepath);
 

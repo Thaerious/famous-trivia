@@ -18,11 +18,12 @@ const logger = Logger.getLogger();
 logger.channel("standard").enabled = true;
 logger.channel("verbose").enabled = false;
 logger.channel("very-verbose").enabled = false;
-logger.channel("debug").enabled = true;
+logger.channel("debug").enabled = false;
 
 if (args.count("silent") > 0) logger.channel("standard").enabled = false;
 if (args.count("verbose") >= 1) logger.channel("verbose").enabled = true;
 if (args.count("verbose") >= 2) logger.channel("very-verbose").enabled = true;
+if (args.count("verbose") >= 3) logger.channel("debug").enabled = true;
 
 class Watcher {
     constructor() {
@@ -36,10 +37,10 @@ class Watcher {
         for (let dir of this.paths) {
             logger.channel("verbose").log(`Watching directory: ${dir}`);
             let recursive = false;
-            new glob_fs().readdirSync(dir)
+            new glob_fs().readdirSync(dir);
 
             logger.channel("verbose").log(dir);
-            if (dir.endsWith("/**")){
+            if (dir.endsWith("/**")) {
                 dir = dir.substring(0, dir.length - 3);
                 FS.watch(dir, { recursive: true }, async (e, f) => await this.listener(dir, e, f));
             } else {
@@ -61,12 +62,15 @@ class Watcher {
             settings = JSON.parse(settings_text);
 
             if (settings.input) for (const path of settings.input) this.addPath(path);
+            if (settings.exclude) for (const path of settings.exclude) this.nidget_preprocessor.addExclude(path);
         }
 
         const directories = args.args.slice(2);
 
         for (const dir of directories) this.addPath(dir);
         this.output_path = settings.output ?? constants.DEFAULT_OUTPUT;
+
+        this.nidget_preprocessor.process();
 
         if (args.flags["output"]) this.output_path = args.flags["output"];
 
@@ -84,29 +88,32 @@ class Watcher {
         logger.channel("verbose").log("# render all records");
 
         for (const record of this.nidget_preprocessor.records) {
-            await this.renderRecord(record);  
+            logger.channel("verbose").log(` - ${record.name} ${record.type}`);
+            try {
+                await this.renderRecord(record);
+            } catch (err) {
+                console.log("Error in #renderAllRecords");
+                console.log(err);
+            }
         }
 
         logger.channel("verbose").log("# hash files");
         for (const input_path of this.paths) {
             for (const filename of glob_fs().readdirSync(input_path)) {
-                if (!FS.lstatSync(filename).isDirectory()){
+                if (!FS.lstatSync(filename).isDirectory()) {
                     const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(filename)).digest("hex");
                     this.md5.set(filename, md5_hash);
-                    logger.channel("very-verbose").log(filename + " " + md5_hash);
                 }
             }
         }
     }
 
     async renderRecord(record) {
-        logger.channel("debug").log(record.toString());
-
         if (record.type === "view") {
             if (record.script) {
-                try{
+                try {
                     await this.browserify(record);
-                } catch (err){
+                } catch (err) {
                     console.log(err);
                     process.exit();
                 }
@@ -122,83 +129,112 @@ class Watcher {
     }
 
     async listener(directory, event, filename) {
-        logger.channel("very-verbose").log(`File Change Pending: ${filename}`);
-        const fullpath = Path.join(directory, filename);
+        try {
+            await this._listener(directory, event, filename);
+        } catch (err) {
+            console.log(err);
+            this.reload_server.error(err.message);
+        }
+    }
 
-        if (this.blacklist.has(filename)) return;
-        this.blacklist.add(filename);
+    async _listener(directory, event, filename) {
+        const fullpath = Path.join(directory, filename);
+        logger.channel("debug").log(`File change pending: ${fullpath}`);
+
+        if (!FS.existsSync(fullpath)) {
+            logger.channel("debug").log(`File change aborted, file not found: ${fullpath}`);
+            return; // delete and renames.
+        }
+
+        if (FS.lstatSync(fullpath).isDirectory()) {
+            logger.channel("debug").log(`File change aborted, path is directory: ${fullpath}`);
+            return; // delete and renames.
+        }
+
+        if (this.blacklist.has(fullpath)) {
+            logger.channel("debug").log(`File change aborted, file black listed: ${fullpath}`);
+            return;
+        }
+        this.blacklist.add(fullpath);
 
         // Compare and/or update md5 hashes to see if the file has actually changed.
         const md5_hash = Crypto.createHash("md5").update(FS.readFileSync(fullpath)).digest("hex");
-        if (this.md5.has(filename) && this.md5.get(filename) === md5_hash){
-            this.blacklist.delete(filename);
-             return;
+        if (this.md5.has(fullpath) && this.md5.get(fullpath) === md5_hash) {
+            logger.channel("debug").log(`File change aborted, file not changed: ${fullpath}`);
+            this.blacklist.delete(fullpath);
+            return;
         }
-        this.md5.set(filename, md5_hash);
+        this.md5.set(fullpath, md5_hash);
 
         if (FS.existsSync(fullpath) && FS.statSync(fullpath).isFile()) {
-            logger.channel("verbose").log(`File Change Detected: ${fullpath}`);
-            this.nidget_preprocessor.reprocess();
+            logger.channel("verbose").log(`File change accepted: ${fullpath}`);
+            this.nidget_preprocessor.process();
             const record = this.nidget_preprocessor.getRecord(filename);
             if (record) logger.channel("debug").log(record.toString());
-            else logger.channel("verbose").log(`no record found for ${filename}`);
+            else logger.channel("verbose").log(`no record found for ${fullpath}`);
 
-            switch (record.type){
+            if (!record) return; // for non .js .ejs .scss files
+
+            switch (record.type) {
                 case "nidget":
                     if (record.script === fullpath) {
-                        for (const parent of record.parents){
+                        for (const parent of record.parents) {
                             if (parent.type === "view") await this.browserify(parent);
                         }
                     }
                     if (record.style === fullpath) this.scss(record);
                     if (record.view === fullpath) {
-                        for (const parent of record.parents){
+                        for (const parent of record.parents) {
                             if (parent.type === "view") this.render(parent);
                         }
                     }
-                break;
+                    break;
                 case "include":
                     if (record.script === fullpath) {
-                        for (const parent of record.parents){
+                        for (const parent of record.parents) {
                             if (parent.type === "view") await this.browserify(parent);
                         }
                     }
-                    if (record.style === fullpath) {              
-                        for (const parent of record.parents){
+                    if (record.style === fullpath) {
+                        for (const parent of record.parents) {
                             if (parent.type === "view") await this.browserify(parent);
                             if (parent.type === "nidget") await this.browserify(parent);
                         }
                     }
                     if (record.view === fullpath) {
-                        for (const parent of record.parents){
+                        for (const parent of record.parents) {
                             if (parent.type === "view") this.render(parent);
                         }
-                    }                    
-                break;
+                    }
+                    break;
                 case "view":
                     if (record.script === fullpath) await this.browserify(record);
                     if (record.view === fullpath) this.render(record);
-                    if (record.script === fullpath) this.scss(record);
-                break;
+                    if (record.style === fullpath) this.scss(record);
+                    break;
             }
 
             if (record.type === "view") this.reload_server.notify(record.name + ".html");
-            for (const parent of record.parents){
-                if (parent.type === "view"){
+            for (const parent of record.parents) {
+                if (parent.type === "view") {
                     this.reload_server.notify(parent.name + ".html");
                 }
             }
         }
-        
-        this.blacklist.delete(filename);
+
+        this.blacklist.delete(fullpath);
     }
 
     async browserify(record) {
+        if (!record.script) {
+            logger.channel("warn").log(`Browserify: missing script for record ${record.name}`);
+            return;
+        }
         const outputPath = Path.join(this.output_path, Path.parse(record.script).name + ".js");
 
         try {
             await renderJS(record.script, record.dependents, outputPath);
-        } catch (error) {            
+        } catch (error) {
             console.log(error.toString());
             console.log(error.code);
             console.log(record.script);
@@ -211,20 +247,26 @@ class Watcher {
         this.blacklist.delete(record.view);
     }
 
-    scss(record){
+    scss(record) {
         if (record.style) {
             const outname = Path.parse(record.style).name + ".css";
             renderSCSS(record.style, Path.join(this.output_path, outname));
-        }        
+        }
     }
 }
 
 const watcher = new Watcher();
 await watcher.startup();
 
-if (args.flags["name"]){
-    await watcher.renderRecord(watcher.nidget_preprocessor.getRecord(args.flags["name"]));
-}else{
+if (args.flags["name"]) {
+    if (!watcher.nidget_preprocessor.getRecord(args.flags["name"])) {
+        logger.channel("standard").log(`Record not found for '${args.flags["name"]}'`);
+    } else {
+        const record = watcher.nidget_preprocessor.getRecord(args.flags["name"]);
+        await watcher.renderRecord(record);
+        logger.channel("verbose").log(record.toString());
+    }
+} else {
     await watcher.renderAllRecords();
 }
 

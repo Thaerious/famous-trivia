@@ -1,0 +1,52 @@
+@import '../../styles/components/button';
+
+* {
+    box-sizing: border-box;
+}
+
+:host(set-score-dialog) {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    border-radius: 20px;
+    border: 3px solid var(--ui-border-color, black);
+    background-color: var(--ui-dialog-bg, whitesmoke);
+    box-shadow: 0px 0px 15px rgba(169, 169, 169, 1);
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--ui-dialog-font-family);
+    font-size: var(--ui-dialog-font-size);
+} 
+
+.label, #value{
+    position: relative;
+    text-align: center;
+    font-family: var(--ui-dialog-font-family);
+    font-size: var(--ui-dialog-font-size);
+    height: 20%;
+    font-family: Arial Black, serif;
+    font-size: 30px;
+}
+
+#value{
+    width: 90%;
+    left: 5%;
+}
+
+:host(set-score-dialog.hidden) {
+    visibility: hidden;
+}
+
+#accept {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    height: 35px;
+    bottom: 3px;
+    font-size: 20px;
+    font-family: "Arial Black", serif;
+    background-color: greenyellow;
+    --ui-button-color: 100, 200, 100;
+}

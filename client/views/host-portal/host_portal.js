@@ -1,13 +1,14 @@
 // noinspection SpellCheckingInspection
 
-import FileOps from "./modules/FileOps.js";
-import Authenticate from "./modules/Authenticate.js";
-import HostPortalView from "./modules/HostPortalView.js";
-import PortalController from "./modules/PortalController";
-import connectWebsocket from "./modules/connectWebsocket.js";
-import GameManagerService from "./modules/GameManagerService";
-import constants from "./constants.js";
-import setupSizeListener from "./modules/SetupSizeListener";
+import FileOps from "../../scripts/modules/FileOps.js";
+import Authenticate from "../../scripts/modules/Authenticate.js";
+import HostPortalView from "../../scripts/modules/HostPortalView.js";
+import PortalController from "../../scripts/modules/PortalController";
+import connectWebsocket from "../../scripts/modules/connectWebsocket.js";
+import GameManagerService from "../../scripts/modules/GameManagerService";
+import constants from "../../scripts/constants.js";
+import setupSizeListener from "../../scripts/modules/SetupSizeListener";
+import pageReloader from "../../scripts/modules/pageReloader.js";  
 
 let gameManagerService = new GameManagerService();
 let fileOps = new FileOps();
@@ -20,6 +21,8 @@ window.onload = async () => {
     const hostView = new HostPortalView();
 
     setupSizeListener();
+
+    await pageReloader();
 
     try {
         await new Authenticate().loadClient();
@@ -57,6 +60,28 @@ window.onload = async () => {
             gameManagerService.terminate(token);
             window.location = constants.locations.HOST;
         });
+
+        document.querySelector("player-container").addEventListener("context-score", (event) =>{
+            const score_dialog = document.querySelector("set-score-dialog");
+            const player_card = event.detail["context_menu_item"].closestParent("player-card");
+            
+            score_dialog.name = player_card.name;
+            score_dialog.score = player_card.score;
+            score_dialog.show();
+        });       
+        
+        document.querySelector("set-score-dialog").addEventListener("update-score", (event) =>{
+            console.log("update-score in host portal");
+            console.log(event);
+            ws.send(JSON.stringify({
+                action : "set_score", 
+                data : {
+                    name : event.detail.name,
+                    score : event.detail.score
+                }
+            }));
+        });              
+
     } catch (err) {
         console.log(err);
     }
@@ -64,4 +89,11 @@ window.onload = async () => {
     let end = new Date();
     let time = end - start;
     console.log("Load Time " + time + " ms");
+}
+
+function showScoreDialog(element){
+    console.log(element);
+    const dialog = document.querySelector("set-score-dialog");
+    dialog.show();
+    dialog.querySelector("#value").content = "0"
 }

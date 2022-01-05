@@ -6,7 +6,7 @@ const logger = Logger.getLogger();
 
 function renderEJS(sourceFullpath, nidgetDependencies, outputDirectory) {
     const basename = Path.basename(sourceFullpath.slice(0, -4));
-    logger.channel("verbose").log(`# render ejs: ${sourceFullpath}`);
+    logger.channel("very-verbose").log(`  \\_ ${sourceFullpath}`);
 
     ejs.renderFile(
         sourceFullpath,

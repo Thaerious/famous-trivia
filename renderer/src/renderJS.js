@@ -4,15 +4,20 @@ import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 
 function renderJS(sourcePath, nidgetDependencies, outputPath){
-    logger.channel("verbose").log(`# render js: ${sourcePath}`);
+    logger.channel("very-verbose").log(`  \\_ ${sourcePath}`);
 
     return new Promise((resolve, reject) => {
         const b = browserify({ debug: true });   
         b.add(sourcePath);
 
         for (let record of nidgetDependencies) {
-            logger.channel("very-verbose").log(`JS Dependency: ${record.script}`);
-            b.add(record.script);
+            
+            if (record.script){
+                logger.channel("very-verbose").log(`    \\_ ${record.script}`);
+                b.add(record.script);
+            } else {
+                logger.channel("very-verbose").log(`    \\_ X ${record.name}`);
+            }
         }
 
         b.transform("babelify");

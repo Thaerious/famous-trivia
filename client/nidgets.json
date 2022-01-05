@@ -6,5 +6,8 @@
         "./scripts/**",
         "./nidgets/**",
         "./views/**"
+    ],
+    "exclude" : [
+        "./views/partials/"
     ]
 }

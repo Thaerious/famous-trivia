@@ -4,9 +4,14 @@ import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 
 function renderSCSS(sourcePath, outputPath){
-    logger.channel("verbose").log(`# render scss: ${sourcePath} ${outputPath}`);
-    const result = sass.compile(sourcePath);
-    FS.writeFileSync(outputPath, result.css);
+    logger.channel("very-verbose").log(`  \\_ ${sourcePath} ${outputPath}`);
+    
+    try{
+        const result = sass.compile(sourcePath);
+        if (result) FS.writeFileSync(outputPath, result.css);
+    } catch (error){
+        throw error;
+    }
 }
 
 export default renderSCSS;

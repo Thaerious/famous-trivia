@@ -1,7 +1,8 @@
 "use strict";
 
-import NidgetElement from "./NidgetElement.js";
+import NidgetElement from "../script/NidgetElement.js";
 import {constants} from "famous-trivia-game";
+import ContextMenu from "../context-menu/ContextMenu.js";
 
 class PlayerCard extends NidgetElement {
     constructor(templateId = "player-card-template") {
@@ -9,7 +10,7 @@ class PlayerCard extends NidgetElement {
     }
 
     async ready() {
-        await super.ready();
+        await super.ready();         
     }
 
     /**

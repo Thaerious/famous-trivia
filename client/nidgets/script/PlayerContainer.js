@@ -81,7 +81,7 @@ class PlayerContainer extends NidgetElement {
         }
 
         return components[0];
-    }    
+    }
 }
 
 window.customElements.define('player-container', PlayerContainer);

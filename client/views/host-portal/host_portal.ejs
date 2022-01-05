@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head'); %>
-    <%- include('./partials/google'); %>
+    <%- include('../partials/head'); %>
+    <%- include('../partials/google'); %>
 </head>
 <body>
-<%- include('./partials/nidget-templates'); %>
+<%- include('../partials/nidget-templates'); %>
+
+<set-score-dialog class="hidden"></set-score-dialog>
 
 <div class="bg"></div>
 
 <div id="page-container" class="aspect-fit">  
-    <player-context-menu id="player-context-menu">   
-        <context-menu-item>Set Score</context-menu-item> 
-        <context-menu-item>Remove Player</context-menu-item> 
-    </player-context-menu>
 
     <div class="top-bar" id="top-bar">
         <menu-container id="menu-container" image-src="assets/images/menu.png">

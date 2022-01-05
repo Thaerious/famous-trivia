@@ -1,4 +1,4 @@
-import NidgetElement from "./NidgetElement.js";
+import NidgetElement from "../script/NidgetElement.js";
 
 class TextInput extends NidgetElement {
     constructor() {

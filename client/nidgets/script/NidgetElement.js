@@ -4,7 +4,6 @@
  * Calling methods on the nidget will treat shadow contents as regular contents.
  */
 class NidgetElement extends HTMLElement {
-
     constructor(templateId) {
         super();
         if (templateId) this.applyTemplate(templateId);
@@ -20,9 +19,26 @@ class NidgetElement extends HTMLElement {
         if (!this.classList.contains("hidden")) this.classList.add("visible");
     }
 
-    detectDOM(){
+    /**
+     * Move elements from the parent element into the template element.
+     * @param {string} outer_target query selector for elements to move.
+     * @param {string} inner_target query selector for element to move outer targets into.
+     * @returns {*} all elements moved
+     */
+    internalize(outer_target, inner_target = "#inner") {
+        const outer_selection = this.outerSelectorAll(outer_target);
+
+        for (let item of outer_selection) {
+            item.detach();
+            this.querySelector(inner_target).append(item);
+        }
+
+        return outer_selection;
+    }
+
+    detectDOM() {
         this.DOM = {};
-        for (const element of this.querySelectorAll("[id]")){
+        for (const element of this.querySelectorAll("[id]")) {
             this.DOM[toCamelCase(element.id)] = element;
         }
     }
@@ -50,22 +66,24 @@ class NidgetElement extends HTMLElement {
         if (this.shadowRoot !== null) return;
         let template = document.getElementById(templateId);
 
-        if (!template){
+        if (!template) {
             throw new Error(
-                "Template '" + templateId + "' not found\n" +
-                "Has the .ejs directive been added to the source file?\n" +
-                "<%- include('../partials/nidget-templates'); %>"
+                "Template '" +
+                    templateId +
+                    "' not found\n" +
+                    "Has the .ejs directive been added to the source file?\n" +
+                    "<%- include('../partials/nidget-templates'); %>"
             );
         }
 
-        if (template.tagName.toUpperCase() !== "TEMPLATE"){
+        if (template.tagName.toUpperCase() !== "TEMPLATE") {
             throw new Error("Element with id '" + templateId + "' is not a template.");
         }
 
-        this.attachShadow({mode: 'open'}).appendChild(template.content.cloneNode(true));
+        this.attachShadow({ mode: "open" }).appendChild(template.content.cloneNode(true));
     }
 
-    async ready(){}
+    async ready() {}
 
     get visible() {
         const v = this.classList.contains("visible") === true;
@@ -101,7 +119,7 @@ class NidgetElement extends HTMLElement {
      * Set the disabled flag that is read by nidget mouse functions.
      * @param value
      */
-    set disabled(value){
+    set disabled(value) {
         this.setAttribute(NidgetElement.DISABLED_ATTRIBUTE, value);
     }
 
@@ -109,7 +127,7 @@ class NidgetElement extends HTMLElement {
      * Get the disabled flag that is read by nidget mouse functions.
      * @param value
      */
-    get disabled(){
+    get disabled() {
         if (!this.hasAttribute(NidgetElement.DISABLED_ATTRIBUTE)) return false;
         return this.getAttribute(NidgetElement.DISABLED_ATTRIBUTE);
     }
@@ -135,14 +153,14 @@ class NidgetElement extends HTMLElement {
     /**
      * Perform a query selection on the element, not the shadow root.
      */
-    outerSelector(selectors){
+    outerSelector(selectors) {
         return super.querySelector(selectors);
     }
 
     /**
      * Perform a query select all on the element, not the shadow root.
      */
-    outerSelectorAll(selectors){
+    outerSelectorAll(selectors) {
         return super.querySelectorAll(selectors);
     }
 
@@ -153,7 +171,7 @@ class NidgetElement extends HTMLElement {
      * @returns {HTMLElementTagNameMap[K]}
      */
     querySelector(selectors) {
-        if (this.shadowRoot){
+        if (this.shadowRoot) {
             return this.shadowRoot.querySelector(selectors);
         } else {
             return super.querySelector(selectors);
@@ -167,7 +185,7 @@ class NidgetElement extends HTMLElement {
      * @returns {HTMLElementTagNameMap[K]}
      */
     querySelectorAll(selectors) {
-        if (this.shadowRoot){
+        if (this.shadowRoot) {
             return this.shadowRoot.querySelectorAll(selectors);
         } else {
             return super.querySelectorAll(selectors);
@@ -177,15 +195,24 @@ class NidgetElement extends HTMLElement {
     /**
      * Remove this element from it's parent.
      */
-    detach(){
+    detach() {
         return this.parentNode.removeChild(this);
     }
 
     /**
      * Index within the parent element.
      */
-    index(){
+    index() {
         return Array.from(this.parentElement.children).indexOf(this);
+    }
+
+    closestParent(selector) {
+        let el = this;
+        while (el && el !== document && el !== window){
+            const found = el.closest(selector);
+            if (found) return found;
+            el = el.getRootNode().host;
+        }
     }
 }
 
@@ -194,18 +221,18 @@ class NidgetElement extends HTMLElement {
  * @param input
  * @returns {*}
  */
-function toCamelCase(input){
+function toCamelCase(input) {
     const split = input.split("-");
     for (let i = 1; i < split.length; i++) {
         split[i] = split[i].charAt(0).toUpperCase() + split[i].slice(1);
     }
-    return split.join('');
+    return split.join("");
 }
 
 NidgetElement.DISABLED_ATTRIBUTE = "nidget-disabled";
 
-if (!window.customElements.get('nidget-element')) {
-    window.customElements.define('nidget-element', NidgetElement);
+if (!window.customElements.get("nidget-element")) {
+    window.customElements.define("nidget-element", NidgetElement);
 }
 
 export default NidgetElement;

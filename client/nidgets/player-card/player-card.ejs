@@ -1,7 +1,11 @@
 <template id="player-card-template">
     <link rel="stylesheet" href="player_card.css">
-
     <div class="outer">
+        <context-menu id="player-context-menu">
+            <context-menu-item id="cmi-score" event-name="context-score">Set Score</context-menu-item>
+            <context-menu-item id="cmi-remove" event-name="context-remove">Remove Player</context-menu-item>
+        </context-menu>
+
         <nidget-text id="name">Name</nidget-text>
         <nidget-text id="score">1000</nidget-text>
         <div id="clock">

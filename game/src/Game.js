@@ -132,8 +132,9 @@ class Game {
         switch (input.action) {
             case "set_score":
                 if (input.player !== config.names.HOST) return;
-                const player = this.getPlayerByName(input.data.name);
+                const player = this.gameModel.getPlayer(input.data.name);
                 player.score = input.data.score;
+                this.updateState();
                 break;
             case "next_round":
                 if (input.player !== config.names.HOST) return;
@@ -360,14 +361,6 @@ class Game {
         switch (input.action) {
             /* no accepted inputs */
         }
-    }
-
-
-    getPlayerByName(name) {
-        for (let p of this.gameModel.players) {
-            if (p.name === name) return p;
-        }
-        return undefined;
     }
 }
 

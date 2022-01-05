@@ -13,17 +13,31 @@ function pageReloader(){
     return new Promise((resolve, reject)=>{
         let socket = new WebSocket(url);
         socket.addEventListener('message', (event) => onMessage(event.data));
+        socket.addEventListener('close', (event) => waitForSocket(url));
         socket.addEventListener('error', (event) => reject(event));
         socket.addEventListener('open', (event) => resolve(socket));
     });
+}
+
+function waitForSocket(url){
+    setInterval(()=>{
+        console.log("attempt reconnect");
+        let socket = new WebSocket(url);
+        socket.addEventListener('open', (event) =>location.reload());
+    }, 5000);
 }
 
 function onMessage(_data){
     console.log(_data);
     const data = JSON.parse(_data);
     const url = "/" + data.url;
-    if (location.pathname.indexOf(url) === 0){
-        location.reload();
+
+    switch(data.action){
+        case "reload":
+            if (location.pathname.indexOf("/" + data.url)) location.reload();
+            break;
+        case "error":
+            window.alert(data.message);
     }
 }
 
