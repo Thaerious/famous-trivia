@@ -8,17 +8,16 @@ import Logger from "@thaerious/logger";
 const logger = Logger.getLogger();
 
 /**
- * When the server serves a page that has the SessionManager middleware a
- * session instance is attached to the request (see #middleware).  The response, if
- * there is one, will have a cookie set to the session hash value.
+ * Assigns or retrieves an identifying hash value on an http request object.
+ * Any request without a session cookie will have one assigned to it' matchin response.
+ * Any request with an expired session cookie will have a new one assigned to it's response.
+ * Requests from the same user will have the same session cookie (assigned by the browser)
+ * and can be identified by their hash.
  * <br>
- * A session instance can be used (via #hash) to uniquely identify the request.
- * Any values set on the session instance (see #get) will be stored in a
- * persistent database and retrieved across server instances (see #load).
+ * The hash value is stored in the session parameter of a request object (req.session).
  * <br>
  * When another endpoint receives a request that has already passed through the
- * middleware the session can be accessed with 'req.session', and identified
- * with 'req.session.hash'.
+ * middleware the session can be idetified with 'req.session.hash'.
  */
 class SessionManager extends HasDB {
     constructor(path) {
@@ -41,7 +40,7 @@ class SessionManager extends HasDB {
 
         let sessionRows = await this.all("SELECT session FROM Sessions");
         for (let sessionRow of sessionRows) {
-            this.sessions[sessionRow.session] = new SessionInstance(this, sessionRow.session);
+            this.sessions[sessionRow.session] = new SessionInstance(sessionRow.session);
             await this.sessions[sessionRow.session].load();            
         }
     }
@@ -106,6 +105,7 @@ class SessionManager extends HasDB {
     async applyTo(req, res) {
         let cookies = new Cookies(req.headers.cookie);
         let sessionHash = undefined;
+
         if (cookies.has(SessionManager.SETTINGS.SESSION_COOKIE_NAME)) {
             sessionHash = cookies.get(SessionManager.SETTINGS.SESSION_COOKIE_NAME);
         }
@@ -146,7 +146,7 @@ class SessionManager extends HasDB {
      */
     getSession(sessionHash) {
         if (!this.sessions[sessionHash]) {
-            this.sessions[sessionHash] = new SessionInstance(this, sessionHash);
+            this.sessions[sessionHash] = new SessionInstance(sessionHash);
         }
 
         return this.sessions[sessionHash];
@@ -177,115 +177,14 @@ class SessionManager extends HasDB {
         }
         return r;
     }
-
-    /**
-     * Return all sessions that has the parameter 'key' set.
-     * @param key The parameter in question.
-     * @param value If set, only return parameters that match.
-     * @returns {*[]}
-     */
-    reverseLookup(key, value = undefined) {
-        let sessions = [];
-
-        if (!value) {
-            for (const hash in this.sessions) {
-                const sessionInstance = this.sessions[hash];
-                if (sessionInstance.has(key)) sessions.push(hash);
-            }
-        } else {
-            for (const hash in this.sessions) {
-                const sessionInstance = this.sessions[hash];
-                if (sessionInstance.has(key, value)) sessions.push(hash);
-            }
-        }
-
-        return sessions;
-    }
 }
 
 class SessionInstance {
-    constructor(sessionManager, hash) {
-        this.DB = sessionManager;
+    constructor(hash) {
         this._hash = hash;
-        this.values = {};
     }
 
-    /**
-     * Read saved parameters from the DB to the live server for this session.
-     * @returns {Promise<void>}
-     */
-    async load() {
-        let cmd = `SELECT name, value
-                   FROM parameters
-                   WHERE session = (?)`;
-        let values = [this.hash];
-        let valueRows = await this.DB.all(cmd, values);
-
-        logger.channel("verbose").log(`loading session values for: ${this.hash.substring(0, 8)}`);
-        for (let valueRow of valueRows) {
-            this.values[valueRow.name] = valueRow.value;
-            logger.channel("verbose").log(`${valueRow.name}:${valueRow.value}`);
-        }
-    }
-
-    /**
-     * List all keys for which there is a value.
-     * @returns {string[]}
-     */
-    listKeys() {
-        return Object.keys(this.values);
-    }
-
-    /**
-     * Determine if a key has an assigned value.
-     * @param key
-     * @returns {boolean}
-     */
-    has(key, value = undefined) {
-        if (!value) {
-            return this.values[key] !== undefined;
-        } else {
-            return this.values[key] === value;
-        }
-    }
-
-    /**
-     * Remove the specified key.
-     */
-    async clear(key) {
-        delete this.values[key];
-        const cmd = "DELETE FROM parameters WHERE name = (?)";
-        const values = [key];
-        await this.DB.run(cmd, values);
-    }
-
-    /**
-     * Retrieve a key's assigned value.
-     * Return undefined if there is no key.
-     * @param key
-     * @returns {*}
-     */
-    get(key) {
-        if (!this.has(key)) return undefined;
-        return this.values[key];
-    }
-
-    /**
-     * Assign a value to a key.
-     * Replaces any value that was previously assigned.
-     * @param key
-     * @param value
-     * @returns {Promise<void>}
-     */
-    async set(key, value) {
-        this.values[key] = value;
-        let cmd = `REPLACE INTO parameters
-                   VALUES (?, ?, ?)`;
-        let values = [this.hash, key, value];
-        await this.DB.run(cmd, values);
-    }
-
-    get hash() {
+    get hash(){
         return this._hash;
     }
 }

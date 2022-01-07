@@ -1,7 +1,8 @@
 import ErrorResponse from "./responses/ErrorResponse.js";
 import Logger from "@thaerious/logger";
-const logger = Logger.getLogger();
-
+import config from "../config.js";
+const logger = Logger.getLogger().channel("connection");
+logger.prefix = ()=>"Connection ";
 /**
  * All incoming messages to the server should take the form of
  * {
@@ -22,12 +23,11 @@ class ParseError extends Error{
  * Create a new websocket connection to a running game.
  */
 class Connection{
-    constructor(ws, req, gameManager, gameManagerEndpoint, session_manager){
+    constructor(ws, req, gameManager, gameManagerEndpoint){
         this.req = req;
         this.ws  = ws;
         this.gm  = gameManager;
         this.gme = gameManagerEndpoint;
-        this.session_manager = session_manager;
 
         this.game = undefined;
         this.name = undefined;
@@ -44,13 +44,9 @@ class Connection{
      * - If name, add player and listener
      */
     async connect(){
-        console.log("connect");
+        console.log("#connect");
         await this.establishConnection();
-        if (this.role === "host"){
-            this.send(this.game.getUpdate());
-        } else {
-            this.send(this.game.getUpdate());
-        }
+        this.send(this.game.getUpdate());
     }
 
     /**
@@ -63,7 +59,7 @@ class Connection{
         let sessionHash = this.req.session.hash;
         [this.game, this.name, this.role] = this.connectionInfo(sessionHash);
         this.addListeners();
-        logger.channel("verbose").log(`connection ${this.name} ${this.role}`);
+        logger.log(`#establishConnection ${this.name} ${this.role}`);
     }
 
     addListeners() {
@@ -123,6 +119,7 @@ class Connection{
 
     parseMessage(json){
         let msg = JSON.parse(json);
+        logger.log("#parseMessage " + msg.action);
         msg.player = this.name;
 
         switch (msg.action){
@@ -130,6 +127,8 @@ class Connection{
                 this.send(this.game.getUpdate());
             break;
             case "remove_player":
+                if (this.name !== config.names.HOST) return;
+                this.gme.removePlayerFromGame(msg.data.name, this.game);
                 this.game.onInput(msg, this);
             break;
             default:

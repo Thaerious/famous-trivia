@@ -11,6 +11,7 @@ import SuccessGameHashResponse from "./responses/SuccessGameHashResponse.js";
 import ErrorResponse from "./responses/ErrorResponse.js";
 import NotInGameResponse from "./responses/NotInGameResponse.js";
 import RejectedResponse from "./responses/RejectedResponse.js";
+import {bfsObject, bfsAll } from './bfsObject.js';
 
 /**
  * API for all non-websocket client-server interaction.
@@ -34,11 +35,13 @@ class GameManagerEndpoint {
         this.validator = validator;
         this.verify = verify;
 
-        this.games_table = {}; // gameHash : session-hash, name, role
+        this.games_table = {}; 
         // {game-hash : {
+        //   'game' : game-object 
         //   'host' : session-hash,
         //   'sessions' : {
         //     session-hash : {
+        //        hash : session-hash,
         //        name : name,
         //        role : role
         //     }
@@ -106,7 +109,7 @@ class GameManagerEndpoint {
             }
 
             let gameHash = await this.game_manager.setGame(user, game)
-            this.games_table[gameHash] = {host: "", sessions: {}};
+            this.games_table[gameHash] = {host: "", game: game, sessions: {}};
             return new SuccessGameHashResponse(gameHash);
         } catch (err) {
             return new ErrorResponse(err.toString(), err);
@@ -181,7 +184,7 @@ class GameManagerEndpoint {
         } else if (await this.nameInUse(processed, body['game-hash'])) {
             return new NameInUseResponse(processed);
         } else {
-            this.games_table[gameHash].sessions[sessionHash] = {name : processed, role : "contestant"};
+            this.games_table[gameHash].sessions[sessionHash] = {hash: sessionHash, name : processed, role : "contestant"};
             const game = this.game_manager.getLiveGame(gameHash);
             game.joinPlayer(processed);
             return new SuccessResponse();
@@ -233,6 +236,16 @@ class GameManagerEndpoint {
         } catch (err) {
             return new ErrorResponse(err.toString(), err);
         }
+    }
+
+    async removePlayerFromGame(name, game){
+        const game_record = bfsObject(this.games_table, "game", game);
+        console.log(game_record);
+        const session_record = bfsObject(game_record, "name", name);
+        console.log(session_record);
+        const session_hash = session_record.hash;
+        delete game_record.sessions[session_hash];
+        console.log(this.games_table);
     }
 
     async nameInUse(name, gameHash) {

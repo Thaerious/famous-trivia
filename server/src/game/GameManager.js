@@ -5,8 +5,6 @@ import config from "../config.js";
 
 /**
  * The game manager keeps a record of all launched games.
- *
- *
  */
 class GameManager{
     constructor() {
