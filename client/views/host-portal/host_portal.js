@@ -1,14 +1,14 @@
 // noinspection SpellCheckingInspection
 
-import FileOps from "../../scripts/modules/FileOps.js";
-import Authenticate from "../../scripts/modules/Authenticate.js";
-import HostPortalView from "../../scripts/modules/HostPortalView.js";
-import PortalController from "../../scripts/modules/PortalController";
-import connectWebsocket from "../../scripts/modules/connectWebsocket.js";
-import GameManagerService from "../../scripts/modules/GameManagerService";
-import constants from "../../scripts/constants.js";
-import setupSizeListener from "../../scripts/modules/SetupSizeListener";
-import pageReloader from "../../scripts/modules/pageReloader.js";  
+import FileOps from "../modules/FileOps.js";
+import Authenticate from "../modules/Authenticate.js";
+import HostPortalView from "./HostPortalView.js";
+import PortalController from "../modules/PortalController";
+import connectWebsocket from "../modules/connectWebsocket.js";
+import GameManagerService from "../modules/GameManagerService";
+import constants from "../modules/constants.js";
+import setupSizeListener from "../modules/SetupSizeListener";
+import pageReloader from "../modules/pageReloader.js";  
 
 let gameManagerService = new GameManagerService();
 let fileOps = new FileOps();
@@ -22,7 +22,11 @@ window.onload = async () => {
 
     setupSizeListener();
 
-    await pageReloader();
+    try{
+        await pageReloader();
+    } catch (err){
+        console.log("page reloader unavailable");
+    }
 
     try {
         await new Authenticate().loadClient();
@@ -69,6 +73,24 @@ window.onload = async () => {
             score_dialog.score = player_card.score;
             score_dialog.show();
         });       
+
+        document.querySelector("player-container").addEventListener("context-remove", (event) =>{
+            console.log(event);
+            const remove_dialog = document.querySelector("#confirm-remove");
+            const player_card = event.detail["context_menu_item"].closestParent("player-card");
+
+            remove_dialog.querySelector("#text").textContent = `Remove ${player_card.name}?`;
+            remove_dialog.show();
+
+            remove_dialog.addEventListener("dialog-accept", event => {
+                ws.send(JSON.stringify({
+                    action : "remove_player", 
+                    data : {
+                        name : player_card.name
+                    }
+                }));                
+            });
+        });            
         
         document.querySelector("set-score-dialog").addEventListener("update-score", (event) =>{
             console.log("update-score in host portal");

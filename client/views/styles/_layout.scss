@@ -1,0 +1,157 @@
+// host_portal/layout
+
+@import "./page_container";
+
+.bg {
+  background-image: url("assets/images/BG01.jpg");
+}
+
+body {
+  background-color: #091158;
+  height: 100vh;
+  width: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hidden{
+  display: none;
+}
+
+trivia-timer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: calc(0.08 * var(--width-value));
+  height: calc(0.08 * var(--width-value));
+  z-index: 10;
+
+  font-family: "Arial Black", serif;
+  font-size: calc(1.2 * var(--base-font-size));
+}
+
+check-box {
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  left: 2%;
+}
+
+#main-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 8%;
+  height: 75%;
+  width: 90%;
+
+  #player-container {
+    position: absolute;
+    width: 13.5%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    font-family: Arial Black, serif;
+    font-size: calc(0.75 * var(--base-font-size));
+    font-variant: small-caps;
+    text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.75);
+  }
+
+  #game-board, #multiple-choice-present, #question-pane {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 85%;
+    height: 100%;
+    z-index: 50;
+  }
+
+  #question-pane, #answer{
+    word-spacing: calc(0.4 * var(--base-font-size));
+  }
+
+  #answer{
+    position: absolute;
+    width: 85%;
+    right: 0;
+    z-index: 100;
+    bottom: 0;
+    pointer-events: none;
+    font-family: OPTIKorinna-Agency, serif;
+    text-transform: uppercase;
+    color: rgb(255, 26, 87);
+    text-align: center;
+    white-space: pre-line;
+  }
+}
+
+#top-bar {
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 5%;
+  z-index: 100;
+
+  menu-container {
+    position: absolute;
+    right: 0px;
+    width: calc(0.06 * var(--height-value));
+    height: calc(0.06 * var(--height-value));
+
+    .menu-area {
+      width: 200px;
+    }
+  }
+}
+
+.round-number-text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  font-family: Arial Black, serif;
+  font-size: 80%;
+  color: #e8e8e8;
+  text-align: center;
+}
+
+.button-dock {
+  position: absolute;
+  width: calc(75 / 9 * 16vh);
+  right: 0;
+  bottom: -5vh;
+  height: 5vh;
+
+  .button {
+    position: absolute;
+    bottom: -1vh;
+
+    &.hidden {
+      display: none;
+    }
+
+    &.left {
+      left: 50%;
+      transform: translateX(-150%);
+    }
+
+    &.right {
+      left: 50%;
+      transform: translateX(50%);
+    }
+
+    &.center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+

@@ -1,0 +1,200 @@
+// editor.scss
+@import '../styles/bg';
+@import '../styles/shared';
+@import "../styles/page_container";
+
+* {
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+.bg {
+    background-image: url("assets/images/BG01.jpg");
+
+    &.busy{
+        z-index: 1000;
+    }
+}
+
+.busy-box{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 40vh;
+    width: 40vh;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+
+    &.hidden{
+        display: none;
+    }
+
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.hidden-anchor{
+    position: relative;
+    left: -1000px;
+}
+
+.button-container {
+    position: relative;
+    top: 91%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    height: 7%;
+
+    nidget-button {
+        position: relative;
+        display: inline-block;
+        width: calc(0.2 * var(--width-value));
+        height: 100%;
+        font-family: "Arial Black", serif;
+        font-size: calc(0.8 * var(--base-font-size));
+        z-index: 10;
+
+        &#show-question {
+            --ui-button-color: 255, 200, 0;
+        }
+
+        &#show-answer {
+            --ui-button-color: 255, 200, 0;
+        }
+
+        &#show-board {
+            --ui-button-color: 255, 200, 0;
+        }
+    }
+}
+
+check-box{
+    position: absolute;
+    width: 5%;
+    height: 5%;
+    left: 2%;
+}
+
+#multiple-choice-compose {
+    position: absolute;
+    z-index: 50;
+}
+
+#game-board, .question-pane, .answer-pane {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    width: 64%;
+    height: 75%;
+    z-index: 50;
+    transform: translate(-50%, -50%);
+}
+
+#multiple-choice-compose{
+    font-size: calc(1.2 * var(--base-font-size));
+    word-spacing: calc(0.75 * var(--base-font-size));
+    --shadow-size: calc(0.2 * var(--base-font-size));
+    text-shadow: var(--shadow-size) var(--shadow-size) var(--shadow-size) #000;
+}
+
+#question-pane {
+    font-size: calc(1.2 * var(--base-font-size));
+    word-spacing: calc(0.75 * var(--base-font-size));
+    line-height: calc(1.5 * var(--base-font-size));
+    --shadow-size: calc(0.2 * var(--base-font-size));
+    text-shadow: var(--shadow-size) var(--shadow-size) var(--shadow-size) #000;
+}
+
+#top-bar {
+    position: absolute;
+    top: 4%;
+    left: 50%;
+    width: 64%;
+    height: 5%;
+    transform: translateX(-50%);
+    z-index: 100;
+
+    #game-name {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 80%;
+        height: 100%;
+        transform: translateX(-50%);
+        background-color: #282058;
+        color: whitesmoke;
+        font-family: Arial Black, serif;
+        font-size: calc(0.8 * var(--base-font-size));
+        line-height: calc(0.042 * var(--height-value));
+        text-align: center;
+        border-radius: calc(0.05 * var(--height-value));
+        border: 0.33vh solid black;
+
+        &:focus {
+            outline: none;
+            border: 0.33vh solid #44b3ff;
+        }
+    }
+
+    #menu {
+        position: absolute;
+        right: 0px;
+        width: calc(0.05 * var(--height-value));
+        height: calc(0.05 * var(--height-value));
+
+        .menu-area {
+            width: 200px;
+        }
+    }
+}
+
+#round-number{
+    position: absolute;
+    top: 9%;
+    left: 50%;
+    width: 50%;
+    height: 5%;
+    transform: translateX(-50%);
+
+    .text{
+        position: absolute;
+        font-family: Arial Black, serif;
+        font-size: calc(0.8 * var(--base-font-size));
+        color: #e8e8e8;
+        text-align: center;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .triangle-indicator{
+        position: absolute;
+        top: 50%;
+        width: 5%;
+        transform: translateY(-50%);
+        z-index: 100;
+        cursor: pointer;
+
+        &.hidden{
+            display: none;
+        }
+
+        &#triangle-left{
+            left: 15%;
+        }
+
+        &#triangle-right{
+            right: 15%;
+        }
+    }
+}
+
+.menu-area{
+    width: 200px;
+}

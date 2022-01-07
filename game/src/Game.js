@@ -3,6 +3,7 @@ import config from "./config.js";
 import crypto from "crypto";
 import constants from "./constants.js";
 import Logger from "@thaerious/logger";
+import SessionManager from "../../server/src/mechanics/SessionManager.js";
 
 const logger = Logger.getLogger().channel("game");
 logger.prefix = ()=>"Game ";
@@ -125,11 +126,20 @@ class Game {
     /**
      * @param input {action : string, data : {}}
      */
-    onInput(input) {
+    onInput(input, session_manager) {
         logger.log(`#onInput state:${this.state}) input:${JSON.stringify(input)}`);
         logger.log(`-----------------------------------`);
 
         switch (input.action) {
+            case "remove_player":
+                if (input.player !== config.names.HOST) return;
+                this.gameModel.removePlayer(input.data.name);
+                
+                const session_instance = session_manager.reverseLookup("name", input.data.name);
+                session_instance.clear("name");
+
+                this.updateState();
+                break;            
             case "set_score":
                 if (input.player !== config.names.HOST) return;
                 const player = this.gameModel.getPlayer(input.data.name);

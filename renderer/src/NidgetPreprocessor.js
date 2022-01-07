@@ -234,8 +234,7 @@ class NidgetPreprocessor {
                     if (file.path.indexOf(resolved_exclude_path) == 0) {
                         logger.channel("debug").log(`excluded ${file.path}`);
                         file.exclude = true;
-                    }
-                    else {
+                    } else {
                         logger.channel("debug").log(`included ${file.path}`);
                     }
                     return file;
@@ -249,17 +248,17 @@ class NidgetPreprocessor {
             }
         }
 
-        try{
+        try {
             for (let filepath of jsFiles) {
                 if (this.hasRecord(filepath)) {
                     this.getRecord(filepath).script = filepath;
-                    if (NidgetPreprocessor.isNidgetScript(filepath)) this.getRecord.type = "nidget";
+                    if (this.isNidgetScript(filepath)) this.getRecord.type = "nidget";
                 }
 
-                if (NidgetPreprocessor.isNidgetScript(filepath)) this.addNidget(filepath);
+                if (this.isNidgetScript(filepath)) this.addNidget(filepath);
                 else this.addInclude(filepath);
             }
-        } catch (err){
+        } catch (err) {
             console.log("*** JS Parsing Error:");
             console.log(`\t${err.message}`);
         }
@@ -425,13 +424,13 @@ class NidgetPreprocessor {
         return includes;
     }
 
-    static isNidgetScript(filepath) {
+    isNidgetScript(filepath) {
         const code = FS.readFileSync(filepath);
         let ast = null;
 
-        try{
+        try {
             ast = Parser.parse(code, { ecmaVersion: "latest", sourceType: "module" });
-        } catch (err){
+        } catch (err) {
             throw new Error(`${err.message} in ${filepath}`);
         }
 
@@ -439,11 +438,12 @@ class NidgetPreprocessor {
         const name = NidgetPreprocessor.convertToDash(filepath);
 
         for (const node of ast) {
+            const class_name = node.id.name;
+            if (class_name === "NidgetElement") return true;
             if (node?.superClass?.name) {
-                if (name !== NidgetPreprocessor.convertToDash(node.id.name)) continue;
-                if (node?.superClass?.name === "NidgetElement") {
-                    return true;
-                }
+                const super_name = node.superClass.name;
+                if (name !== NidgetPreprocessor.convertToDash(class_name)) continue;
+                if (this.getRecord(super_name)?.type === "nidget") return true;
             }
         }
 

@@ -237,7 +237,7 @@ class SessionInstance {
     }
 
     /**
-     * Determine is a key has an assigned value.
+     * Determine if a key has an assigned value.
      * @param key
      * @returns {boolean}
      */

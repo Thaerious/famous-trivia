@@ -1,12 +1,27 @@
 // host_portal.scss
 
-@import '../../styles/portal/layout';
-@import '../../styles/portal/button_layout';
-@import '../../styles/components/bg';
-@import '../../styles/components/shared';
+@import '../styles/layout';
+@import '../styles/button_layout';
+@import '../styles/bg';
+@import '../styles/shared';
 
-player-context-menu{
+.popup-panel{
     position: absolute;
-    left: 100px;
-    top: 100px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 200px;
+    z-index: 500;
+}
+
+::part(text){    
+    position: absolute;
+    top: 50%;
+    color: whitesmoke;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;   
+    width: 100%;    
+    transform: translateY(-50%); 
 }

@@ -1,10 +1,10 @@
-import GameDescriptionHelper from "../../scripts/modules/GameDescriptionHelper.js";
-import FileOps from "../../scripts/modules/FileOps.js";
-import GameManagerService from "../../scripts/modules/GameManagerService.js";
-import emptyRoot from "../../scripts/json_schema/empty_root.js";
-import emptyCategory from "../../scripts/json_schema/empty_categorical.js";
-import constants from "../../scripts/constants.js";
-import pageReloader from "../../scripts/modules/pageReloader.js";
+import GameDescriptionHelper from "../modules/GameDescriptionHelper.js";
+import FileOps from "../modules/FileOps.js";
+import GameManagerService from "../modules/GameManagerService.js";
+import emptyRoot from "../json_schema/empty_root.js";
+import emptyCategory from "../json_schema/empty_categorical.js";
+import constants from "../modules/constants.js";
+import pageReloader from "../modules/pageReloader.js";
 
 let fileOps = new FileOps();
 const gameManagerService = new GameManagerService();

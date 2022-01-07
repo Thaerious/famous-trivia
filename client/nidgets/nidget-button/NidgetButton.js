@@ -1,4 +1,4 @@
-import NidgetElement from "../script/NidgetElement.js";
+import NidgetElement from "../modules/NidgetElement.js";
 
 class NidgetButton extends  NidgetElement{
     constructor() {

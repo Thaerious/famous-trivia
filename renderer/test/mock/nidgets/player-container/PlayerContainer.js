@@ -1,7 +1,6 @@
 "use strict";
 
-import NidgetElement from "../NidgetElement.js";
-import Utility from "../Utility.js";
+import NidgetElement from "../modules/NidgetElement.js";
 
 class PlayerContainer extends NidgetElement {
     constructor(templateId = "player-container-template") {

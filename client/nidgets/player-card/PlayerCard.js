@@ -1,6 +1,6 @@
 "use strict";
 
-import NidgetElement from "../script/NidgetElement.js";
+import NidgetElement from "../modules/NidgetElement.js";
 import {constants} from "famous-trivia-game";
 import ContextMenu from "../context-menu/ContextMenu.js";
 

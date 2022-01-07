@@ -22,11 +22,12 @@ class ParseError extends Error{
  * Create a new websocket connection to a running game.
  */
 class Connection{
-    constructor(ws, req, gameManager, gameManagerEndpoint){
+    constructor(ws, req, gameManager, gameManagerEndpoint, session_manager){
         this.req = req;
         this.ws  = ws;
         this.gm  = gameManager;
         this.gme = gameManagerEndpoint;
+        this.session_manager = session_manager;
 
         this.game = undefined;
         this.name = undefined;
@@ -128,8 +129,11 @@ class Connection{
             case "request_model":
                 this.send(this.game.getUpdate());
             break;
+            case "remove_player":
+                this.game.onInput(msg, this);
+            break;
             default:
-                this.game.onInput(msg);
+                this.game.onInput(msg, this);
             break;
          }
     }

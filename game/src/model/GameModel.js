@@ -50,9 +50,8 @@ class GameModel {
      * @param index
      * @returns {*}
      */
-    getRound(index) {
+    getRound(index = this.roundIndex) {
         logger.log("#getRound");
-        index = index ?? this.roundIndex;
         if (index < 0) return new GameNotStarted();
         return this.rounds[index];
     }
