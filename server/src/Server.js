@@ -35,6 +35,9 @@ class Server {
         this.setupPageRenderingEndpoints(cors);
         this.setupWebsocket(sessionManager, gameManager, gameManagerEndpoint);
         this.setup404();
+
+        process.on('SIGINT', () => process.exit())
+        process.on('SIGTERM', () => process.exit())        
     }
 
     start(port, ip = "0.0.0.0") {
