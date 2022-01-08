@@ -44,7 +44,6 @@ class Connection{
      * - If name, add player and listener
      */
     async connect(){
-        console.log("#connect");
         await this.establishConnection();
         this.send(this.game.getUpdate());
     }

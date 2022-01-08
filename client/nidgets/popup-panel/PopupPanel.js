@@ -42,6 +42,11 @@ class PopupPanel extends NidgetElement {
             this.hide();
         });
     }
+
+    show(message){        
+        this.querySelector("#popup-inner").innerText = message;
+        super.show();
+    }
 }
 
 window.customElements.define("popup-panel", PopupPanel);

@@ -53,7 +53,6 @@ class GameBoard extends NidgetElement {
             });
 
             this.getHeader(col).addEventListener("blur", (event)=>{
-                console.log(event.target);
                 window.x = event.target;
                 event.target.innerHTML = event.target.text.trim();
                 event.target.fitText.notify(fontSize=>{
