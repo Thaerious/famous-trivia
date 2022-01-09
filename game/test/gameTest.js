@@ -29,7 +29,7 @@ describe(`gameTest.js`, () => {
 
         it(`Adam joins game`, () => {
             game.joinPlayer("Adam");
-            assert.strictEqual(game.gameModel.hasPlayer("Adam"), true);
+            assert.strictEqual(game.game_model.hasPlayer("Adam"), true);
         });
 
         it(`Host starts game`, () => {

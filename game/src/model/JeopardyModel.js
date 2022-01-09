@@ -20,7 +20,7 @@ class JeopardyModel {
             }
         }
 
-        this.stateData = {
+        this.state_data = {
             style: constants.GAME_MODEL_STYLE.JEOPARDY,
             state: constants.GAME_MODEL_STATES.BOARD,
             spent: this.spent
@@ -52,7 +52,7 @@ class JeopardyModel {
      */
     setPlayerSpent() {
         const name = this.getCurrentPlayer();
-        if (this.stateData.state !== constants.GAME_MODEL_STATES.QUESTION) return false;
+        if (this.state_data.state !== constants.GAME_MODEL_STATES.QUESTION) return false;
         if (!name) return false;
         if (this.isPlayerSpent(name)) return true;
         this.spentPlayers.push(name);
@@ -121,13 +121,13 @@ class JeopardyModel {
         this.currentPlayer = this.parent.players[0].name;
         this.spentPlayers = [];
 
-        this.stateData = {
+        this.state_data = {
             style: constants.GAME_MODEL_STYLE.JEOPARDY,
             state: constants.GAME_MODEL_STATES.BOARD,
             spent: this.spent
         };
 
-        return this.stateData;
+        return this.state_data;
     }
 
     /**
@@ -142,7 +142,7 @@ class JeopardyModel {
         this.currentPlayer = this.parent.players[0].name;
         this.spentPlayers = [];
 
-        this.stateData = {
+        this.state_data = {
             style: constants.GAME_MODEL_STYLE.JEOPARDY,
             state: constants.GAME_MODEL_STATES.QUESTION,
             col: col,
@@ -152,7 +152,7 @@ class JeopardyModel {
             spent: this.spent
         };
 
-        return this.stateData;
+        return this.state_data;
     }
 
     /**
@@ -171,7 +171,7 @@ class JeopardyModel {
         this.currentPlayer = this.parent.players[0].name;
         this.spentPlayers = [];
 
-        this.stateData = {
+        this.state_data = {
             style: constants.GAME_MODEL_STYLE.JEOPARDY,
             state: constants.GAME_MODEL_STATES.REVEAL,
             col: col,
@@ -182,7 +182,7 @@ class JeopardyModel {
             spent: this.spent            
         };
 
-        return this.stateData;
+        return this.state_data;
     }
 
     /**
@@ -247,7 +247,7 @@ class JeopardyModel {
         };
 
         external_update.players = players;
-        Object.assign(external_update.round, this.stateData);
+        Object.assign(external_update.round, this.state_data);
 
         return JSON.parse(JSON.stringify(external_update));
     }
@@ -259,8 +259,8 @@ class JeopardyModel {
      * @returns {*[]}
      */
     checkTableBounds(col, row){
-        col = col ?? this.stateData.col;
-        row = row ?? this.stateData.row;
+        col = col ?? this.state_data.col;
+        row = row ?? this.state_data.row;
 
         if (col < 0 || col > 5) throw new Error(`Column out of range: ${col}`);
         if (row < 0 || row > 4) throw new Error(`Row out of range: ${row}`);

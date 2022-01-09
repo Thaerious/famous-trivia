@@ -217,10 +217,13 @@ class Game {
     }
 
     startRound() {
-        if (this.game_model.getRound().stateData.style === constants.GAME_MODEL_STYLE.JEOPARDY) {
+        const update = this.game_model.getUpdate();
+        console.log(update);
+
+        if (update.round.style === constants.GAME_MODEL_STYLE.JEOPARDY) {
             this.game_model.getRound().setBoardState();
             this.updateState(4);
-        } else if (this.game_model.getRound().stateData.style === constants.GAME_MODEL_STYLE.END_OF_GAME) {
+        } else if (update.round.style === constants.GAME_MODEL_STYLE.END_OF_GAME) {
             this.updateState(10);
         }
     }
