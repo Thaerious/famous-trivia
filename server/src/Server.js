@@ -36,8 +36,8 @@ class Server {
         this.setupWebsocket(sessionManager, gameManager, gameManagerEndpoint);
         this.setup404();
 
-        process.on('SIGINT', () => process.exit())
-        process.on('SIGTERM', () => process.exit())        
+        process.on('SIGINT', () => this.stop());
+        process.on('SIGTERM', () => this.stop())        
     }
 
     start(port, ip = "0.0.0.0") {
@@ -47,9 +47,10 @@ class Server {
         });
     }
 
-    stop(cb = () => {}) {
+    stop() {
         console.log("Stopping server");
-        this.httpServer.close(cb);
+        this.httpServer.close();
+        process.exit();
     }
 
     setupExternals() {
