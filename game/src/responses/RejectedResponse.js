@@ -1,13 +1,13 @@
 
-export default class RejectedResponse{
-    constructor(reason = "") {
+export default class RejectedResponse {
+    constructor (reason = ``) {
         this.reason = reason;
     }
 
-    get object(){
+    get object () {
         return {
-            result: 'rejected',
+            result: `rejected`,
             reason: this.reason
-        }
+        };
     }
 }

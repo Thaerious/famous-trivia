@@ -28,40 +28,40 @@ describe(`remove_player_test.js`, function () {
             describe(`#hasPlayer`, function () {
                 it(`true for Adam`, function () {
                     this.game.joinPlayer("Adam");
-                    assert.strictEqual(this.game.game_model.hasPlayer("Adam"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Adam"), true);
                 });
                 it(`true for Beth`, function () {
                     this.game.joinPlayer("Beth");
-                    assert.strictEqual(this.game.game_model.hasPlayer("Beth"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Beth"), true);
                 });
                 it(`true for Charlie`, function () {
                     this.game.joinPlayer("Charlie");
-                    assert.strictEqual(this.game.game_model.hasPlayer("Charlie"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Charlie"), true);
                 });
                 it(`true for Dave`, function () {
                     this.game.joinPlayer("Dave");
-                    assert.strictEqual(this.game.game_model.hasPlayer("Dave"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Dave"), true);
                 });
             });
         });
 
         describe(`Adam is removed from the game`, function () {
             before(function () {
-                this.game.game_model.removePlayer("Adam");
+                this.game.gameModel.removePlayer("Adam");
             });
 
             describe(`#hasPlayer`, function () {
                 it(`false for Adam`, function () {
-                    assert.strictEqual(this.game.game_model.hasPlayer("Adam"), false);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Adam"), false);
                 });
                 it(`true for Beth`, function () {
-                    assert.strictEqual(this.game.game_model.hasPlayer("Beth"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Beth"), true);
                 });
                 it(`true for Charlie`, function () {
-                    assert.strictEqual(this.game.game_model.hasPlayer("Charlie"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Charlie"), true);
                 });
                 it(`true for Dave`, function () {
-                    assert.strictEqual(this.game.game_model.hasPlayer("Dave"), true);
+                    assert.strictEqual(this.game.gameModel.hasPlayer("Dave"), true);
                 });
             });
         });
@@ -79,7 +79,7 @@ describe(`remove_player_test.js`, function () {
 
         describe(`player drops out while choosing question`, function(){
             beforeEach(function(){
-                this.game.game_model.removePlayer("Adam");
+                this.game.gameModel.removePlayer("Adam");
             });
 
             it(`the second player (Beth) becomes the current player`, function(){
@@ -93,7 +93,7 @@ describe(`remove_player_test.js`, function () {
         describe(`player drops out after choosing question before answering`, function(){
             beforeEach(function(){
                 this.game.onInput({action: "select", data: {col: 0, row: 1}, player: "@HOST"});
-                this.game.game_model.removePlayer("Adam");
+                this.game.gameModel.removePlayer("Adam");
             });
 
             it(`current player becomes blank`, function(){

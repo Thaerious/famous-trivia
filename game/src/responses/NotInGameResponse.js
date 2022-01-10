@@ -1,15 +1,14 @@
 
-export default class NotInGameResponse{
-    constructor(eid) {
+export default class NotInGameResponse {
+    constructor (eid) {
         this.eid = eid;
     }
 
-
-    get object(){
+    get object () {
         return {
-            result: 'rejected',
-            reason: 'Contestant is not in a game.',
-            eid : this.eid
-        }
+            result: `rejected`,
+            reason: `Contestant is not in a game.`,
+            eid: this.eid
+        };
     }
 }

@@ -6,26 +6,30 @@ import config from "../config.js";
 /**
  * The game manager keeps a record of all launched games.
  */
-class GameManager{
-    constructor() {
+class GameManager {
+    constructor () {
         this.hosts = new Map(); // userId -> {hash, name}
-        this.liveGames= new Map(); // hash -> game
+        this.liveGames = new Map(); // hash -> game
     }
 
-    get size(){
+    get size () {
         return this.liveGames.size;
     }
 
-    set timeAnswer(value){
-        this.ta = value;
+    set timeAnswer (value) {
+        this._timeAnswer = value;
     }
 
-    set timeBuzz(value){
-        this.tb = value;
+    get timeAnswer () {
+        return this._timeAnswer;
     }
 
-    set timeMultipleChoice(value){
-        this.tm = value;
+    set timeBuzz (value) {
+        this._timeBuzz = value;
+    }
+
+    get timeBuzz () {
+        return this._timeBuzz;
     }
 
     /**
@@ -35,18 +39,18 @@ class GameManager{
      * @param game a game object from Game.js
      * @returns {string} the game-hash of the live game
      */
-    setGame(hostInfo, liveGame) {
-        if (!hostInfo?.userId) throw new Error("userId missing from user object");
-        if (!hostInfo?.userName) throw new Error("userName missing from user object");
-        if (this.hosts.has(hostInfo.userId)) throw new Error("duplicate host key");
+    setGame (hostInfo, liveGame) {
+        if (!hostInfo?.userId) throw new Error(`userId missing from user object`);
+        if (!hostInfo?.userName) throw new Error(`userName missing from user object`);
+        if (this.hosts.has(hostInfo.userId)) throw new Error(`duplicate host key`);
 
-        let gameHash = crypto.randomBytes(20).toString('hex');
+        const gameHash = crypto.randomBytes(20).toString(`hex`);
         this.liveGames.set(gameHash, liveGame);
 
-        liveGame.times.ANSWER          = this.ta ?? config.TIMES.ANSWER;
-        liveGame.times.BUZZ            = this.tb ?? config.TIMES.BUZZ;
+        liveGame.times.ANSWER = this._timeAnswer ?? config.TIMES.ANSWER;
+        liveGame.times.BUZZ = this._timeBuzz ?? config.TIMES.BUZZ;
 
-        this.hosts.set(hostInfo.userId, {hash:gameHash, name:hostInfo.userName});
+        this.hosts.set(hostInfo.userId, { hash: gameHash, name: hostInfo.userName });
         return gameHash;
     }
 
@@ -54,7 +58,7 @@ class GameManager{
      * True if the game has been saved for the given host.
      * @param hostInfo the user object returned from verify.js
      */
-    hasGame(hostInfo) {
+    hasGame (hostInfo) {
         return this.hosts.has(hostInfo.userId);
     }
 
@@ -63,9 +67,9 @@ class GameManager{
      * @param hostToken the user object returned from verify.js
      * @returns {Promise<unknown>}
      */
-    getGame(hostInfo) {
+    getGame (hostInfo) {
         const tableEntry = this.hosts.get(hostInfo.userId);
-        if (!tableEntry) throw new Error("no game associated with host");
+        if (!tableEntry) throw new Error(`no game associated with host`);
         return this.liveGames.get(tableEntry.hash);
     }
 
@@ -74,7 +78,7 @@ class GameManager{
      * @param hostInfo the user object returned from verify.js
      * @returns {boolean}
      */
-    deleteGame(hostInfo) {
+    deleteGame (hostInfo) {
         if (!this.hosts.get(hostInfo.userId)) return false;
         const hash = this.hosts.get(hostInfo.userId).hash;
         this.liveGames.delete(hash);
@@ -87,7 +91,7 @@ class GameManager{
      * @param hostToken the user object returned from verify.js
      * @returns {Promise<unknown>}
      */
-    getGameHash(hostInfo) {
+    getGameHash (hostInfo) {
         return this.hosts.get(hostInfo.userId)?.hash;
     }
 
@@ -96,7 +100,7 @@ class GameManager{
      * @param gameHash The public hash for a game.
      * @return The live game object or undefined if no game found.
      */
-    getLiveGame(gameHash){
+    getLiveGame (gameHash) {
         return this.liveGames.get(gameHash);
     }
 }

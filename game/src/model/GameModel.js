@@ -3,13 +3,14 @@ import JeopardyModel from "./JeopardyModel.js";
 import EndOfGame from "./EndOfGame.js";
 import GameNotStarted from "./GameNotStarted.js";
 import Logger from "@thaerious/logger";
-const logger = Logger.getLogger().channel("game_model");
-logger.prefix = ()=>"GameModel ";
+const logger = Logger.getLogger().channel(`game_model`);
+logger.prefix = () => `GameModel `;
+logger.enabled = false;
 
 class GameModel {
-    constructor(gameDescription) {
-        logger.log("#constructor");
-        if (typeof gameDescription === "string") gameDescription = JSON.parse(gameDescription);
+    constructor (gameDescription) {
+        logger.log(`#constructor`);
+        if (typeof gameDescription === `string`) gameDescription = JSON.parse(gameDescription);
         this.gameDescription = gameDescription;
         this._players = []; // {name, score, enabled}
         this.listeners = {};
@@ -19,13 +20,13 @@ class GameModel {
     /**
      * Perform initialization of each round in the model.
      */
-    setupRounds(){
-        logger.log("#setupRounds");
+    setupRounds () {
+        logger.log(`#setupRounds`);
         this.rounds = [];
         this.roundIndex = -1;
 
-        for(let roundModel of this.gameDescription.rounds){
-            if (roundModel.type ===  constants.SCHEMA_CONSTANTS.CATEGORY) {
+        for (const roundModel of this.gameDescription.rounds) {
+            if (roundModel.type === constants.SCHEMA_CONSTANTS.CATEGORY) {
                 this.rounds.push(new JeopardyModel(this, roundModel));
             }
         }
@@ -38,11 +39,11 @@ class GameModel {
      * This object will be used to update the client view.
      * @returns {{round: *}}
      */
-    getUpdate(external_update = {}) {
-        logger.log("#getUpdate");
-        Object.assign(external_update, {players : this.players});
-        external_update = JSON.parse(JSON.stringify(external_update));
-        return this.getRound().getUpdate(external_update);
+    getUpdate (externalUpdate = {}) {
+        logger.log(`#getUpdate`);
+        Object.assign(externalUpdate, { players: this.players });
+        externalUpdate = JSON.parse(JSON.stringify(externalUpdate));
+        return this.getRound().getUpdate(externalUpdate);
     }
 
     /**
@@ -50,8 +51,8 @@ class GameModel {
      * @param index
      * @returns {*}
      */
-    getRound(index = this.roundIndex) {
-        logger.log("#getRound");
+    getRound (index = this.roundIndex) {
+        logger.log(`#getRound`);
         if (index < 0) return new GameNotStarted();
         return this.rounds[index];
     }
@@ -61,20 +62,20 @@ class GameModel {
      * @param value
      * @return current round object.
      */
-    setRound(index) {
-        logger.log("#setRound");
+    setRound (index) {
+        logger.log(`#setRound`);
         if (index < 0 || index > this.gameDescription.rounds.length) return this.getRound();
         this.roundIndex = index;
         return this.getRound();
     }
 
-    nextRound() {
-        logger.log("#nextRound");
+    nextRound () {
+        logger.log(`#nextRound`);
         return this.setRound(this.roundIndex + 1);
     }
 
-    prevRound() {
-        logger.log("#prevRound");
+    prevRound () {
+        logger.log(`#prevRound`);
         return this.setRound(this.roundIndex - 1);
     }
 
@@ -84,8 +85,8 @@ class GameModel {
      * @param name
      * @returns the added player
      */
-    addPlayer(name) {
-        logger.log("#addPlayer");
+    addPlayer (name) {
+        logger.log(`#addPlayer`);
         if (this.hasPlayer(name)) {
             return this.getPlayer(name);
         }
@@ -100,20 +101,20 @@ class GameModel {
         return player;
     }
 
-    disablePlayer(name) {
-        logger.log("#disablePlayer");
+    disablePlayer (name) {
+        logger.log(`#disablePlayer`);
         if (!this.hasPlayer(name)) return;
         this.getPlayer(name).enabled = false;
     }
 
-    enablePlayer(name) {
-        logger.log("#enablePlayer");
+    enablePlayer (name) {
+        logger.log(`#enablePlayer`);
         if (!this.hasPlayer(name)) return;
         this.getPlayer(name).enabled = true;
     }
 
-    isEnabled(name) {
-        logger.log("#isEnabled");
+    isEnabled (name) {
+        logger.log(`#isEnabled`);
         if (!this.hasPlayer(name)) return;
         return this.getPlayer(name).enabled;
     }
@@ -124,8 +125,8 @@ class GameModel {
      * { name, score, enabled}
      * @returns {*[]}
      */
-    get players() {
-        logger.log(".players");
+    get players () {
+        logger.log(`.players`);
         return [...this._players];
     }
 
@@ -133,8 +134,8 @@ class GameModel {
      * Retrieve the active player object.
      * @returns {null|*}
      */
-    get activePlayer() {
-        logger.log(".activePlayer");
+    get activePlayer () {
+        logger.log(`.activePlayer`);
         if (this._players.length === 0) return null;
         return this._players[0];
     }
@@ -145,29 +146,29 @@ class GameModel {
      * @param name
      * @returns {null|*}
      */
-    getPlayer(name) {
-        logger.log("#getPlayer");
-        for (let player of this._players) if (player.name === name) return player;
+    getPlayer (name) {
+        logger.log(`#getPlayer`);
+        for (const player of this._players) if (player.name === name) return player;
         return null;
     }
 
-    hasPlayer(name) {
-        logger.log("#hasPlayer");
+    hasPlayer (name) {
+        logger.log(`#hasPlayer`);
         return this.getPlayer(name) !== null;
     }
 
     /**
-     * Remove a player specified by 'name' from the game.  If a player with 
+     * Remove a player specified by 'name' from the game.  If a player with
      * the same name rejoins, they will be treated as a new player.
      * Returns the player tuple (name, score, enabled) when successfull.
      * Returns null when the player is not found.
      */
-    removePlayer(name) {
-        logger.log("#removePlayer");
-        let player = this.getPlayer(name);
-        let index = this._players.indexOf(player);
+    removePlayer (name) {
+        logger.log(`#removePlayer`);
+        const player = this.getPlayer(name);
+        const index = this._players.indexOf(player);
         if (index === -1) return null;
-        let splice = this._players.splice(index, 1);
+        const splice = this._players.splice(index, 1);
 
         if (this.getRound()?.removePlayer) this.getRound().removePlayer(name);
 
@@ -179,8 +180,8 @@ class GameModel {
      * Setting active player out of range will set it to -1
      * Returns, JSON object to broadcast
      */
-    nextActivePlayer() {
-        logger.log("#nextActivePlayer");
+    nextActivePlayer () {
+        logger.log(`#nextActivePlayer`);
         if (this._players.length === 0) return null;
 
         do {

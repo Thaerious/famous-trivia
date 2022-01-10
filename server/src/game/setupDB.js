@@ -6,14 +6,14 @@ import Path from "path";
  * Create the database file.
  * Deletes any previous file already there.
  */
-async function setupDB(dbPath, dbFileName, dbScriptPath){
+async function setupDB (dbPath, dbFileName, dbScriptPath) {
     const fullPath = Path.join(dbPath, dbFileName);
 
-    if (fs.existsSync(fullPath)){
+    if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
     }
 
-    fs.mkdirSync(dbPath, {recursive: true});
+    fs.mkdirSync(dbPath, { recursive: true });
 
     // Setup the database connection
     const db = new sqlite3.Database(fullPath.toString(), async (err) => {
@@ -26,11 +26,11 @@ async function setupDB(dbPath, dbFileName, dbScriptPath){
     db.close();
 }
 
-function populateDB(db, dbScriptPath){
-    return new Promise((resolve, reject)=> {
+function populateDB (db, dbScriptPath) {
+    return new Promise((resolve, reject) => {
         const sql = fs.readFileSync(dbScriptPath);
 
-        db.exec(sql.toString(), (err)=>{
+        db.exec(sql.toString(), (err) => {
             if (err) reject(err);
             resolve();
         });

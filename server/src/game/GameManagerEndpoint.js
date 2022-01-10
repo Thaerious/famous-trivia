@@ -1,17 +1,11 @@
-// noinspection DuplicatedCode,JSUnresolvedFunction
-
-import verify from '../mechanics/verify.js';
-import {Game} from 'famous-trivia-game';
-import {GameModel} from 'famous-trivia-game';
-import NameValidator from "./NameValidator.js";
+import { Game, GameModel } from 'famous-trivia-game';
 import NameInUseResponse from "./responses/NameInUseResponse.js";
 import InvalidNameResponse from "./responses/InvalidNameResponse.js";
 import SuccessResponse from "./responses/SuccessResponse.js";
 import SuccessGameHashResponse from "./responses/SuccessGameHashResponse.js";
 import ErrorResponse from "./responses/ErrorResponse.js";
-import NotInGameResponse from "./responses/NotInGameResponse.js";
 import RejectedResponse from "./responses/RejectedResponse.js";
-import {bfsObject, bfsAll } from './bfsObject.js';
+import { bfsObject } from './bfsObject.js';
 
 /**
  * API for all non-websocket client-server interaction.
@@ -19,25 +13,24 @@ import {bfsObject, bfsAll } from './bfsObject.js';
 class GameManagerEndpoint {
     /**
      * Create a new GameManagerEndpoint.
-     *
      * The validator is an object to validate names, has #preProcess and #validate
      * The verify accepts a token:string and returns {userId:string, userName:string}
      * @param {GameManager} gameManager
      * @param {NameValidator} validator (name validator)
      * @param {function} verify function to verify the host google credentials
      */
-    constructor(gameManager, validator, verify) {
-        if (!gameManager) throw new Error("Missing parameter: gameManager");
-        if (!validator) throw new Error("Missing parameter: validator");
-        if (!verify) throw new Error("Missing parameter: verify");
+    constructor (gameManager, validator, verify) {
+        if (!gameManager) throw new Error(`Missing parameter: gameManager`);
+        if (!validator) throw new Error(`Missing parameter: validator`);
+        if (!verify) throw new Error(`Missing parameter: verify`);
 
-        this.game_manager = gameManager;
+        this.gameManager = gameManager;
         this.validator = validator;
         this.verify = verify;
 
-        this.games_table = {}; 
+        this.gamesTable = {};
         // {game-hash : {
-        //   'game' : game-object 
+        //   'game' : game-object
         //   'host' : session-hash,
         //   'sessions' : {
         //     session-hash : {
@@ -53,29 +46,29 @@ class GameManagerEndpoint {
      * Retrieve a new middleware callback for the endpoint.
      * @returns {(function(*=, *=, *): Promise<void>)|*}
      */
-    get middleware() {
+    get middleware () {
         return async (req, res, next) => {
             if (!req.body) {
-                next(new Error("Missing body from endpoint request"));
+                next(new Error(`Missing body from endpoint request`));
                 return;
             }
 
             const action = req.body.action;
 
             if (!action) {
-                next(new Error("Missing action from endpoint request"));
+                next(new Error(`Missing action from endpoint request`));
                 return;
             }
 
             if (!this[action]) {
-                next(new Error("Unknown game-manager-endpoint action: " + action));
+                next(new Error(`Unknown game-manager-endpoint action: ` + action));
                 return;
             }
 
-            let response = await this[action](req.body, req.session.hash);
+            const response = await this[action](req.body, req.session.hash);
             res.json(response.object);
             res.end();
-        }
+        };
     }
 
     /**
@@ -88,28 +81,28 @@ class GameManagerEndpoint {
      * @param {Object} body {token, model}
      * @returns {Promise<SuccessGameHashResponse|ErrorResponse>}
      */
-    async ['launch'](body) {
-        if (!verifyParameter(body, "token")){
+    async [`launch`] (body) {
+        if (!verifyParameter(body, `token`)) {
             return new ErrorResponse(`missing parameter: token`);
         }
 
-        if (!verifyParameter(body, "model")){
+        if (!verifyParameter(body, `model`)) {
             return new ErrorResponse(`missing parameter: model`);
         }
 
-        let token = body.token;
-        let model = body.model;
+        const token = body.token;
+        const model = body.model;
 
         try {
-            let user = await this.verify(token);
-            let game = new Game(new GameModel(model));
+            const user = await this.verify(token);
+            const game = new Game(new GameModel(model));
 
-            if (await this.game_manager.hasGame(user)){
-                return new ErrorResponse("game already launched for token");
+            if (await this.gameManager.hasGame(user)) {
+                return new ErrorResponse(`game already launched for token`);
             }
 
-            let gameHash = await this.game_manager.setGame(user, game)
-            this.games_table[gameHash] = {host: "", game: game, sessions: {}};
+            const gameHash = await this.gameManager.setGame(user, game);
+            this.gamesTable[gameHash] = { host: ``, game: game, sessions: {} };
             return new SuccessGameHashResponse(gameHash);
         } catch (err) {
             return new ErrorResponse(err.toString(), err);
@@ -125,18 +118,18 @@ class GameManagerEndpoint {
      * @param body {token}
      * @returns {Promise<RejectedResponse|SuccessGameHashResponse|ErrorResponse>}
      */
-    async ['get-hosted-game-hash'](body) {
-        if (!verifyParameter(body, "token")){
+    async [`get-hosted-game-hash`] (body) {
+        if (!verifyParameter(body, `token`)) {
             return new ErrorResponse(`missing parameter: token`);
         }
 
-        let token = body['token'];
+        const token = body.token;
 
         try {
-            let user = await this.verify(token);
+            const user = await this.verify(token);
 
-            if (await this.game_manager.hasGame(user)) {
-                let gameHash = await this.game_manager.getGameHash(user);
+            if (await this.gameManager.hasGame(user)) {
+                const gameHash = await this.gameManager.getGameHash(user);
                 return new SuccessGameHashResponse(gameHash);
             } else {
                 return new RejectedResponse();
@@ -158,34 +151,34 @@ class GameManagerEndpoint {
      * @param sessionHash
      * @returns {Promise<SuccessResponse|ErrorResponse|RejectedResponse>}
      */
-    async ['join-game'](body, sessionHash) {
-        if (!verifyParameter(body, "name")){
+    async [`join-game`] (body, sessionHash) {
+        if (!verifyParameter(body, `name`)) {
             return new ErrorResponse(`missing parameter: name`);
         }
 
-        if (!verifyParameter(body, "game-hash")){
+        if (!verifyParameter(body, `game-hash`)) {
             return new ErrorResponse(`missing parameter: game-hash`);
         }
 
-        const name = body['name'];
+        const name = body.name;
         const processed = this.validator.preProcess(name);
-        const gameHash = body['game-hash'];
+        const gameHash = body[`game-hash`];
 
-        if (!this.games_table[gameHash]){
+        if (!this.gamesTable[gameHash]) {
             return new ErrorResponse(`unknown game`);
         }
 
-        if (this.knownSessions()[sessionHash]){
-            return new RejectedResponse("player already in game");
+        if (this.knownSessions()[sessionHash]) {
+            return new RejectedResponse(`player already in game`);
         }
 
         if (!this.validator.validate(name)) {
             return new InvalidNameResponse(name);
-        } else if (await this.nameInUse(processed, body['game-hash'])) {
+        } else if (await this.isNameInUse(processed, body[`game-hash`])) {
             return new NameInUseResponse(processed);
         } else {
-            this.games_table[gameHash].sessions[sessionHash] = {hash: sessionHash, name : processed, role : "contestant"};
-            const game = this.game_manager.getLiveGame(gameHash);
+            this.gamesTable[gameHash].sessions[sessionHash] = { hash: sessionHash, name: processed, role: `contestant` };
+            const game = this.gameManager.getLiveGame(gameHash);
             game.joinPlayer(processed);
             return new SuccessResponse();
         }
@@ -199,10 +192,10 @@ class GameManagerEndpoint {
      * @param sessionHash
      * @returns {Promise<SuccessResponse|RejectedResponse>}
      */
-    async ['get-game-hash'](body, sessionHash) {
+    async [`get-game-hash`] (body, sessionHash) {
         const tableEntry = this.knownSessions()[sessionHash];
-        if (!tableEntry) return new RejectedResponse("no game associated with session hash");
-        return new SuccessGameHashResponse(tableEntry['game-hash']);
+        if (!tableEntry) return new RejectedResponse(`no game associated with session hash`);
+        return new SuccessGameHashResponse(tableEntry[`game-hash`]);
     }
 
     /**
@@ -212,11 +205,11 @@ class GameManagerEndpoint {
      * If a game has not been launched an error will be emitted.
      * On success emits a success with a game-hash.
      * @param body
-     * @param session_hash
+     * @param sessionHash
      * @returns {Promise<SuccessResponse|ErrorResponse>}
      */
-    async ['connect-host'](body, session_hash) {
-        if (!verifyParameter(body, "token")){
+    async [`connect-host`] (body, sessionHash) {
+        if (!verifyParameter(body, `token`)) {
             return new ErrorResponse(`missing parameter: token`);
         }
 
@@ -225,32 +218,29 @@ class GameManagerEndpoint {
         try {
             const user = await this.verify(token);
 
-            if (!await this.game_manager.hasGame(user)){
-                return new ErrorResponse("game not launched for token");
+            if (!await this.gameManager.hasGame(user)) {
+                return new ErrorResponse(`game not launched for token`);
             }
 
-            const game_hash = await this.game_manager.getGameHash(user);
+            const gameHash = await this.gameManager.getGameHash(user);
 
-            this.games_table[game_hash].host = session_hash;
-            return new SuccessGameHashResponse(game_hash);
+            this.gamesTable[gameHash].host = sessionHash;
+            return new SuccessGameHashResponse(gameHash);
         } catch (err) {
             return new ErrorResponse(err.toString(), err);
         }
     }
 
-    async removePlayerFromGame(name, game){
-        const game_record = bfsObject(this.games_table, "game", game);
-        console.log(game_record);
-        const session_record = bfsObject(game_record, "name", name);
-        console.log(session_record);
-        const session_hash = session_record.hash;
-        delete game_record.sessions[session_hash];
-        console.log(this.games_table);
+    async removePlayerFromGame (name, game) {
+        const gameRecord = bfsObject(this.gamesTable, `game`, game);
+        const sessionRecord = bfsObject(gameRecord, `name`, name);
+        const sessionHash = sessionRecord.hash;
+        delete gameRecord.sessions[sessionHash];
     }
 
-    async nameInUse(name, gameHash) {
-        for (const sessionHash in this.games_table[gameHash].sessions){
-            if (this.games_table[gameHash].sessions[sessionHash].name === name) return true;
+    async isNameInUse (name, gameHash) {
+        for (const sessionHash in this.gamesTable[gameHash].sessions) {
+            if (this.gamesTable[gameHash].sessions[sessionHash].name === name) return true;
         }
         return false;
     }
@@ -267,16 +257,16 @@ class GameManagerEndpoint {
      * @param {Object} body {token}
      * @returns {Promise<SuccessResponse|ErrorResponse>}
      */
-    async ['terminate'](body) {
-        if (!verifyParameter(body, "token")){
+    async [`terminate`] (body) {
+        if (!verifyParameter(body, `token`)) {
             return new ErrorResponse(`missing parameter: token`);
         }
 
         try {
-            let user = await this.verify(body['token']);
-            const gameHash = await this.game_manager.getGameHash(user);
-            await this.game_manager.deleteGame(user);
-            delete this.games_table[gameHash];
+            const user = await this.verify(body.token);
+            const gameHash = await this.gameManager.getGameHash(user);
+            await this.gameManager.deleteGame(user);
+            delete this.gamesTable[gameHash];
             return new SuccessResponse();
         } catch (err) {
             return new ErrorResponse(err.toString(), err);
@@ -286,14 +276,14 @@ class GameManagerEndpoint {
     /**
      * Return a table of sessionHash => {game-hash, name, role}
      */
-    knownSessions(){
+    knownSessions () {
         const sessionsTable = {};
-        for (const gameHash in this.games_table){
-            const hostHash = this.games_table[gameHash].host;
-            sessionsTable[hostHash] = {'game-hash' : gameHash, 'name': '@HOST', 'role': 'host'};
-            for (const sessionHash in this.games_table[gameHash].sessions){
-                const entry = this.games_table[gameHash].sessions[sessionHash];
-                sessionsTable[sessionHash] = {'game-hash' : gameHash, 'name': entry.name, 'role': entry.role};
+        for (const gameHash in this.gamesTable) {
+            const hostHash = this.gamesTable[gameHash].host;
+            sessionsTable[hostHash] = { 'game-hash': gameHash, name: `@HOST`, role: `host` };
+            for (const sessionHash in this.gamesTable[gameHash].sessions) {
+                const entry = this.gamesTable[gameHash].sessions[sessionHash];
+                sessionsTable[sessionHash] = { 'game-hash': gameHash, name: entry.name, role: entry.role };
             }
         }
         return sessionsTable;
@@ -305,9 +295,9 @@ class GameManagerEndpoint {
      * @param sessionHash
      * @returns {boolean}
      */
-    isHostSession(gameHash, sessionHash){
-        if (!this.games_table[gameHash]) return false;
-        return this.games_table[gameHash].host === sessionHash;
+    isHostSession (gameHash, sessionHash) {
+        if (!this.gamesTable[gameHash]) return false;
+        return this.gamesTable[gameHash].host === sessionHash;
     }
 
     /**
@@ -316,37 +306,37 @@ class GameManagerEndpoint {
      * @param sessionHash
      * @returns {boolean}
      */
-    isContestantSession(gameHash, sessionHash){
-        if (!gameHash) throw new Error("missing parameter: gameHash");
-        if (!sessionHash) throw new Error("missing parameter: sessionHash");
-        if (!this.games_table[gameHash]) return false;
-        return this.games_table[gameHash].sessions[sessionHash] !== undefined;
+    isContestantSession (gameHash, sessionHash) {
+        if (!gameHash) throw new Error(`missing parameter: gameHash`);
+        if (!sessionHash) throw new Error(`missing parameter: sessionHash`);
+        if (!this.gamesTable[gameHash]) return false;
+        return this.gamesTable[gameHash].sessions[sessionHash] !== undefined;
     }
 
-    getName(sessionHash){
-        if (!sessionHash) throw new Error("missing parameter: sessionHash");
+    getName (sessionHash) {
+        if (!sessionHash) throw new Error(`missing parameter: sessionHash`);
         const tableEntry = this.knownSessions()[sessionHash];
-        if (!tableEntry) throw new Error("unknown session: " + sessionHash.substr(0, 6));
-        return tableEntry['name'];
+        if (!tableEntry) throw new Error(`unknown session: ` + sessionHash.substr(0, 6));
+        return tableEntry.name;
     }
 
-    getRole(sessionHash){
-        if (!sessionHash) throw new Error("missing parameter: sessionHash");
+    getRole (sessionHash) {
+        if (!sessionHash) throw new Error(`missing parameter: sessionHash`);
         const tableEntry = this.knownSessions()[sessionHash];
-        if (!tableEntry) throw new Error("unknown session: " + sessionHash.substr(0, 6));
-        return tableEntry['role'];
+        if (!tableEntry) throw new Error(`unknown session: ` + sessionHash.substr(0, 6));
+        return tableEntry.role;
     }
 
-    getGameHash(sessionHash){
-        if (!sessionHash) throw new Error("missing parameter: sessionHash");
+    getGameHash (sessionHash) {
+        if (!sessionHash) throw new Error(`missing parameter: sessionHash`);
         const tableEntry = this.knownSessions()[sessionHash];
         if (!tableEntry) return undefined;
-        return tableEntry['game-hash'];
+        return tableEntry[`game-hash`];
     }
 }
 
-function verifyParameter(body, parameter) {
-    let value = body[parameter];
+function verifyParameter (body, parameter) {
+    const value = body[parameter];
     if (!value) return false;
     return true;
 }

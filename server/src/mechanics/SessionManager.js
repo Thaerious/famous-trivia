@@ -20,7 +20,7 @@ const logger = Logger.getLogger();
  * middleware the session can be idetified with 'req.session.hash'.
  */
 class SessionManager extends HasDB {
-    constructor(path) {
+    constructor (path) {
         super(path);
         this.sessions = {};
     }
@@ -29,8 +29,8 @@ class SessionManager extends HasDB {
      * Read session information from the DB to the live server.
      * @returns {Promise<void>}
      */
-    async load() {
-        logger.channel("verbose").log("loading sessions");
+    async load () {
+        logger.channel(`verbose`).log(`loading sessions`);
         this.sessions = {};
         await this.clearOldSessions();
 
@@ -38,10 +38,10 @@ class SessionManager extends HasDB {
             this.interval = setInterval(() => this.clearOldSessions(), SessionManager.SETTINGS.SESSION_CLEAR_DELAY_MIN * 60 * 1000);
         }
 
-        let sessionRows = await this.all("SELECT session FROM Sessions");
-        for (let sessionRow of sessionRows) {
+        const sessionRows = await this.all(`SELECT session FROM Sessions`);
+        for (const sessionRow of sessionRows) {
             this.sessions[sessionRow.session] = new SessionInstance(sessionRow.session);
-            await this.sessions[sessionRow.session].load();            
+            await this.sessions[sessionRow.session].load();
         }
     }
 
@@ -49,7 +49,7 @@ class SessionManager extends HasDB {
      * Remove all Live and DB session information.
      * @returns {Promise<void>}
      */
-    async clearAll() {
+    async clearAll () {
         await this.clearLive();
         await this.clearDB();
     }
@@ -58,7 +58,7 @@ class SessionManager extends HasDB {
      * Remove all Live session information.
      * @returns {Promise<void>}
      */
-    async clearLive() {
+    async clearLive () {
         this.sessions = {};
     }
 
@@ -66,22 +66,22 @@ class SessionManager extends HasDB {
      * Remove all DB session information.
      * @returns {Promise<void>}
      */
-    async clearDB() {
-        await this.run("DELETE FROM 'sessions'");
-        await this.run("DELETE FROM 'parameters'");
+    async clearDB () {
+        await this.run(`DELETE FROM 'sessions'`);
+        await this.run(`DELETE FROM 'parameters'`);
     }
 
     /**
      * Remove all expired sessions from the DB.
      */
-    async clearOldSessions() {
-        let expired = new Date().getTime();
+    async clearOldSessions () {
+        const expired = new Date().getTime();
         await this.run(`DELETE
                         FROM sessions
                         WHERE expires < ${expired};`);
         await this.run(`DELETE
                         FROM parameters
-                        WHERE session NOT IN (SELECT session FROM sessions);`)
+                        WHERE session NOT IN (SELECT session FROM sessions);`);
     }
 
     /**
@@ -89,11 +89,11 @@ class SessionManager extends HasDB {
      * Attaches the SessionInstance to the request.
      * @returns {function(...[*]=)}
      */
-    get middleware() {
+    get middleware () {
         return async (req, res, next) => {
             await this.applyTo(req, res);
             next();
-        }
+        };
     }
 
     /**
@@ -102,9 +102,9 @@ class SessionManager extends HasDB {
      * @param res
      * @returns {Promise<void>}
      */
-    async applyTo(req, res) {
-        let cookies = new Cookies(req.headers.cookie);
-        let sessionHash = undefined;
+    async applyTo (req, res) {
+        const cookies = new Cookies(req.headers.cookie);
+        let sessionHash;
 
         if (cookies.has(SessionManager.SETTINGS.SESSION_COOKIE_NAME)) {
             sessionHash = cookies.get(SessionManager.SETTINGS.SESSION_COOKIE_NAME);
@@ -113,7 +113,7 @@ class SessionManager extends HasDB {
         sessionHash = await this.validateSession(sessionHash);
 
         if (res) {
-            res.cookie(SessionManager.SETTINGS.SESSION_COOKIE_NAME, sessionHash, {maxAge: SessionManager.SETTINGS.SESSION_EXPIRE_HOURS * 60 * 60 * 1000});
+            res.cookie(SessionManager.SETTINGS.SESSION_COOKIE_NAME, sessionHash, { maxAge: SessionManager.SETTINGS.SESSION_EXPIRE_HOURS * 60 * 60 * 1000 });
         }
 
         if (!req.session) {
@@ -126,11 +126,11 @@ class SessionManager extends HasDB {
      * This session is added to both Live and the DB.
      * @returns {String} Session hash to send to the client, may or may not be new.
      */
-    async validateSession(sessionHash) {
-        let expires = new Date().getTime() + SessionManager.SETTINGS.SESSION_EXPIRE_HOURS * 60 * 60 * 1000;
+    async validateSession (sessionHash) {
+        const expires = new Date().getTime() + SessionManager.SETTINGS.SESSION_EXPIRE_HOURS * 60 * 60 * 1000;
 
         if (!sessionHash || !this.sessions[sessionHash]) {
-            sessionHash = crypto.randomBytes(64).toString('hex');
+            sessionHash = crypto.randomBytes(64).toString(`hex`);
         }
 
         if (!this.sessions[sessionHash]) {
@@ -144,7 +144,7 @@ class SessionManager extends HasDB {
      * @param sessionHash
      * @returns {*}
      */
-    getSession(sessionHash) {
+    getSession (sessionHash) {
         if (!this.sessions[sessionHash]) {
             this.sessions[sessionHash] = new SessionInstance(sessionHash);
         }
@@ -158,10 +158,10 @@ class SessionManager extends HasDB {
      * @param expires
      * @returns {Promise<void>}
      */
-    async saveHash(session, expires) {
-        let cmd = `REPLACE INTO sessions
+    async saveHash (session, expires) {
+        const cmd = `REPLACE INTO sessions
                    VALUES (?, ?)`;
-        let values = [session, expires];
+        const values = [session, expires];
         await this.run(cmd, values);
     }
 
@@ -170,9 +170,9 @@ class SessionManager extends HasDB {
      * Used for CLI
      * @returns {*[]}
      */
-    listHashes() {
-        let r = [];
-        for (let key of Object.keys(this.sessions)) {
+    listHashes () {
+        const r = [];
+        for (const key of Object.keys(this.sessions)) {
             r.push(key.substring(0, 6));
         }
         return r;
@@ -180,31 +180,31 @@ class SessionManager extends HasDB {
 }
 
 class SessionInstance {
-    constructor(hash) {
+    constructor (hash) {
         this._hash = hash;
     }
 
-    get hash(){
+    get hash () {
         return this._hash;
     }
 }
 
 class Cookies {
-    constructor(string) {
-        string = string ?? "";
+    constructor (string) {
+        string = string ?? ``;
         this.cookies = {};
-        let rawCookies = string.split('; ');
+        const rawCookies = string.split(`; `);
         rawCookies.forEach(raw => {
-            let keyValue = raw.split("=");
+            const keyValue = raw.split(`=`);
             this.cookies[keyValue[0]] = keyValue[1];
         });
     }
 
-    get(key) {
+    get (key) {
         return this.cookies[key];
     }
 
-    has(key) {
+    has (key) {
         return this.cookies[key] !== undefined;
     }
 }

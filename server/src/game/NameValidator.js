@@ -1,6 +1,5 @@
 
-class NameValidator{
-
+class NameValidator {
     /**
      * Return true if the name is valid,
      * otherwise return false.
@@ -10,7 +9,7 @@ class NameValidator{
      * @param source
      * @returns {boolean}
      */
-    validate(source) {
+    validate (source) {
         const pre = this.preProcess(source);
         if (pre.length < 2) return false;
         if (pre.length > 15) return false;
@@ -25,9 +24,9 @@ class NameValidator{
      * null/undefined names get converted to zero-length strings
      * @param source
      */
-    preProcess(source){
-        if (!source) return "";
-        if (typeof source !== "string") return "";
+    preProcess (source) {
+        if (!source) return ``;
+        if (typeof source !== `string`) return ``;
         return source.trim().toUpperCase();
     }
 }

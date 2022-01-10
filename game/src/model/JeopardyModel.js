@@ -5,17 +5,17 @@ class JeopardyModel {
      * @param parent the GameModel object that constructed this
      * @param model the JSON model of questions
      */
-    constructor(parent, model) {
+    constructor (parent, model) {
         this.parent = parent;
         this.model = model;
         this.spentPlayers = [];
 
         /** matrix of which questions have already been answered **/
         this.spent = [];
-        for (let col of this.model.column) {
-            let cells = [];
+        for (let i = 0; i < this.model.column.length; i++) {
+            const cells = [];
             this.spent.push(cells);
-            for (let cell of col.cell) {
+            for (let j = 0; j < cells.length; j++) {
                 cells.push(false);
             }
         }
@@ -29,20 +29,20 @@ class JeopardyModel {
         this.categories = [];
         this.values = [];
 
-        for (let column of this.model.column) {
+        for (const column of this.model.column) {
             this.categories.push({
-                "text": column.category,
+                text: column.category,
                 "font-size": column.fontSize
             });
-            let valueCol = [];
+            const valueCol = [];
             this.values.push(valueCol);
-            for (let cell of column.cell) {
+            for (const cell of column.cell) {
                 valueCol.push(cell.value);
             }
         }
     }
 
-    isPlayerSpent(name) {
+    isPlayerSpent (name) {
         return this.spentPlayers.indexOf(name) !== -1;
     }
 
@@ -50,7 +50,7 @@ class JeopardyModel {
      * Mark the current player as spent.
      * @returns {boolean}
      */
-    setPlayerSpent() {
+    setPlayerSpent () {
         const name = this.getCurrentPlayer();
         if (this.state_data.state !== constants.GAME_MODEL_STATES.QUESTION) return false;
         if (!name) return false;
@@ -59,23 +59,23 @@ class JeopardyModel {
         return true;
     }
 
-    setCurrentPlayer(name) {
+    setCurrentPlayer (name) {
         if (!this.parent.hasPlayer(name)) return false;
         this.currentPlayer = name;
         return true;
     }
 
-    clearCurrentPlayer() {
-        this.currentPlayer = '';
+    clearCurrentPlayer () {
+        this.currentPlayer = ``;
     }
 
-    /** return true if name is unspent and is a name*/
-    hasPlayer(name) {
+    /** return true if name is unspent and is a name */
+    hasPlayer (name) {
         if (!this.parent.hasPlayer(name)) return false;
         return this.isPlayerSpent(name) === false;
     }
 
-    getCurrentPlayer() {
+    getCurrentPlayer () {
         return this.currentPlayer;
     }
 
@@ -86,12 +86,12 @@ class JeopardyModel {
      * (Players become spent by selecting a question or buzzing in)
      * (If the current player is unspent, it means they have not selected a qustion)
      */
-    removePlayer(name){
-        if (name == this.currentPlayer){            
-            if (!this.isPlayerSpent(name)){
+    removePlayer (name) {
+        if (name === this.currentPlayer) {
+            if (!this.isPlayerSpent(name)) {
                 this.currentPlayer = this.parent.players[0].name;
             } else {
-                this.currentPlayer = "";
+                this.currentPlayer = ``;
             }
         }
     }
@@ -100,11 +100,20 @@ class JeopardyModel {
      * return the number of unspent players.
      * @returns {*}
      */
-    countUnspentPlayers() {
+    countUnspentPlayers () {
         return this.parent.players.length - this.spentPlayers.length;
     }
 
-    isSpent(col, row) {
+    isLowestUnspent (col, row) {
+        [col, row] = this.checkTableBounds(col, row);
+        if (row === 0) return true;
+        for (let r = row; r > 0; r--) {
+            if (!this.isSpent(col, r - 1)) return false;
+        }
+        return true;
+    }
+
+    isSpent (col, row) {
         [col, row] = this.checkTableBounds(col, row);
         return this.spent[col][row];
     }
@@ -115,7 +124,7 @@ class JeopardyModel {
      * @param row
      * @returns question text
      */
-    setBoardState(col, row) {
+    setBoardState (col, row) {
         [col, row] = this.checkTableBounds(col, row);
 
         this.currentPlayer = this.parent.players[0].name;
@@ -136,7 +145,7 @@ class JeopardyModel {
      * @param row
      * @returns question text
      */
-    setQuestionState(col, row) {
+    setQuestionState (col, row) {
         [col, row] = this.checkTableBounds(col, row);
 
         this.currentPlayer = this.parent.players[0].name;
@@ -163,7 +172,7 @@ class JeopardyModel {
      * @param row
      * @returns game state update object
      */
-    setRevealState(col, row) {
+    setRevealState (col, row) {
         [col, row] = this.checkTableBounds(col, row);
 
         this.spent[col][row] = true;
@@ -179,7 +188,7 @@ class JeopardyModel {
             type: this.getType(col, row),
             question: this.model.column[col].cell[row].q,
             answer: this.getAnswer(),
-            spent: this.spent            
+            spent: this.spent
         };
 
         return this.state_data;
@@ -193,7 +202,7 @@ class JeopardyModel {
      * @param row
      * @returns game state update object
      */
-    getAnswer(col, row) {
+    getAnswer (col, row) {
         [col, row] = this.checkTableBounds(col, row);
         return this.model.column[col].cell[row].a;
     }
@@ -206,7 +215,7 @@ class JeopardyModel {
      * @param row
      * @returns {*}
      */
-    getValue(col, row) {
+    getValue (col, row) {
         [col, row] = this.checkTableBounds(col, row);
         return this.model.column[col].cell[row].value;
     }
@@ -219,31 +228,29 @@ class JeopardyModel {
      * @param row
      * @returns game state update object
      */
-    getType(col, row) {
+    getType (col, row) {
         [col, row] = this.checkTableBounds(col, row);
         return this.model.column[col].cell[row].type;
     }
 
-    getUpdate(external_update = {}) {
+    getUpdate (external_update = {}) {
         const players = this.parent.players;
 
-        for (let player of players) {
+        for (const player of players) {
             if (player.name === this.currentPlayer) {
                 player.light_state = constants.LIGHT_STATE.HIGHLIGHT;
-            }
-            else if (this.spentPlayers.indexOf(player.name) !== -1) {
+            } else if (this.spentPlayers.indexOf(player.name) !== -1) {
                 player.light_state = constants.LIGHT_STATE.DIM;
-            }
-            else {
+            } else {
                 player.light_state = constants.LIGHT_STATE.NORMAL;
             }
         }
 
         external_update.round = {
-            current_player : this.currentPlayer,
-            categories : this.categories,
-            values : this.values,
-            spent_players : [...this.spentPlayers]
+            current_player: this.currentPlayer,
+            categories: this.categories,
+            values: this.values,
+            spent_players: [...this.spentPlayers]
         };
 
         external_update.players = players;
@@ -258,7 +265,7 @@ class JeopardyModel {
      * @param row
      * @returns {*[]}
      */
-    checkTableBounds(col, row){
+    checkTableBounds (col, row) {
         col = col ?? this.state_data.col;
         row = row ?? this.state_data.row;
 

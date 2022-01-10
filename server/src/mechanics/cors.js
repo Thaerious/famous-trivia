@@ -8,14 +8,14 @@ const logger = Logger.getLogger();
  * @param res
  * @param next
  */
-function cors(req, res, next) {
-    logger.channel("verbose").log(`cors: ${req.originalUrl}`);
-    let csp = extractCSP(res);
-    csp["default-src"] = "ws://localhost:41141 'self' *.google.com *.googleapis.com 'unsafe-inline' 'unsafe-eval'";
-    csp["style-src"] = "'self' *.google.com 'unsafe-inline'";
-    delete csp["script-src"];
-    delete csp["script-src-attr"];
-    res.set("Content-Security-Policy", concatCSP(res, csp));
+function cors (req, res, next) {
+    logger.channel(`verbose`).log(`cors: ${req.originalUrl}`);
+    const csp = extractCSP(res);
+    csp[`default-src`] = `ws://localhost:41141 'self' *.google.com *.googleapis.com 'unsafe-inline' 'unsafe-eval'`;
+    csp[`style-src`] = `'self' *.google.com 'unsafe-inline'`;
+    delete csp[`script-src`];
+    delete csp[`script-src-attr`];
+    res.set(`Content-Security-Policy`, concatCSP(res, csp));
     next();
 }
 
@@ -26,13 +26,13 @@ function cors(req, res, next) {
  * @param res
  * @returns {JS-Object}
  */
-function extractCSP(res){
-    let csp = res.get("Content-Security-Policy").split(";");
-    let dict = {};
+function extractCSP (res) {
+    const csp = res.get(`Content-Security-Policy`).split(`;`);
+    const dict = {};
 
-    for (let policy of  csp) {
-        let kv = policy.split(/ /);
-        dict[kv[0]] = kv[1] ?? "";
+    for (const policy of csp) {
+        const kv = policy.split(/ /);
+        dict[kv[0]] = kv[1] ?? ``;
     }
 
     return dict;
@@ -46,10 +46,10 @@ function extractCSP(res){
  * @param csp
  * @returns {string}
  */
-function concatCSP(res, csp){
-    let policyString = "";
-    for (let key in csp){
-        policyString = policyString + key + " " + csp[key] + ";"
+function concatCSP (res, csp) {
+    let policyString = ``;
+    for (const key in csp) {
+        policyString = policyString + key + ` ` + csp[key] + `;`;
     }
     return policyString;
 }

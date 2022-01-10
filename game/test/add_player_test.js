@@ -5,7 +5,7 @@ import { Game, Timer } from "../src/Game.js";
 import Logger from "@thaerious/logger";
 
 Logger.getLogger().channel("game").enabled = false;
-Logger.getLogger().channel("game_model").enabled = false;
+Logger.getLogger().channel("gameModel").enabled = false;
 
 function newGame(filename = "test/data/test-data-00.json") {
     const file = fs.readFileSync(filename);
@@ -30,19 +30,19 @@ describe(`add_player_test.js`, function () {
 
             it(`true for Adam`, function () {
                 this.game.joinPlayer("Adam");
-                assert.strictEqual(this.game.game_model.hasPlayer("Adam"), true);
+                assert.strictEqual(this.game.gameModel.hasPlayer("Adam"), true);
             });
             it(`true for Beth`, function () {
                 this.game.joinPlayer("Beth");
-                assert.strictEqual(this.game.game_model.hasPlayer("Beth"), true);
+                assert.strictEqual(this.game.gameModel.hasPlayer("Beth"), true);
             });
             it(`true for Charlie`, function () {
                 this.game.joinPlayer("Charlie");
-                assert.strictEqual(this.game.game_model.hasPlayer("Charlie"), true);
+                assert.strictEqual(this.game.gameModel.hasPlayer("Charlie"), true);
             });
             it(`true for Dave`, function () {
                 this.game.joinPlayer("Dave");
-                assert.strictEqual(this.game.game_model.hasPlayer("Dave"), true);
+                assert.strictEqual(this.game.gameModel.hasPlayer("Dave"), true);
             });
         });
         describe(`update has player`, function () {
@@ -52,22 +52,22 @@ describe(`add_player_test.js`, function () {
 
             it(`true for Adam`, function () {
                 this.game.joinPlayer("Adam");
-                const update = this.game.game_model.getUpdate();
+                const update = this.game.gameModel.getUpdate();
                 assert.strictEqual(update.players[0].name, "Adam");
             });
             it(`true for Beth`, function () {
                 this.game.joinPlayer("Beth");
-                const update = this.game.game_model.getUpdate();
+                const update = this.game.gameModel.getUpdate();
                 assert.strictEqual(update.players[1].name, "Beth");
             });
             it(`true for Charlie`, function () {
                 this.game.joinPlayer("Charlie");
-                const update = this.game.game_model.getUpdate();
+                const update = this.game.gameModel.getUpdate();
                 assert.strictEqual(update.players[2].name, "Charlie");
             });
             it(`true for Dave`, function () {
                 this.game.joinPlayer("Dave");
-                const update = this.game.game_model.getUpdate();
+                const update = this.game.gameModel.getUpdate();
                 assert.strictEqual(update.players[3].name, "Dave");
             });
         });        
