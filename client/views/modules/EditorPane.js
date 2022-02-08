@@ -315,7 +315,8 @@ class EditorPane {
         this.jeopardyBoardCtrl = new JPBoardCtrl(()=>this.onSave());
 
         this.DOM.menu.addEventListener("menu-download", () => {
-            const json = JSON.stringify(this.gameDescriptionHelper.get, null, 2);
+            console.log("menu download");
+            const json = JSON.stringify(this.gameDescriptionHelper.get(), null, 2);
             const blob = new Blob([json], {type: "application/json"});
             const url = window.URL.createObjectURL(blob);
             const anchor = document.querySelector("#download-anchor");
