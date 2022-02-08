@@ -4,7 +4,7 @@ import constants from "./constants.js";
 import NidgetPreprocessor from "./NidgetPreprocessor.js";
 import Path from "path";
 import renderEJS from "./renderEJS.js";
-import renderJS from "./RenderJS.js";
+import renderJS from "./renderJS.js";
 import renderSCSS from "./renderSCSS.js";
 import Crypto from "crypto";
 import ParseArgs from "@thaerious/parseargs";
