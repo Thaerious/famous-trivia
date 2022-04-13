@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@nidget/core": "file:../Nidget",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "querystring": "^0.2.1"
+  },
+  "name": "famous-trivia",
+  "description": "The documentation is made with SPHINX.\r To build, execute the following:",
+  "version": "0.2.0",
+  "main": "server-src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thaerious/famous-trivia.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thaerious/famous-trivia/issues"
+  },
+  "homepage": "https://github.com/Thaerious/famous-trivia#readme",
+  "type": "module"
+}

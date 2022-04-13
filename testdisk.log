@@ -1,0 +1,994 @@
+
+
+Mon Mar 28 15:45:25 2022
+Command line: TestDisk
+
+TestDisk 7.1, Data Recovery Utility, July 2019
+Christophe GRENIER <grenier@cgsecurity.org>
+https://www.cgsecurity.org
+OS: Linux, kernel 5.10.60.1-microsoft-standard-WSL2 (#1 SMP Wed Aug 25 23:20:18 UTC 2021) x86_64
+Compiler: GCC 9.2
+ext2fs lib: 1.45.5, ntfs lib: libntfs-3g, reiserfs lib: none, ewf lib: none, curses lib: ncurses 6.1
+Warning: can't get size for Disk /dev/mapper/control - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop0 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop1 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop2 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop3 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop4 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop5 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop6 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop7 - 0 B - 0 sectors, sector size=512
+Hard disk list
+Disk /dev/sda - 274 GB / 256 GiB - CHS 33418 255 63, sector size=512 - Msft Virtual Disk, FW:1.0
+Disk /dev/sdb - 356 MB / 339 MiB - CHS 43 255 63 (RO), sector size=512 - Msft Virtual Disk, FW:1.0
+Disk /dev/sdc - 274 GB / 256 GiB - CHS 33418 255 63, sector size=512 - Msft Virtual Disk, FW:1.0
+
+Partition table type (auto): None
+Media is opened in read-only.
+Disk /dev/sdb - 356 MB / 339 MiB (RO) - Msft Virtual Disk
+Partition table type: None
+
+Interface Advanced
+
+recover_EXT2: s_block_group_nr=0/2, s_mnt_count=0/0, s_blocks_per_group=32768, s_inodes_per_group=3936
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 86973
+recover_EXT2: part_size 695784
+   P ext4                     0   0  1    43  79 12     695784
+     ext4 blocksize=4096 Large_file, 356 MB / 339 MiB
+search_superblock
+
+recover_EXT2: s_block_group_nr=0/2, s_mnt_count=0/0, s_blocks_per_group=32768, s_inodes_per_group=3936
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 86973
+recover_EXT2: part_size 695784
+Ext2 superblock found at sector 2 (block=0, blocksize=4096)
+  ext4                     0   0  1    43  79 12     695784
+superblock 0, blocksize=4096 []
+
+To repair the filesystem using alternate superblock, run
+fsck.ext4 -p -b superblock -B blocksize device
+search_superblock
+
+recover_EXT2: s_block_group_nr=0/2, s_mnt_count=0/0, s_blocks_per_group=32768, s_inodes_per_group=3936
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 86973
+recover_EXT2: part_size 695784
+Ext2 superblock found at sector 2 (block=0, blocksize=4096)
+  ext4                     0   0  1    43  79 12     695784
+superblock 0, blocksize=4096 []
+
+To repair the filesystem using alternate superblock, run
+fsck.ext4 -p -b superblock -B blocksize device
+Partition table type (auto): None
+Media is opened in read-only.
+Disk /dev/sdb - 356 MB / 339 MiB (RO) - Msft Virtual Disk
+Partition table type: None
+
+Interface Advanced
+
+recover_EXT2: s_block_group_nr=0/2, s_mnt_count=0/0, s_blocks_per_group=32768, s_inodes_per_group=3936
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 86973
+recover_EXT2: part_size 695784
+   P ext4                     0   0  1    43  79 12     695784
+     ext4 blocksize=4096 Large_file, 356 MB / 339 MiB
+
+
+dir_partition inode=2
+   P ext4                     0   0  1    43  79 12     695784
+     ext4 blocksize=4096 Large_file, 356 MB / 339 MiB
+Directory /
+       2 drwxr-xr-x     0      0      4096                   .
+       2 drwxr-xr-x     0      0      4096                   ..
+      11 drwx------     0      0      4096                   lost+found
+      12 -rwxr-xr-x     0      0         0 15-Jul-2021 18:54 .dockerenv
+      13 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 bin
+      14 drwx------     0      0      4096 24-Feb-2021 16:13 boot
+      15 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 dev
+      19 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 etc
+     286 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 home
+     293 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 lib
+     294 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 lib64
+     295 lrwxrwxrwx     0      0         9 24-Feb-2021 03:11 media
+     296 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 mnt
+     299 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 proc
+     300 drwxr-x---     0      0      4096 24-Feb-2021 16:13 root
+     307 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 run
+     308 lrwxrwxrwx     0      0         8 24-Feb-2021 03:11 sbin
+     309 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 srv
+     310 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 sys
+     311 drwxrwxrwt     0      0      4096 24-Feb-2021 16:13 tmp
+     322 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 usr
+   11713 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 var
+
+dir_partition inode=286
+   P ext4                     0   0  1    43  79 12     695784
+     ext4 blocksize=4096 Large_file, 356 MB / 339 MiB
+Directory /home
+     286 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 .
+       2 drwxr-xr-x     0      0      4096                   ..
+     287 drwxr-xr-x  1000    100      4096 15-Jul-2021 18:54 wslg
+
+dir_partition inode=287
+   P ext4                     0   0  1    43  79 12     695784
+     ext4 blocksize=4096 Large_file, 356 MB / 339 MiB
+Directory /home/wslg
+     287 drwxr-xr-x  1000    100      4096 15-Jul-2021 18:54 .
+     286 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 ..
+     288 -rw-r--r--  1000    100       178 24-Feb-2021 03:48 .bash_logout
+     289 -rw-r--r--  1000    100       645 24-Feb-2021 03:48 .bash_profile
+     290 -rw-r--r--  1000    100       452 24-Feb-2021 03:48 .bashrc
+     291 drwxr-xr-x  1000      0      4096 15-Jul-2021 18:54 .config
+Directory /home
+     286 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 .
+       2 drwxr-xr-x     0      0      4096                   ..
+     287 drwxr-xr-x  1000    100      4096 15-Jul-2021 18:54 wslg
+Directory /
+       2 drwxr-xr-x     0      0      4096                   .
+       2 drwxr-xr-x     0      0      4096                   ..
+      11 drwx------     0      0      4096                   lost+found
+      12 -rwxr-xr-x     0      0         0 15-Jul-2021 18:54 .dockerenv
+      13 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 bin
+      14 drwx------     0      0      4096 24-Feb-2021 16:13 boot
+      15 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 dev
+      19 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 etc
+     286 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 home
+     293 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 lib
+     294 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 lib64
+     295 lrwxrwxrwx     0      0         9 24-Feb-2021 03:11 media
+     296 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 mnt
+     299 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 proc
+     300 drwxr-x---     0      0      4096 24-Feb-2021 16:13 root
+     307 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 run
+     308 lrwxrwxrwx     0      0         8 24-Feb-2021 03:11 sbin
+     309 lrwxrwxrwx     0      0         7 24-Feb-2021 03:11 srv
+     310 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 sys
+     311 drwxrwxrwt     0      0      4096 24-Feb-2021 16:13 tmp
+     322 drwxr-xr-x     0      0      4096 15-Jul-2021 18:54 usr
+   11713 drwxr-xr-x     0      0      4096 24-Feb-2021 16:13 var
+Partition table type (auto): None
+Disk /dev/sda - 274 GB / 256 GiB - Msft Virtual Disk
+Partition table type: None
+
+Interface Advanced
+
+recover_EXT2: s_block_group_nr=0/2048, s_mnt_count=1/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Last mount time:    Thu Mar 24 17:44:02 2022
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+search_superblock
+
+recover_EXT2: s_block_group_nr=0/2048, s_mnt_count=1/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Last mount time:    Thu Mar 24 17:44:02 2022
+Ext2 superblock found at sector 2 (block=0, blocksize=4096)
+
+block_group_nr 1
+
+recover_EXT2: "e2fsck -b 32768 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=1/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 262144 (block=32768, blocksize=4096)
+
+block_group_nr 3
+
+recover_EXT2: "e2fsck -b 98304 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=3/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 786432 (block=98304, blocksize=4096)
+
+block_group_nr 5
+
+recover_EXT2: "e2fsck -b 163840 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=5/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1310720 (block=163840, blocksize=4096)
+
+block_group_nr 7
+
+recover_EXT2: "e2fsck -b 229376 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=7/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1835008 (block=229376, blocksize=4096)
+
+block_group_nr 9
+
+recover_EXT2: "e2fsck -b 294912 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=9/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 2359296 (block=294912, blocksize=4096)
+
+block_group_nr 25
+
+recover_EXT2: "e2fsck -b 819200 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=25/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 6553600 (block=819200, blocksize=4096)
+
+block_group_nr 27
+
+recover_EXT2: "e2fsck -b 884736 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=27/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 7077888 (block=884736, blocksize=4096)
+
+block_group_nr 49
+
+recover_EXT2: "e2fsck -b 1605632 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=49/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 12845056 (block=1605632, blocksize=4096)
+
+block_group_nr 81
+
+recover_EXT2: "e2fsck -b 2654208 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=81/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 21233664 (block=2654208, blocksize=4096)
+  ext4                     0   0  1 33418 170 32  536870912
+superblock 0, blocksize=4096 []
+superblock 32768, blocksize=4096 []
+superblock 98304, blocksize=4096 []
+superblock 163840, blocksize=4096 []
+superblock 229376, blocksize=4096 []
+superblock 294912, blocksize=4096 []
+superblock 819200, blocksize=4096 []
+superblock 884736, blocksize=4096 []
+superblock 1605632, blocksize=4096 []
+superblock 2654208, blocksize=4096 []
+
+To repair the filesystem using alternate superblock, run
+fsck.ext4 -p -b superblock -B blocksize device
+
+
+dir_partition inode=2
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+      11 drwx------     0      0     16384 10-Apr-2019 12:35 lost+found
+      12 -rw-------     0      0 4294971392 24-Mar-2022 17:44 file
+Partition table type (auto): None
+Disk /dev/sdc - 274 GB / 256 GiB - Msft Virtual Disk
+Partition table type: None
+
+Interface Advanced
+
+recover_EXT2: s_block_group_nr=0/2048, s_mnt_count=74/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Last mount time:    Thu Mar 24 17:44:03 2022
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+search_superblock
+
+recover_EXT2: s_block_group_nr=0/2048, s_mnt_count=74/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Last mount time:    Thu Mar 24 17:44:03 2022
+Ext2 superblock found at sector 2 (block=0, blocksize=4096)
+
+block_group_nr 1
+
+recover_EXT2: "e2fsck -b 32768 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=1/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 262144 (block=32768, blocksize=4096)
+
+block_group_nr 3
+
+recover_EXT2: "e2fsck -b 98304 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=3/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 786432 (block=98304, blocksize=4096)
+
+block_group_nr 5
+
+recover_EXT2: "e2fsck -b 163840 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=5/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1310720 (block=163840, blocksize=4096)
+
+block_group_nr 7
+
+recover_EXT2: "e2fsck -b 229376 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=7/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1835008 (block=229376, blocksize=4096)
+
+block_group_nr 9
+
+recover_EXT2: "e2fsck -b 294912 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=9/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 2359296 (block=294912, blocksize=4096)
+
+block_group_nr 25
+
+recover_EXT2: "e2fsck -b 819200 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=25/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 6553600 (block=819200, blocksize=4096)
+
+block_group_nr 27
+
+recover_EXT2: "e2fsck -b 884736 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=27/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 7077888 (block=884736, blocksize=4096)
+
+block_group_nr 49
+
+recover_EXT2: "e2fsck -b 1605632 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=49/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 12845056 (block=1605632, blocksize=4096)
+
+block_group_nr 81
+
+recover_EXT2: "e2fsck -b 2654208 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=81/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 21233664 (block=2654208, blocksize=4096)
+  ext4                     0   0  1 33418 170 32  536870912
+superblock 0, blocksize=4096 []
+superblock 32768, blocksize=4096 []
+superblock 98304, blocksize=4096 []
+superblock 163840, blocksize=4096 []
+superblock 229376, blocksize=4096 []
+superblock 294912, blocksize=4096 []
+superblock 819200, blocksize=4096 []
+superblock 884736, blocksize=4096 []
+superblock 1605632, blocksize=4096 []
+superblock 2654208, blocksize=4096 []
+
+To repair the filesystem using alternate superblock, run
+fsck.ext4 -p -b superblock -B blocksize device
+
+
+dir_partition inode=2
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+      11 drwx------     0      0     16384 10-Apr-2019 12:35 lost+found
+      12 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 bin
+    8193 drwxr-xr-x     0      0      4096 19-Feb-2021 18:56 boot
+    8194 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 dev
+   16385 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 etc
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 home
+      13 -rwxr-xr-x     0      0         0 24-Mar-2022 17:44 init
+      14 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 lib
+      15 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib32
+      16 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib64
+      17 lrwxrwxrwx     0      0        10 19-Feb-2021 18:48 libx32
+   24577 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 media
+   24578 drwxr-xr-x     0      0      4096 19-Nov-2021 12:53 mnt
+   32769 drwxr-xr-x     0      0      4096 17-Jan-2022 13:57 opt
+   32770 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 proc
+   40961 drwx------     0      0      4096  8-Feb-2022 12:30 root
+   40962 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 run
+      18 lrwxrwxrwx     0      0         8 19-Feb-2021 18:48 sbin
+   49153 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 snap
+   49154 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 srv
+   57345 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 sys
+   57346 drwxrwxrwt     0      0     12288 28-Mar-2022 15:43 tmp
+   65537 drwxr-xr-x     0      0      4096 17-Jan-2022 13:29 usr
+   65538 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 var
+X 278529 drwx------     0      0         0 24-Mar-2022 17:44 wslEcfBEP
+X 278530 drwx------     0      0         0 24-Mar-2022 17:44 wslDDbIAE
+
+dir_partition inode=16386
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 edward
+
+dir_partition inode=39218
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 .
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 ..
+  213101 -rw-r--r--  1000   1000      3965  8-Feb-2022 12:10 .bashrc
+  271334 -rw-------  1000   1000     37427 25-Mar-2022 14:32 .bash_history
+   39221 -rw-r--r--  1000   1000       220  3-Aug-2021 12:20 .bash_logout
+     448 -rw-r--r--  1000   1000       111  9-Aug-2021 14:51 .gitconfig
+   39223 -rw-r--r--  1000   1000        20  4-Aug-2021 11:25 .inputrc
+   39224 drwxr-xr-x  1000   1000      4096  3-Aug-2021 12:20 .landscape
+   39225 drwxr-xr-x  1000   1000      4096  4-Dec-2021 09:24 .local
+   39226 -rw-r--r--  1000   1000         0 25-Mar-2022 14:33 .motd_shown
+   39227 -rw-r--r--  1000   1000       807  3-Aug-2021 12:20 .profile
+   39228 -rw-r--r--  1000   1000         0  3-Aug-2021 12:20 .sudo_as_admin_successful
+  214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo
+     449 drwxr-xr-x  1000   1000      4096 10-Aug-2021 12:21 .vim
+   39222 drwx------  1000   1000      4096 16-Mar-2022 18:18 .ssh
+   40834 drwxr-xr-x  1000   1000      4096 30-Aug-2021 11:53 .vscode-server
+  163344 -rw-------  1000   1000      1500  9-Mar-2022 11:46 .python_history
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 project
+   53857 -rw-------  1000   1000      3657 21-Mar-2022 09:14 .node_repl_history
+     193 drwx------  1000   1000      4096 16-Feb-2022 10:56 .config
+     476 drwxr-xr-x  1000   1000      4096 22-Oct-2021 12:54 .npm
+   59291 drwxr-xr-x  1000   1000      4096 20-Jan-2022 10:07 .cache
+   83316 -rw-------  1000   1000        74 24-Nov-2021 15:23 .npmrc
+   60171 drwxr-xr-x  1000   1000      4096 12-Oct-2021 15:39 .luaver
+   53484 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:53 .gem
+   69752 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:54 .bundle
+  139483 -rwxrwxrwx  1000   1000  90769636 10-Nov-2021 22:04 google-chrome-stable_current_amd64.deb
+  153916 drwx------  1000   1000      4096 23-Nov-2021 14:08 .pki
+    3175 drwx------  1000   1000      4096  4-Dec-2021 09:24 .dbus
+    3322 -rw-r-----  1000   1000       153  8-Dec-2021 11:02 .my.cnf
+  224309 -rw-------  1000   1000      3192 16-Mar-2022 10:06 .sqlite_history
+     431 drwxr-xr-x  1000   1000      4096 20-Jan-2022 09:53 .keras
+   15223 drwx------  1000   1000      4096 17-Jan-2022 14:37 .nv
+  213795 -rw-r--r--  1000   1000       199 16-Feb-2022 13:07 .wget-hsts
+  267330 -rw-r--r--  1000   1000         0 14-Mar-2022 10:31 afile
+  267331 -rw-r--r--  1000   1000         0 14-Mar-2022 10:32 AFILE
+X 214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo.tmp
+Directory /home
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 edward
+Directory /
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+      11 drwx------     0      0     16384 10-Apr-2019 12:35 lost+found
+      12 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 bin
+    8193 drwxr-xr-x     0      0      4096 19-Feb-2021 18:56 boot
+    8194 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 dev
+   16385 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 etc
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 home
+      13 -rwxr-xr-x     0      0         0 24-Mar-2022 17:44 init
+      14 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 lib
+      15 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib32
+      16 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib64
+      17 lrwxrwxrwx     0      0        10 19-Feb-2021 18:48 libx32
+   24577 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 media
+   24578 drwxr-xr-x     0      0      4096 19-Nov-2021 12:53 mnt
+   32769 drwxr-xr-x     0      0      4096 17-Jan-2022 13:57 opt
+   32770 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 proc
+   40961 drwx------     0      0      4096  8-Feb-2022 12:30 root
+   40962 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 run
+      18 lrwxrwxrwx     0      0         8 19-Feb-2021 18:48 sbin
+   49153 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 snap
+   49154 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 srv
+   57345 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 sys
+   57346 drwxrwxrwt     0      0     12288 28-Mar-2022 15:43 tmp
+   65537 drwxr-xr-x     0      0      4096 17-Jan-2022 13:29 usr
+   65538 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 var
+X 278529 drwx------     0      0         0 24-Mar-2022 17:44 wslEcfBEP
+X 278530 drwx------     0      0         0 24-Mar-2022 17:44 wslDDbIAE
+search_superblock
+
+recover_EXT2: s_block_group_nr=0/2048, s_mnt_count=74/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Last mount time:    Thu Mar 24 17:44:03 2022
+Ext2 superblock found at sector 2 (block=0, blocksize=4096)
+
+block_group_nr 1
+
+recover_EXT2: "e2fsck -b 32768 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=1/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 262144 (block=32768, blocksize=4096)
+
+block_group_nr 3
+
+recover_EXT2: "e2fsck -b 98304 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=3/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 786432 (block=98304, blocksize=4096)
+
+block_group_nr 5
+
+recover_EXT2: "e2fsck -b 163840 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=5/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1310720 (block=163840, blocksize=4096)
+
+block_group_nr 7
+
+recover_EXT2: "e2fsck -b 229376 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=7/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 1835008 (block=229376, blocksize=4096)
+
+block_group_nr 9
+
+recover_EXT2: "e2fsck -b 294912 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=9/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 2359296 (block=294912, blocksize=4096)
+
+block_group_nr 25
+
+recover_EXT2: "e2fsck -b 819200 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=25/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 6553600 (block=819200, blocksize=4096)
+
+block_group_nr 27
+
+recover_EXT2: "e2fsck -b 884736 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=27/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 7077888 (block=884736, blocksize=4096)
+
+block_group_nr 49
+
+recover_EXT2: "e2fsck -b 1605632 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=49/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 12845056 (block=1605632, blocksize=4096)
+
+block_group_nr 81
+
+recover_EXT2: "e2fsck -b 2654208 -B 4096 device" may be needed
+recover_EXT2: s_block_group_nr=81/2048, s_mnt_count=0/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 67108864
+recover_EXT2: part_size 536870912
+Filesystem created: Wed Apr 10 12:35:05 2019
+Ext2 superblock found at sector 21233664 (block=2654208, blocksize=4096)
+  ext4                     0   0  1 33418 170 32  536870912
+superblock 0, blocksize=4096 []
+superblock 32768, blocksize=4096 []
+superblock 98304, blocksize=4096 []
+superblock 163840, blocksize=4096 []
+superblock 229376, blocksize=4096 []
+superblock 294912, blocksize=4096 []
+superblock 819200, blocksize=4096 []
+superblock 884736, blocksize=4096 []
+superblock 1605632, blocksize=4096 []
+superblock 2654208, blocksize=4096 []
+
+To repair the filesystem using alternate superblock, run
+fsck.ext4 -p -b superblock -B blocksize device
+
+
+dir_partition inode=2
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+      11 drwx------     0      0     16384 10-Apr-2019 12:35 lost+found
+      12 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 bin
+    8193 drwxr-xr-x     0      0      4096 19-Feb-2021 18:56 boot
+    8194 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 dev
+   16385 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 etc
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 home
+      13 -rwxr-xr-x     0      0         0 24-Mar-2022 17:44 init
+      14 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 lib
+      15 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib32
+      16 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib64
+      17 lrwxrwxrwx     0      0        10 19-Feb-2021 18:48 libx32
+   24577 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 media
+   24578 drwxr-xr-x     0      0      4096 19-Nov-2021 12:53 mnt
+   32769 drwxr-xr-x     0      0      4096 17-Jan-2022 13:57 opt
+   32770 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 proc
+   40961 drwx------     0      0      4096  8-Feb-2022 12:30 root
+   40962 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 run
+      18 lrwxrwxrwx     0      0         8 19-Feb-2021 18:48 sbin
+   49153 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 snap
+   49154 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 srv
+   57345 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 sys
+   57346 drwxrwxrwt     0      0     12288 28-Mar-2022 15:43 tmp
+   65537 drwxr-xr-x     0      0      4096 17-Jan-2022 13:29 usr
+   65538 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 var
+X 278529 drwx------     0      0         0 24-Mar-2022 17:44 wslEcfBEP
+X 278530 drwx------     0      0         0 24-Mar-2022 17:44 wslDDbIAE
+
+dir_partition inode=16386
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 edward
+
+dir_partition inode=39218
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 .
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 ..
+  213101 -rw-r--r--  1000   1000      3965  8-Feb-2022 12:10 .bashrc
+  271334 -rw-------  1000   1000     37427 25-Mar-2022 14:32 .bash_history
+   39221 -rw-r--r--  1000   1000       220  3-Aug-2021 12:20 .bash_logout
+     448 -rw-r--r--  1000   1000       111  9-Aug-2021 14:51 .gitconfig
+   39223 -rw-r--r--  1000   1000        20  4-Aug-2021 11:25 .inputrc
+   39224 drwxr-xr-x  1000   1000      4096  3-Aug-2021 12:20 .landscape
+   39225 drwxr-xr-x  1000   1000      4096  4-Dec-2021 09:24 .local
+   39226 -rw-r--r--  1000   1000         0 25-Mar-2022 14:33 .motd_shown
+   39227 -rw-r--r--  1000   1000       807  3-Aug-2021 12:20 .profile
+   39228 -rw-r--r--  1000   1000         0  3-Aug-2021 12:20 .sudo_as_admin_successful
+  214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo
+     449 drwxr-xr-x  1000   1000      4096 10-Aug-2021 12:21 .vim
+   39222 drwx------  1000   1000      4096 16-Mar-2022 18:18 .ssh
+   40834 drwxr-xr-x  1000   1000      4096 30-Aug-2021 11:53 .vscode-server
+  163344 -rw-------  1000   1000      1500  9-Mar-2022 11:46 .python_history
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 project
+   53857 -rw-------  1000   1000      3657 21-Mar-2022 09:14 .node_repl_history
+     193 drwx------  1000   1000      4096 16-Feb-2022 10:56 .config
+     476 drwxr-xr-x  1000   1000      4096 22-Oct-2021 12:54 .npm
+   59291 drwxr-xr-x  1000   1000      4096 20-Jan-2022 10:07 .cache
+   83316 -rw-------  1000   1000        74 24-Nov-2021 15:23 .npmrc
+   60171 drwxr-xr-x  1000   1000      4096 12-Oct-2021 15:39 .luaver
+   53484 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:53 .gem
+   69752 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:54 .bundle
+  139483 -rwxrwxrwx  1000   1000  90769636 10-Nov-2021 22:04 google-chrome-stable_current_amd64.deb
+  153916 drwx------  1000   1000      4096 23-Nov-2021 14:08 .pki
+    3175 drwx------  1000   1000      4096  4-Dec-2021 09:24 .dbus
+    3322 -rw-r-----  1000   1000       153  8-Dec-2021 11:02 .my.cnf
+  224309 -rw-------  1000   1000      3192 16-Mar-2022 10:06 .sqlite_history
+     431 drwxr-xr-x  1000   1000      4096 20-Jan-2022 09:53 .keras
+   15223 drwx------  1000   1000      4096 17-Jan-2022 14:37 .nv
+  213795 -rw-r--r--  1000   1000       199 16-Feb-2022 13:07 .wget-hsts
+  267330 -rw-r--r--  1000   1000         0 14-Mar-2022 10:31 afile
+  267331 -rw-r--r--  1000   1000         0 14-Mar-2022 10:32 AFILE
+X 214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo.tmp
+
+dir_partition inode=39321
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 .
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 ..
+X  40831 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 tru
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 trunk
+
+dir_partition inode=40864
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 ..
+   40831 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 edx
+  214897 -rwxr-xr-x  1000   1000       320 16-Mar-2022 09:53 .env
+  227284 drwxr-xr-x  1000   1000      4096 27-Mar-2022 12:29 Nidget
+  271332 drwxr-xr-x  1000   1000      4096 25-Mar-2022 14:27 nidget_core
+  227916 drwxr-xr-x  1000   1000      4096 13-Mar-2022 10:37 cli
+X 227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 test_nidget
+   53481 drwxr-xr-x  1000   1000      4096 16-Mar-2022 12:14 mldsp-portal
+  214880 drwxr-xr-x  1000   1000      4096 16-Mar-2022 10:00 mldsp-portal-220316
+X 271223 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test_package
+  227483 drwxr-xr-x  1000   1000      4096 17-Mar-2022 10:12 nidget_element_bak
+  271288 drwxr-xr-x  1000   1000      4096 25-Mar-2022 22:52 temp
+  274284 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:43 famous-trivia
+
+dir_partition inode=227490
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget
+  227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 ..
+X 227491 -rw-r--r--     0      0     54205 28-Mar-2022 15:43 package.json
+X 271681 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 www
+X 213405 -rw-r--r--  1000   1000        32 28-Mar-2022 15:39 node_modules
+X 227908 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 package-lock.json
+X 250559 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .nidgetrc
+X 267292 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .babelrc
+X 271222 -rwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 logRoute.js
+X 271675 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 coverage
+X 227492 -rw-r--r--     0      0         0 28-Mar-2022 15:43 server-src
+X 271595 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test
+X 271320 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 client-src
+X 271589 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 output
+Directory /home/edward/project/trunk
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 ..
+   40831 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 edx
+  214897 -rwxr-xr-x  1000   1000       320 16-Mar-2022 09:53 .env
+  227284 drwxr-xr-x  1000   1000      4096 27-Mar-2022 12:29 Nidget
+  271332 drwxr-xr-x  1000   1000      4096 25-Mar-2022 14:27 nidget_core
+  227916 drwxr-xr-x  1000   1000      4096 13-Mar-2022 10:37 cli
+X 227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 test_nidget
+   53481 drwxr-xr-x  1000   1000      4096 16-Mar-2022 12:14 mldsp-portal
+  214880 drwxr-xr-x  1000   1000      4096 16-Mar-2022 10:00 mldsp-portal-220316
+X 271223 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test_package
+  227483 drwxr-xr-x  1000   1000      4096 17-Mar-2022 10:12 nidget_element_bak
+  271288 drwxr-xr-x  1000   1000      4096 25-Mar-2022 22:52 temp
+  274284 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:48 famous-trivia
+
+dir_partition inode=227490
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget
+  227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 ..
+X 227491 -rw-r--r--     0      0     54205 28-Mar-2022 15:43 package.json
+X 271681 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 www
+X 213405 -rw-r--r--  1000   1000        32 28-Mar-2022 15:39 node_modules
+X 227908 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 package-lock.json
+X 250559 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .nidgetrc
+X 267292 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .babelrc
+X 271222 -rwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 logRoute.js
+X 271675 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 coverage
+X 227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 server-src
+X 271595 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test
+X 271320 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 client-src
+X 271589 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 output
+
+dir_partition inode=227492
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget/server-src
+  227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  214337 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 project
+
+dir_partition inode=227514
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget/server-src/project
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227516 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 trunk
+
+dir_partition inode=227516
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget/server-src/project/trunk
+  227516 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227525 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 test_nidget
+
+dir_partition inode=227525
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget/server-src/project/trunk/test_nidget
+  227525 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  227516 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227534 -rw-r--r--     0      0     54205 28-Mar-2022 15:43 package.json
+  227537 drwxr-xr-x     0      0      4096 28-Mar-2022 15:38 www
+  227538 -rw-r--r--     0      0        32 28-Mar-2022 15:39 node_modules
+  227539 -rw-r--r--     0      0         0 28-Mar-2022 15:38 package-lock.json
+  227540 -rw-r--r--     0      0         0 28-Mar-2022 15:38 .nidgetrc
+  227541 -rw-r--r--     0      0         0 28-Mar-2022 15:38 .babelrc
+  227542 -rwxr-xr-x     0      0         0 28-Mar-2022 15:38 logRoute.js
+  227543 drwxr-xr-x     0      0      4096 28-Mar-2022 15:38 coverage
+  227544 -rw-r--r--     0      0      4096 28-Mar-2022 15:43 server-src
+  227545 drwxr-xr-x     0      0      4096 28-Mar-2022 15:38 test
+  227546 drwxr-xr-x     0      0      4096 28-Mar-2022 15:38 client-src
+  227547 drwxr-xr-x     0      0      4096 28-Mar-2022 15:38 output
+Directory /home/edward/project/trunk/test_nidget/server-src/project/trunk
+  227516 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227525 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 test_nidget
+Directory /home/edward/project/trunk/test_nidget/server-src/project
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227516 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 trunk
+Directory /home/edward/project/trunk/test_nidget/server-src
+  227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  214337 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 project
+Directory /home/edward/project/trunk/test_nidget
+  227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 ..
+X 227491 -rw-r--r--     0      0     54205 28-Mar-2022 15:43 package.json
+X 271681 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 www
+X 213405 -rw-r--r--  1000   1000        32 28-Mar-2022 15:39 node_modules
+X 227908 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 package-lock.json
+X 250559 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .nidgetrc
+X 267292 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .babelrc
+X 271222 -rwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 logRoute.js
+X 271675 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 coverage
+X 227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 server-src
+X 271595 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test
+X 271320 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 client-src
+X 271589 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 output
+
+dir_partition inode=227492
+   P ext4                     0   0  1 33418 170 32  536870912
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 274 GB / 256 GiB
+Directory /home/edward/project/trunk/test_nidget/server-src
+  227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 .
+  214337 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 ..
+  227514 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 project
+Directory /home/edward/project/trunk/test_nidget
+  227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 ..
+X 227491 -rw-r--r--     0      0     54205 28-Mar-2022 15:43 package.json
+X 271681 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 www
+X 213405 -rw-r--r--  1000   1000        32 28-Mar-2022 15:39 node_modules
+X 227908 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 package-lock.json
+X 250559 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .nidgetrc
+X 267292 -rw-r--r--  1000   1000         0 28-Mar-2022 15:38 .babelrc
+X 271222 -rwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 logRoute.js
+X 271675 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 coverage
+X 227492 drwxr-xr-x     0      0      4096 28-Mar-2022 15:48 server-src
+X 271595 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test
+X 271320 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 client-src
+X 271589 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 output
+Directory /home/edward/project/trunk
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 .
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 ..
+   40831 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 edx
+  214897 -rwxr-xr-x  1000   1000       320 16-Mar-2022 09:53 .env
+  227284 drwxr-xr-x  1000   1000      4096 27-Mar-2022 12:29 Nidget
+  271332 drwxr-xr-x  1000   1000      4096 25-Mar-2022 14:27 nidget_core
+  227916 drwxr-xr-x  1000   1000      4096 13-Mar-2022 10:37 cli
+X 227490 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 test_nidget
+   53481 drwxr-xr-x  1000   1000      4096 16-Mar-2022 12:14 mldsp-portal
+  214880 drwxr-xr-x  1000   1000      4096 16-Mar-2022 10:00 mldsp-portal-220316
+X 271223 drwxr-xr-x  1000   1000         0 28-Mar-2022 15:38 test_package
+  227483 drwxr-xr-x  1000   1000      4096 17-Mar-2022 10:12 nidget_element_bak
+  271288 drwxr-xr-x  1000   1000      4096 25-Mar-2022 22:52 temp
+  274284 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:48 famous-trivia
+Directory /home/edward/project
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 .
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 ..
+X  40831 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 tru
+   40864 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:38 trunk
+Directory /home/edward
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 .
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 ..
+  213101 -rw-r--r--  1000   1000      3965  8-Feb-2022 12:10 .bashrc
+  271334 -rw-------  1000   1000     37427 25-Mar-2022 14:32 .bash_history
+   39221 -rw-r--r--  1000   1000       220  3-Aug-2021 12:20 .bash_logout
+     448 -rw-r--r--  1000   1000       111  9-Aug-2021 14:51 .gitconfig
+   39223 -rw-r--r--  1000   1000        20  4-Aug-2021 11:25 .inputrc
+   39224 drwxr-xr-x  1000   1000      4096  3-Aug-2021 12:20 .landscape
+   39225 drwxr-xr-x  1000   1000      4096  4-Dec-2021 09:24 .local
+   39226 -rw-r--r--  1000   1000         0 25-Mar-2022 14:33 .motd_shown
+   39227 -rw-r--r--  1000   1000       807  3-Aug-2021 12:20 .profile
+   39228 -rw-r--r--  1000   1000         0  3-Aug-2021 12:20 .sudo_as_admin_successful
+  214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo
+     449 drwxr-xr-x  1000   1000      4096 10-Aug-2021 12:21 .vim
+   39222 drwx------  1000   1000      4096 16-Mar-2022 18:18 .ssh
+   40834 drwxr-xr-x  1000   1000      4096 30-Aug-2021 11:53 .vscode-server
+  163344 -rw-------  1000   1000      1500  9-Mar-2022 11:46 .python_history
+   39321 drwxr-xr-x  1000   1000      4096 30-Aug-2021 12:03 project
+   53857 -rw-------  1000   1000      3657 21-Mar-2022 09:14 .node_repl_history
+     193 drwx------  1000   1000      4096 16-Feb-2022 10:56 .config
+     476 drwxr-xr-x  1000   1000      4096 22-Oct-2021 12:54 .npm
+   59291 drwxr-xr-x  1000   1000      4096 20-Jan-2022 10:07 .cache
+   83316 -rw-------  1000   1000        74 24-Nov-2021 15:23 .npmrc
+   60171 drwxr-xr-x  1000   1000      4096 12-Oct-2021 15:39 .luaver
+   53484 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:53 .gem
+   69752 drwxr-xr-x  1000   1000      4096 20-Oct-2021 14:54 .bundle
+  139483 -rwxrwxrwx  1000   1000  90769636 10-Nov-2021 22:04 google-chrome-stable_current_amd64.deb
+  153916 drwx------  1000   1000      4096 23-Nov-2021 14:08 .pki
+    3175 drwx------  1000   1000      4096  4-Dec-2021 09:24 .dbus
+    3322 -rw-r-----  1000   1000       153  8-Dec-2021 11:02 .my.cnf
+  224309 -rw-------  1000   1000      3192 16-Mar-2022 10:06 .sqlite_history
+     431 drwxr-xr-x  1000   1000      4096 20-Jan-2022 09:53 .keras
+   15223 drwx------  1000   1000      4096 17-Jan-2022 14:37 .nv
+  213795 -rw-r--r--  1000   1000       199 16-Feb-2022 13:07 .wget-hsts
+  267330 -rw-r--r--  1000   1000         0 14-Mar-2022 10:31 afile
+  267331 -rw-r--r--  1000   1000         0 14-Mar-2022 10:32 AFILE
+X 214312 -rw-------  1000   1000     17458 28-Mar-2022 15:40 .viminfo.tmp
+Directory /home
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+   39218 drwxr-xr-x  1000   1000      4096 28-Mar-2022 15:40 edward
+Directory /
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 .
+       2 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 ..
+      11 drwx------     0      0     16384 10-Apr-2019 12:35 lost+found
+      12 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 bin
+    8193 drwxr-xr-x     0      0      4096 19-Feb-2021 18:56 boot
+    8194 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 dev
+   16385 drwxr-xr-x     0      0      4096 24-Mar-2022 17:44 etc
+   16386 drwxr-xr-x     0      0      4096  3-Aug-2021 12:20 home
+      13 -rwxr-xr-x     0      0         0 24-Mar-2022 17:44 init
+      14 lrwxrwxrwx     0      0         7 19-Feb-2021 18:48 lib
+      15 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib32
+      16 lrwxrwxrwx     0      0         9 19-Feb-2021 18:48 lib64
+      17 lrwxrwxrwx     0      0        10 19-Feb-2021 18:48 libx32
+   24577 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 media
+   24578 drwxr-xr-x     0      0      4096 19-Nov-2021 12:53 mnt
+   32769 drwxr-xr-x     0      0      4096 17-Jan-2022 13:57 opt
+   32770 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 proc
+   40961 drwx------     0      0      4096  8-Feb-2022 12:30 root
+   40962 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 run
+      18 lrwxrwxrwx     0      0         8 19-Feb-2021 18:48 sbin
+   49153 drwxr-xr-x     0      0      4096 19-Feb-2021 18:52 snap
+   49154 drwxr-xr-x     0      0      4096 19-Feb-2021 18:48 srv
+   57345 drwxr-xr-x     0      0      4096 15-Apr-2020 07:09 sys
+   57346 drwxrwxrwt     0      0     12288 28-Mar-2022 15:43 tmp
+   65537 drwxr-xr-x     0      0      4096 17-Jan-2022 13:29 usr
+   65538 drwxr-xr-x     0      0      4096 19-Feb-2021 18:51 var
+X 278529 drwx------     0      0         0 24-Mar-2022 17:44 wslEcfBEP
+X 278530 drwx------     0      0         0 24-Mar-2022 17:44 wslDDbIAE
+
+TestDisk exited normally.

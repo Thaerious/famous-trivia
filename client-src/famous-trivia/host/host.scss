@@ -1,0 +1,80 @@
+// @import '../../styles/components/file_list';
+@import '../styles/button';
+@import '../styles/shared';
+@import 'busy_box';
+
+*{
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden;
+    background-color: #a3f3ff;
+}
+
+.bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #a3f3ff;
+    background-image: url("../assets/BG03.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.button-container{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #144369;
+    border-radius: 20px;
+    background-color: var(--ui-dialog-bg);
+    width: 350px;    
+    height: 500px;
+    
+    #sign-out{
+        cursor: pointer;
+
+        &.hidden{
+            cursor: default;
+            color: grey;
+        }
+    }
+
+    nidget-button, .button{
+        position: relative;
+        height: 50px;
+        width: 300px;
+        background-color: aqua;
+    }
+}
+
+.hidden-anchor{
+    position: relative;
+    left: -1000px;
+}
+
+file-list{
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    height: 80%;
+    width: 400px;
+    border: 3px solid;
+    border-color: #44b3ff;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 1.0);
+}

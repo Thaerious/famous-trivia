@@ -95,4 +95,4 @@ class GameManagerService {
 }
 
 GameManagerService.URL = "game-manager-service";
-module.exports = GameManagerService;
+export default GameManagerService;

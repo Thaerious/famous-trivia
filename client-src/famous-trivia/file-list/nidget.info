@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "type": "component",
+            "fullName": "file-list",
+            "tagName": "file-list",
+            "view": "file-list.ejs",
+            "es6": "FileList.mjs",
+            "style": {
+                "src": "file-list.scss",
+                "dest": "file-list.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/file-list",
+                "src": "client-src/famous-trivia/file-list"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

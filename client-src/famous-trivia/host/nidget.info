@@ -1,0 +1,19 @@
+{
+    "components": [
+        {
+            "type": "view",
+            "fullName": "host",
+            "view": "host.ejs",
+            "es6": "Host.mjs",
+            "style": {
+                "src": "host.scss",
+                "dest": "host.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/host",
+                "src": "client-src/famous-trivia/host"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

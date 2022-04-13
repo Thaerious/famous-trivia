@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "type": "component",
+            "fullName": "nidget-button",
+            "tagName": "nidget-button",
+            "view": "nidget-button.ejs",
+            "es6": "NidgetButton.mjs",
+            "style": {
+                "src": "nidget-button.scss",
+                "dest": "nidget-button.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/nidget-button",
+                "src": "client-src/famous-trivia/nidget-button"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

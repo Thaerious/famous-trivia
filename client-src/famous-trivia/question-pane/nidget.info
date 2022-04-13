@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "type": "component",
+            "fullName": "question-pane",
+            "tagName": "question-pane",
+            "view": "question-pane.ejs",
+            "es6": "QuestionPane.mjs",
+            "style": {
+                "src": "question-pane.scss",
+                "dest": "question-pane.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/question-pane",
+                "src": "client-src/famous-trivia/question-pane"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

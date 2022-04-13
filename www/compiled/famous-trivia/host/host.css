@@ -1,0 +1,151 @@
+.button {
+  border: 3px solid rgb(var(--ui-border-color));
+  border-radius: 15px;
+  cursor: pointer;
+  background-color: rgba(var(--ui-bg), 0.6);
+}
+.button .text {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  font-family: "Arial Black", serif;
+  line-height: 0;
+  top: 50%;
+}
+.button:hover {
+  border-color: rgb(var(--ui-border-color-hover));
+  background-color: rgba(var(--ui-bg), 0.9);
+}
+.button.disabled {
+  border-color: #6e6e6e;
+  color: #6e6e6e;
+  background-color: rgba(var(--ui-bg-dis, 138, 138, 138), 0.6);
+  pointer-events: none;
+}
+.button.hidden {
+  display: none;
+}
+
+:root {
+  --ui-border-color: #2e3333;
+  --ui-border-color-hover: #bde2e8;
+  --ui-border-color-disabled: #444;
+  --ui-font-color-disabled: #444;
+  --ui-background-hover: #3f43d8;
+  --ui-background: #1117d9;
+  --ui-background-selected: #3f43d8;
+  --ui-background-disabled: #888;
+  --ui-dialog-bg: rgb(163, 213, 236);
+  --ui-panel-bg: rgb(225, 245, 235, 1.0);
+  --ui-background-editable: rgb(255, 255, 255, 1.0);
+  --ui-dialog-font-family: Arial Black, serif;
+  --ui-dialog-font-size: 2vh;
+  --menu-font-family: Arial Black, serif;
+  --menu-font-size: 2vh;
+  --menu-width: 200px;
+  font: var(--ui-dialog-font-family);
+}
+
+@font-face {
+  font-family: "OPTIKorinna-Agency";
+  src: url("../font/OPTIKorinna-Agency.ttf.woff") format("woff"), url("../font/OPTIKorinna-Agency.ttf.svg#OPTIKorinna-Agency") format("svg"), url("../font/OPTIKorinna-Agency.ttf.eot"), url("../font/OPTIKorinna-Agency.ttf.eot?#iefix") format("embedded-opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: Arial Black, serif;
+}
+
+.busy-box {
+  position: absolute;
+  left: -5%;
+  top: -5%;
+  width: 110%;
+  height: 110%;
+  border-radius: 20px;
+  background-color: rgba(128, 128, 128, 0.3);
+}
+.busy-box.hidden {
+  display: none;
+}
+.busy-box img {
+  position: absolute;
+  width: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body, html {
+  height: 100%;
+  overflow: hidden;
+  background-color: #a3f3ff;
+}
+
+.bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #a3f3ff;
+  background-image: url("../assets/BG03.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.button-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #144369;
+  border-radius: 20px;
+  background-color: var(--ui-dialog-bg);
+  width: 350px;
+  height: 500px;
+}
+.button-container #sign-out {
+  cursor: pointer;
+}
+.button-container #sign-out.hidden {
+  cursor: default;
+  color: grey;
+}
+.button-container nidget-button, .button-container .button {
+  position: relative;
+  height: 50px;
+  width: 300px;
+  background-color: aqua;
+}
+
+.hidden-anchor {
+  position: relative;
+  left: -1000px;
+}
+
+file-list {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  height: 80%;
+  width: 400px;
+  border: 3px solid;
+  border-color: #44b3ff;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: white;
+}

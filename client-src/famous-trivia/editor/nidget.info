@@ -1,0 +1,19 @@
+{
+    "components": [
+        {
+            "type": "view",
+            "fullName": "editor",
+            "view": "editor.ejs",
+            "es6": "Editor.mjs",
+            "style": {
+                "src": "editor.scss",
+                "dest": "editor.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/editor",
+                "src": "client-src/famous-trivia/editor"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

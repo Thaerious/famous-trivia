@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "type": "component",
+            "fullName": "menu/menu-item",
+            "tagName": "menu-item",
+            "view": "menu-item.ejs",
+            "es6": "MenuItem.mjs",
+            "style": {
+                "src": "menu-item.scss",
+                "dest": "menu-item.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/menu/menu-item",
+                "src": "client-src/famous-trivia/menu/menu-item"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}

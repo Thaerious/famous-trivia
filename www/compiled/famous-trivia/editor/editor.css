@@ -1,0 +1,254 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+:root {
+  --ui-border-color: #2e3333;
+  --ui-border-color-hover: #bde2e8;
+  --ui-border-color-disabled: #444;
+  --ui-font-color-disabled: #444;
+  --ui-background-hover: #3f43d8;
+  --ui-background: #1117d9;
+  --ui-background-selected: #3f43d8;
+  --ui-background-disabled: #888;
+  --ui-dialog-bg: rgb(163, 213, 236);
+  --ui-panel-bg: rgb(225, 245, 235, 1.0);
+  --ui-background-editable: rgb(255, 255, 255, 1.0);
+  --ui-dialog-font-family: Arial Black, serif;
+  --ui-dialog-font-size: 2vh;
+  --menu-font-family: Arial Black, serif;
+  --menu-font-size: 2vh;
+  --menu-width: 200px;
+  font: var(--ui-dialog-font-family);
+}
+
+@font-face {
+  font-family: "OPTIKorinna-Agency";
+  src: url("../font/OPTIKorinna-Agency.ttf.woff") format("woff"), url("../font/OPTIKorinna-Agency.ttf.svg#OPTIKorinna-Agency") format("svg"), url("../font/OPTIKorinna-Agency.ttf.eot"), url("../font/OPTIKorinna-Agency.ttf.eot?#iefix") format("embedded-opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: Arial Black, serif;
+}
+
+#page-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: calc(var(--height-value));
+  width: calc(var(--width-value));
+  font-size: calc(var(--base-font-size));
+}
+#page-container.aspect-fit {
+  --height-value: 100vh;
+  --width-value: 16/9 * 100vh;
+  --base-font-size: 5vh;
+  --cell-font-size: 6.5vh;
+  --fit-text-unit: 0.1vh;
+}
+#page-container.shrink-horz {
+  --height-value: (9/16 * 100vw);
+  --width-value: 100vw;
+  --base-font-size: (9/16 * 5vw);
+  --cell-font-size: calc(9/16 * 6.5vw);
+  --fit-text-unit: (9/16 * 0.1vw) ;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.bg {
+  background-image: url("../assets/BG01.jpg");
+}
+.bg.busy {
+  z-index: 1000;
+}
+
+.busy-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 40vh;
+  width: 40vh;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.busy-box.hidden {
+  display: none;
+}
+.busy-box img {
+  width: 100%;
+  height: 100%;
+}
+
+.hidden-anchor {
+  position: relative;
+  left: -1000px;
+}
+
+.button-container {
+  position: relative;
+  top: 91%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-block;
+  height: 7%;
+}
+.button-container nidget-button {
+  position: relative;
+  display: inline-block;
+  width: calc(0.2 * var(--width-value));
+  height: 100%;
+  font-family: "Arial Black", serif;
+  font-size: calc(0.8 * var(--base-font-size));
+  z-index: 10;
+}
+.button-container nidget-button#show-question {
+  --ui-button-color: 255, 200, 0;
+}
+.button-container nidget-button#show-answer {
+  --ui-button-color: 255, 200, 0;
+}
+.button-container nidget-button#show-board {
+  --ui-button-color: 255, 200, 0;
+}
+
+check-box {
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  left: 2%;
+}
+
+#multiple-choice-compose {
+  position: absolute;
+  z-index: 50;
+}
+
+#game-board, .question-pane, .answer-pane {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  width: 64%;
+  height: 75%;
+  z-index: 50;
+  transform: translate(-50%, -50%);
+}
+
+#multiple-choice-compose {
+  font-size: calc(1.2 * var(--base-font-size));
+  word-spacing: calc(0.75 * var(--base-font-size));
+  --shadow-size: calc(0.2 * var(--base-font-size));
+  text-shadow: var(--shadow-size) var(--shadow-size) var(--shadow-size) #000;
+}
+
+#question-pane {
+  font-size: calc(1.2 * var(--base-font-size));
+  word-spacing: calc(0.75 * var(--base-font-size));
+  line-height: calc(1.5 * var(--base-font-size));
+  --shadow-size: calc(0.2 * var(--base-font-size));
+  text-shadow: var(--shadow-size) var(--shadow-size) var(--shadow-size) #000;
+}
+
+#top-bar {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  width: 64%;
+  height: 5%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+#top-bar #game-name {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 80%;
+  height: 100%;
+  transform: translateX(-50%);
+  background-color: #282058;
+  color: whitesmoke;
+  font-family: Arial Black, serif;
+  font-size: calc(0.8 * var(--base-font-size));
+  line-height: calc(0.042 * var(--height-value));
+  text-align: center;
+  border-radius: calc(0.05 * var(--height-value));
+  border: 0.33vh solid black;
+}
+#top-bar #game-name:focus {
+  outline: none;
+  border: 0.33vh solid #44b3ff;
+}
+#top-bar #menu {
+  position: absolute;
+  right: 0px;
+  width: calc(0.05 * var(--height-value));
+  height: calc(0.05 * var(--height-value));
+}
+#top-bar #menu .menu-area {
+  width: 200px;
+}
+
+#round-number {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  width: 50%;
+  height: 5%;
+  transform: translateX(-50%);
+}
+#round-number .text {
+  position: absolute;
+  font-family: Arial Black, serif;
+  font-size: calc(0.8 * var(--base-font-size));
+  color: #e8e8e8;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#round-number .triangle-indicator {
+  position: absolute;
+  top: 50%;
+  width: 5%;
+  transform: translateY(-50%);
+  z-index: 100;
+  cursor: pointer;
+}
+#round-number .triangle-indicator.hidden {
+  display: none;
+}
+#round-number .triangle-indicator#triangle-left {
+  left: 15%;
+}
+#round-number .triangle-indicator#triangle-right {
+  right: 15%;
+}
+
+.menu-area {
+  width: 200px;
+}

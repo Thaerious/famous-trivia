@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/famous-trivia/editor/editor.css">
+    <script type="importmap">
+        <% if (typeof prebuild === "undefined" || !prebuild){ %>
+        <%- include('../../../compiled/import_map.ejs'); %>
+        <% } %>
+    </script>
+</head>
+<body>
+    <script type="module" src="/famous-trivia/editor/Editor.mjs"></script>
+    <% if (typeof prebuild === "undefined" || !prebuild){ %>
+        <%- include('../../../compiled/famous-trivia/editor/templates.ejs');  %>
+    <% } %>
+    <%- include('./body.ejs'); %>
+</body>
+</html>
+

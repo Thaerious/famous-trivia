@@ -1,0 +1,38 @@
+:root {
+  --ui-border-color: #2e3333;
+  --ui-border-color-hover: #bde2e8;
+  --ui-border-color-disabled: #444;
+  --ui-font-color-disabled: #444;
+  --ui-background-hover: #3f43d8;
+  --ui-background: #1117d9;
+  --ui-background-selected: #3f43d8;
+  --ui-background-disabled: #888;
+
+  --ui-dialog-bg: rgb(163, 213, 236);
+  --ui-panel-bg: rgb(225, 245, 235, 1.0);
+
+  --ui-background-editable: rgb(255, 255, 255, 1.0);
+
+  --ui-dialog-font-family: Arial Black, serif;
+  --ui-dialog-font-size: 2vh;
+
+  --menu-font-family: Arial Black, serif;
+  --menu-font-size: 2vh;
+  --menu-width: 200px;
+
+  font: var(--ui-dialog-font-family);
+}
+
+@font-face {
+  font-family: 'OPTIKorinna-Agency';
+  src: url('../font/OPTIKorinna-Agency.ttf.woff') format('woff'),
+  url('../font/OPTIKorinna-Agency.ttf.svg#OPTIKorinna-Agency') format('svg'),
+  url('../font/OPTIKorinna-Agency.ttf.eot'),
+  url('../font/OPTIKorinna-Agency.ttf.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{
+  font-family: Arial Black, serif;
+}

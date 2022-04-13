@@ -1,0 +1,19 @@
+{
+    "components": [
+        {
+            "type": "view",
+            "fullName": "nidget-button/test",
+            "view": "test.ejs",
+            "es6": "Test.mjs",
+            "style": {
+                "src": "test.scss",
+                "dest": "test.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/nidget-button/test",
+                "src": "client-src/famous-trivia/nidget-button/test"
+            },
+            "package": "famous-trivia"
+        }
+    ]
+}
