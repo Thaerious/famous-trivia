@@ -5,139 +5,6 @@ import constants from "../modules/constants.js";
 
 const DOM = {/* see EditorPane.constructor */};
 
-/**
- * Multiple Choice Answer State Controller
- */
-class MCAnswerCtrl {
-    /**
-     * @param {NidgetElement} element
-     * @param {function} saveCB
-     */
-    constructor(saveCB, mcQuestionCtrl) {
-        this.saveCB = saveCB;
-        this.setupListeners();
-        this.mcQuestionCtrl = mcQuestionCtrl;
-    }
-
-    show(model) {
-        this.model = model;
-        console.log(model);
-
-        document.querySelector("#mc").show();
-        document.querySelector("#jp").hide();
-        document.querySelector("#mc .answer-pane").show();
-        document.querySelector("#mc .question-pane").hide();
-        document.querySelector("#mc .button-container").show();
-        document.querySelector("#mc .show-question").enable();
-        document.querySelector("#mc .show-answer").disable();
-
-        document.querySelector("#menu").querySelector("#menu-decrease-value").hide();
-        document.querySelector("#menu").querySelector("#menu-increase-value").hide();
-
-        window.parameters.type = "multiple_choice";
-        window.parameters.subtype = "answer";
-        pushParameters();
-
-        const radioButtons = document.querySelector("#mc .answer-pane").querySelector("#radio-group");
-        radioButtons.selected = `radio-${model['correct-answer']}`;
-
-        const pane = document.querySelector("#mc .answer-pane");
-        for (let i = 0; i < 5; i++) {
-            const textInput = pane.querySelector(`#txt-${i}`);
-            textInput.content = this.model.options[i];
-        }
-    }
-
-    setupListeners() {
-        const pane = document.querySelector("#mc .answer-pane");
-
-        document.querySelector("#mc .show-question").addEventListener("click", event=> {
-            this.mcQuestionCtrl.show(this.model);
-            window.parameters.subtype = "answer";
-            pushParameters();
-        });
-
-        document.querySelector("#mc .question-pane").addEventListener("text-update", event => {
-            this.model.question = event.detail.text;
-            console.log(this.model);
-        });
-
-        const radioButtons = pane.querySelector("#radio-group");
-        radioButtons.addEventListener("selection-changed", event=> {
-            this.model["correct-answer"] = event.detail.element.parentElement.getAttribute("data-index");
-            this.saveCB();
-        });
-
-        for (let i = 0; i < 5; i++) {
-            const textInput = pane.querySelector(`#txt-${i}`);
-            textInput.addEventListener("text-enter", event=> {
-                this.model.options[i] = textInput.content;
-            });
-            textInput.addEventListener("blur", event=> {
-                this.model.options[i] = textInput.content;
-            });
-        }
-    }
-
-    textList(event) {
-        this.model.question = event.detail.text;
-        this.saveCB();
-    }
-}
-
-class MCQuestionCtrl {
-    /**
-     *
-     * @param {NidgetElement} element
-     * @param {function} saveCB
-     */
-    constructor(saveCB) {
-        this.saveCB = saveCB;
-        this.setupListeners();
-        this.mcAnswerControl = new MCAnswerCtrl(saveCB, this);
-    }
-
-    show(model) {
-        this.model = model;
-        console.log(model);
-
-        document.querySelector("#mc").show();
-        document.querySelector("#jp").hide();
-        document.querySelector("#mc .answer-pane").hide();
-        document.querySelector("#mc .question-pane").show();
-        document.querySelector("#mc .button-container").show();
-        document.querySelector("#mc .show-question").disable();
-        document.querySelector("#mc .show-answer").enable();
-
-        document.querySelector("#menu").querySelector("#menu-decrease-value").hide();
-        document.querySelector("#menu").querySelector("#menu-increase-value").hide();
-
-        window.parameters.type = "multiple_choice";
-        window.parameters.subtype = "question";
-        pushParameters();
-
-        document.querySelector("#mc .question-pane").setText(this.model.question);
-    }
-
-    setupListeners() {
-        document.querySelector("#mc .question-pane").addEventListener("text-update", event => {
-            this.model.question = event.detail.text;
-            console.log(this.model);
-        });
-
-        document.querySelector("#mc .show-answer").addEventListener("click", event=> {
-            this.mcAnswerControl.show(this.model);
-            window.parameters.subtype = "answer";
-            pushParameters();
-        });
-    }
-
-    textList(event) {
-        this.model.question = event.detail.text;
-        this.saveCB();
-    }
-}
-
 class JPBoardCtrl {
     constructor(saveCB) {
         this.saveCB = saveCB;
@@ -175,7 +42,6 @@ class JPBoardCtrl {
         console.log(model);
         this.model = model ?? this.model;
 
-        document.querySelector("#mc").hide();
         document.querySelector("#jp").show();
         document.querySelector("#jp .game-board").show();
         document.querySelector("#jp .answer-pane").hide();
@@ -307,10 +173,6 @@ class EditorPane {
         this.DOM.triangleLeft = document.querySelector("#triangle-left");
         this.DOM.gameName = document.querySelector("#game-name");
         this.DOM.gameBoard = document.querySelector("#game-board");
-
-        this.mcQuestionCtrl = new MCQuestionCtrl(()=>this.onSave());
-
-        this.mcAnswerCtrl = this.mcQuestionCtrl.mcAnswerControl;
 
         this.jeopardyBoardCtrl = new JPBoardCtrl(()=>this.onSave());
 

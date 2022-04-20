@@ -10,11 +10,11 @@ import emptyRoot from "../json_schema/empty_root.js";
 let fileOps = new FileOps();
 let editorPane = null;
 
-window.onload = async () => {
+window.addEventListener("load", async ()=>{
     await setup();
     setupSizeListener();
     clearBusy();
-}
+});
 
 window.addEventListener("beforeunload", ()=>{
     editorPane.onSave();
@@ -50,7 +50,7 @@ async function setup(){
     }
 
     document.querySelector("#game-name").textContent = gameDescriptionHelper.name;
-    editorPane = new EditorPane(gameDescriptionHelper, fileOps, window.parameters.fileId);
+    // editorPane = new EditorPane(gameDescriptionHelper, fileOps, window.parameters.fileId);
     window.editorPane = editorPane;
 
     let end = new Date();

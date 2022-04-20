@@ -1,0 +1,107 @@
+:host(game-board.hidden){
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+:host(game-board.hidden){
+    display: none;
+}
+
+#game-board {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    font-family: Arial Black, serif;
+    table-layout: fixed;
+    font-size: 0;
+    background-color: #000000;
+    z-index: 0;
+    border: 1px solid black;
+    border-radius: 2px;
+
+    .row {
+        position: relative;
+        width: 100%;
+        height: 16.66%;
+        font-size: 0;
+
+        .column {
+            position: relative;
+            display: inline-block;
+            width: 16.66%;
+            height: 100%;
+            text-align: center;
+            text-shadow: 4px 4px #000;
+            border-color: black;
+            border-style: solid;
+            border-width: 1px 1px 1px 1px;
+
+            &[data-row]{
+                background-image: url("assets/images/jeopardy_cell_bg.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            &[data-row="h"] {
+                .text-buffer {
+                    position: absolute;
+                    width: 90%;
+                    height: 90%;
+                    left: 5%;
+                    top: 5%;
+
+                    .value {
+                        position: absolute;
+                        overflow: visible;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        text-transform: uppercase;
+                        white-space: pre;
+                        color: whitesmoke;
+                        font-size: calc(50 * var(--fit-text-unit));
+                        --nidget-fit-text: width height;
+
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                }
+            }
+
+            &:not([data-row="h"]){
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 70%;
+                }
+
+                nidget-text {
+                    position: absolute;
+                    left: 0;
+                    overflow: visible;
+                    padding: 5%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    text-align: center;
+                    width: 100%;
+                    font-size: var(--cell-font-size);
+                    color: #ffdc18;
+
+                    &[data-complete='false']{
+                        color: #c8c8c8;
+                        text-shadow: none;
+                    }
+                    &[data-complete='partial']{
+                        color: #ffec9e;
+                        text-shadow: none;
+                    }
+                }
+            }
+        }
+    }
+}

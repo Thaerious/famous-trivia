@@ -1,18 +1,20 @@
 import NidgetElement from "@nidget/core";
 
-class MenuContainer extends NidgetElement{
-
+class MenuContainer extends NidgetElement {
     constructor(props) {
         super("menu-container-template");
     }
 
-    async ready() {
+    async ready(){
         await super.ready();
+        window.addEventListener("load", () => this.load());
+    }
+
+    async load() {
+        this.internalize("menu-item");
         this.querySelector("#menu-icon").setAttribute("src",  this.getAttribute("image-src"));
 
-        for (let item of this.outerSelectorAll("menu-item")){
-            item.detach();
-            this.menuArea.append(item);
+        for (let item of this.querySelectorAll("menu-item")){
             item.addEventListener("click", (event)=>{
                 this.dispatchEvent(new CustomEvent(item.getAttribute("event-name"), {bubbles: true, composed: true}));
             });
@@ -27,13 +29,13 @@ class MenuContainer extends NidgetElement{
         this.menuButton.addEventListener("mouseenter", ()=> this.mouseEnter());
     }
 
-    init(menuSelector){
-        document.querySelectorAll("[data-autoclose='true']").forEach((ele)=> {
-            ele.addEventListener("click", ()=>this.close());
+    init(menuSelector) {
+        document.querySelectorAll("[data-autoclose='true']").forEach(ele => {
+            ele.addEventListener("click", () => this.close());
         });
 
-        document.querySelectorAll(".sub-menu").forEach((ele)=>{
-            ele.querySelector(".menu-label").addEventListener("click", ()=>{
+        document.querySelectorAll(".sub-menu").forEach(ele => {
+            ele.querySelector(".menu-label").addEventListener("click", () => {
                 this.toggleMenu(ele);
             });
         });
@@ -41,83 +43,83 @@ class MenuContainer extends NidgetElement{
         return this;
     }
 
-    close(){
+    close() {
         this.menuArea.classList.add("hidden");
 
-        document.querySelectorAll(".sub-menu > .menu-area").forEach((ele)=>{
+        document.querySelectorAll(".sub-menu > .menu-area").forEach(ele => {
             ele.classList.add("hidden");
         });
     }
 
-    open(){
+    open() {
         this.menuArea.classList.remove("hidden");
         this.positionMenu();
     }
 
-    mouseLeave(){
+    mouseLeave() {
         if (this.timeout) return;
-        this.timeout = setTimeout(()=>{
+        this.timeout = setTimeout(() => {
             this.close();
             this.timeout = null;
         }, 500);
     }
 
-    mouseEnter(){
+    mouseEnter() {
         if (!this.timeout) return;
         clearTimeout(this.timeout);
         this.timeout = null;
     }
 
-    showMenu(){
+    showMenu() {
         this.menuArea.classList.remove("hidden");
         this.positionMenu();
     }
 
-    hideMenu(){
+    hideMenu() {
         this.menuArea.classList.add("hidden");
     }
 
-    isMenuHidden(){
+    isMenuHidden() {
         return this.menuArea.classList.contains("hidden");
     }
 
-    toggleMenu(){
+    toggleMenu() {
         if (this.isMenuHidden()) this.showMenu();
         else this.hideMenu();
     }
 
-    positionMenu(){
+    positionMenu() {
         const left = this.menuButton.getBoundingClientRect().left;
         const bWidth = this.menuButton.getBoundingClientRect().width;
         const mWidth = this.menuArea.getBoundingClientRect().width;
 
-        if ((left + bWidth + mWidth + 2) > window.innerWidth){
+        if (left + bWidth + mWidth + 2 > window.innerWidth) {
             this.setMenuLeft();
         } else {
             this.setMenuRight();
         }
     }
 
-    setMenuLeft(){
+    setMenuLeft() {
         const left = this.menuButton.offsetLeft;
         const width = this.menuArea.offsetWidth;
-        this.menuArea.style.left = (left - width - 2) + "px";
+        this.menuArea.style.left = left - width - 2 + "px";
     }
 
-    setMenuRight(){
+    setMenuRight() {
         const left = this.menuButton.offsetLeft;
         const width = this.menuButton.offsetWidth;
-        this.menuArea.style.left = (left + width + 2) + "px";
+        this.menuArea.style.left = left + width + 2 + "px";
     }
 
-    get menuButton(){
+    get menuButton() {
         return this.querySelector("#menu-icon");
     }
 
-    get menuArea(){
+    get menuArea() {
         return this.querySelector("#outer");
     }
 }
 
-window.customElements.define('menu-container', MenuContainer);
+window.customElements.define("menu-container", MenuContainer);
 export default MenuContainer;

@@ -1,3 +1,10 @@
 :host(menu-item.hidden){
     display: none;
 }
+
+menu-item {
+    cursor: pointer;
+    display: block;
+    width: 100px;
+    height: 50px;
+}

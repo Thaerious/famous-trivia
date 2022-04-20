@@ -1,0 +1,20 @@
+<script type="module" src="/famous-trivia/host/functions/renderButton.mjs"></script>
+<script type="text/javascript" src="https://apis.google.com/js/api.js" async defer></script>
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+<script type="module" src="/famous-trivia/host/Host.mjs"></script>
+
+<div class="bg"></div>
+
+<input id="upload-anchor" class="hidden-anchor" type="file" />
+
+<div id="button-container" class="button-container">
+    <nidget-button class="round disabled" id="b-create">Create</nidget-button>
+    <nidget-button class="round disabled" id="b-upload">Upload</nidget-button>
+    <nidget-button class="round disabled" id="b-edit">Edit</nidget-button>
+    <nidget-button class="round disabled" id="b-launch">Launch</nidget-button>
+    <nidget-button class="round disabled" id="b-delete">Delete</nidget-button>
+    <div id="sign-in"></div>
+    <div id="sign-out" class="hidden">sign out</div>
+</div>
+
+<file-list class="hidden"></file-list> F

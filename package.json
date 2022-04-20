@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@nidget/core": "file:../Nidget",
+    "@html-widget/core": "github:Thaerious/HTML-Widget",
     "ejs": "^3.1.6",
     "express": "^4.17.3",
     "http": "^0.0.1-security",

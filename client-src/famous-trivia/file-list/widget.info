@@ -3,7 +3,6 @@
         {
             "type": "component",
             "fullName": "file-list",
-            "tagName": "file-list",
             "view": "file-list.ejs",
             "es6": "FileList.mjs",
             "style": {
@@ -14,7 +13,8 @@
                 "sub": "famous-trivia/file-list",
                 "src": "client-src/famous-trivia/file-list"
             },
-            "package": "famous-trivia"
+            "package": "famous-trivia",
+            "tagName": "file-list"
         }
     ]
 }

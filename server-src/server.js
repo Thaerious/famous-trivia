@@ -2,11 +2,11 @@ import FS from "fs";
 import Express from "express";
 import http from "http";
 import https from "https";
-import { NPP } from "@nidget/core";
+import { WidgetMiddleware } from "@nidget/core";
 import querystring from "querystring";
 
 (() => {
-    const npp = new NPP();
+    const wmw = new WidgetMiddleware();
     const app = Express();
 
     app.use(`*`, (req, res, next) => {
@@ -19,7 +19,7 @@ import querystring from "querystring";
 
     app.get("/", (req, res, next) => res.redirect("/host"));
 
-    app.use((req, res, next) => npp.middleware(req, res, next));
+    app.use((req, res, next) => wmw.middleware(req, res, next));
 
     app.use(Express.static("www/compiled"));
     app.use(Express.static("www/linked"));

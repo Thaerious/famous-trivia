@@ -223,7 +223,7 @@ class NidgetPreprocessor {
     }
 
     process () {
-        Logger.getLogger().channel(`debig`).log(`# NPP process`);
+        Logger.getLogger().channel(`debig`).log(`# MWM process`);
 
         this.nidgetRecords = {};
 

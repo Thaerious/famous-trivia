@@ -3,7 +3,6 @@ import NidgetElement from "@nidget/core";
 class NidgetButton extends NidgetElement {
     constructor() {
         super("nidget-button-template");
-        console.log("nidget-button");
     }
 
     async ready(){

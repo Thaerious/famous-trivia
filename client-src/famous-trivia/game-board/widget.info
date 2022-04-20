@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "type": "component",
+            "fullName": "game-board",
+            "view": "game-board.ejs",
+            "es6": "GameBoard.mjs",
+            "style": {
+                "src": "game-board.scss",
+                "dest": "game-board.css"
+            },
+            "dir": {
+                "sub": "famous-trivia/game-board",
+                "src": "client-src/famous-trivia/game-board"
+            },
+            "package": "famous-trivia",
+            "tagName": "game-board"
+        }
+    ]
+}

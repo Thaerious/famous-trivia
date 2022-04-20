@@ -3,7 +3,6 @@
         {
             "type": "component",
             "fullName": "question-pane",
-            "tagName": "question-pane",
             "view": "question-pane.ejs",
             "es6": "QuestionPane.mjs",
             "style": {
@@ -14,7 +13,8 @@
                 "sub": "famous-trivia/question-pane",
                 "src": "client-src/famous-trivia/question-pane"
             },
-            "package": "famous-trivia"
+            "package": "famous-trivia",
+            "tagName": "question-pane"
         }
     ]
 }

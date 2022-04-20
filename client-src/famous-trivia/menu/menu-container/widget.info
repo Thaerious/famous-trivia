@@ -3,7 +3,6 @@
         {
             "type": "component",
             "fullName": "menu/menu-container",
-            "tagName": "menu-container",
             "view": "menu-container.ejs",
             "es6": "MenuContainer.mjs",
             "style": {
@@ -14,7 +13,8 @@
                 "sub": "famous-trivia/menu/menu-container",
                 "src": "client-src/famous-trivia/menu/menu-container"
             },
-            "package": "famous-trivia"
+            "package": "famous-trivia",
+            "tagName": "menu-container"
         }
     ]
 }

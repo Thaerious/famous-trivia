@@ -3,7 +3,6 @@
         {
             "type": "component",
             "fullName": "nidget-button",
-            "tagName": "nidget-button",
             "view": "nidget-button.ejs",
             "es6": "NidgetButton.mjs",
             "style": {
@@ -14,7 +13,8 @@
                 "sub": "famous-trivia/nidget-button",
                 "src": "client-src/famous-trivia/nidget-button"
             },
-            "package": "famous-trivia"
+            "package": "famous-trivia",
+            "tagName": "nidget-button"
         }
     ]
 }
